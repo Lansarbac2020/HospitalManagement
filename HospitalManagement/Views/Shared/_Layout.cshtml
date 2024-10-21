@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - HospitalManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/HospitalManagement.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/styles.css" asp-append-version="true" />
+</head>
+<body>
+    <header class="bg-[#001F3F] shadow-md">
+        <div class="mx-auto flex h-16 max-w-screen-xl items-center gap-8 px-4 sm:px-6 lg:px-8">
+            <a class="block text-teal-600" href="#">
+                <span class="sr-only">Home</span>
+                <svg class="h-8" viewBox="0 0 28 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0.41 10.3847C1.14777 7.4194 2.85643 4.7861 5.2639 2.90424C7.6714 1.02234 10.6393 0 13.695 0C16.7507 0 19.7186 1.02234 22.1261 2.90424C24.5336 4.7861 26.2422 7.4194 26.98 10.3847H25.78C23.7557 10.3549 21.7729 10.9599 20.11 12.1147C20.014 12.1842 19.9138 12.2477 19.81 12.3047H19.67C19.5662 12.2477 19.466 12.1842 19.37 12.1147C17.6924 10.9866 15.7166 10.3841 13.695 10.3841C11.6734 10.3841 9.6976 10.9866 8.02 12.1147C7.924 12.1842 7.8238 12.2477 7.72 12.3047H7.58C7.4762 12.2477 7.376 12.1842 7.28 12.1147C5.6171 10.9599 3.6343 10.3549 1.61 10.3847H0.41ZM23.62 16.6547C24.236 16.175 24.9995 15.924 25.78 15.9447H27.39V12.7347H25.78C24.4052 12.7181 23.0619 13.146 21.95 13.9547C21.3243 14.416 20.5674 14.6649 19.79 14.6649C19.0126 14.6649 18.2557 14.416 17.63 13.9547C16.4899 13.1611 15.1341 12.7356 13.745 12.7356C12.3559 12.7356 11.0001 13.1611 9.86 13.9547C9.2343 14.416 8.4774 14.6649 7.7 14.6649C6.9226 14.6649 6.1657 14.416 5.54 13.9547C4.4144 13.1356 3.0518 12.7072 1.66 12.7347H0V15.9447H1.61C2.39051 15.924 3.154 16.175 3.77 16.6547C4.908 17.4489 6.2623 17.8747 7.65 17.8747C9.0377 17.8747 10.392 17.4489 11.53 16.6547C12.1468 16.1765 12.9097 15.9257 13.69 15.9447C14.4708 15.9223 15.2348 16.1735 15.85 16.6547C16.9901 17.4484 18.3459 17.8738 19.735 17.8738C21.1241 17.8738 22.4799 17.4484 23.62 16.6547ZM23.62 22.3947C24.236 21.915 24.9995 21.664 25.78 21.6847H27.39V18.4747H25.78C24.4052 18.4581 23.0619 18.886 21.95 19.6947C21.3243 20.156 20.5674 20.4049 19.79 20.4049C19.0126 20.4049 18.2557 20.156 17.63 19.6947C16.4899 18.9011 15.1341 18.4757 13.745 18.4757C12.3559 18.4757 11.0001 18.9011 9.86 19.6947C9.2343 20.156 8.4774 20.4049 7.7 20.4049C6.9226 20.4049 6.1657 20.156 5.54 19.6947C4.4144 18.8757 3.0518 18.4472 1.66 18.4747H0V21.6847H1.61C2.39051 21.664 3.154 21.915 3.77 22.3947C4.908 23.1889 6.2623 23.6147 7.65 23.6147C9.0377 23.6147 10.392 23.1889 11.53 22.3947C12.1468 21.9165 12.9097 21.6657 13.69 21.6847C14.4708 21.6623 15.2348 21.9135 15.85 22.3947C16.9901 23.1884 18.3459 23.6138 19.735 23.6138C21.1241 23.6138 22.4799 23.1884 23.62 22.3947Z" fill="currentColor" />
+                </svg>
+            </a>
+
+            <div class="flex flex-1 items-center justify-end md:justify-between">
+                <nav aria-label="Global" class="hidden md:block">
+                    <ul class="flex items-center gap-6 text-sm">
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Home </a>
+                        </li>
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Duty Schedule </a>
+                        </li>
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Faculty </a>
+                        </li>
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Appointments </a>
+                        </li>
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Emergency Announcements </a>
+                        </li>
+                    </ul>
+                </nav>
+
+                <div class="flex items-center gap-4">
+                    <div class="sm:flex sm:gap-4">
+                       
+                        <a class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block" href="#">
+                            Admin/Login
+                        </a>
+                    </div>
+
+                    <button class="block rounded bg-gray-100 p-2.5 text-gray-600 transition hover:text-gray-600/75 md:hidden">
+                        <span class="sr-only">Toggle menu</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+        <p class="text-red-300">this is a sample text</p>
+    </div>
+
+    
+    <footer class="border-top footer text-muted bg-gray-800 text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg font-bold text-white">Pediatric Department</h2>
+                    <p class="mt-1 text-sm text-white">Providing exceptional care for children.</p>
+                </div>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#" class="hover:text-gray-400">Privacy Policy</a>
+                    <a href="#" class="hover:text-gray-400">Terms of Service</a>
+                    <a href="#" class="hover:text-gray-400">Contact Us</a>
+                </div>
+            </div>
+            <div class="mt-4 border-t border-gray-700 pt-4 text-center">
+                <p class="text-sm text-white">© 2024 Pediatric Department. All rights reserved.</p>
+                <div class="flex justify-center space-x-4 mt-2">
+                    <a href="#" class="hover:text-gray-400">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.627 0-12 5.373-12 12 0 5.25 3.438 9.69 8.094 11.188.593.109.812-.257.812-.574 0-.281-.01-1.22-.017-2.2-3.256.703-3.943-1.565-3.943-1.565-.531-1.354-1.293-1.716-1.293-1.716-1.059-.723.081-.707.081-.707 1.172.082 1.79 1.2 1.79 1.2 1.041 1.786 2.733 1.272 3.395.975.105-.755.41-1.272.743-1.566-2.596-.297-5.309-1.298-5.309-5.779 0-1.278.464-2.328 1.226-3.155-.123-.296-.533-1.486.115-3.096 0 0 1.008-.322 3.303 1.229.956-.265 1.984-.397 3.005-.402 1.021.005 2.048.137 3.005.402 2.295-1.551 3.303-1.229 3.303-1.229.648 1.61.239 2.8.117 3.096.762.827 1.226 1.877 1.226 3.155 0 4.5-2.719 5.474-5.313 5.77.42.362.794 1.078.794 2.171 0 1.568-.014 2.832-.014 3.215 0 .319.217.688.82.574 4.656-1.499 8.094-5.938 8.094-11.188 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                    <a href="#" class="hover:text-gray-400">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2c-5.515 0-10 4.485-10 10s4.485 10 10 10 10-4.485 10-10-4.485-10-10-10zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm1-13h-2v6h2v-6zm0 8h-2v2h2v-2z" />
+                        </svg>
+                    </a>
+                    <!-- Add more social media icons as needed -->
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

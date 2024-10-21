@@ -1,0 +1,18 @@
+{
+  "name": "hospitalmanagement",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "css:build": "npx tailwindcss -i ./wwwroot/css/site.css -o ./wwwroot/css/styles.css --minify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "eslint": "^9.13.0",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.14"
+  }
+}
