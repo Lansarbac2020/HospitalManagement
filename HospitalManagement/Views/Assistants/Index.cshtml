@@ -1,0 +1,64 @@
+﻿@model List<Assistant>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Assistants - Pediatric Department</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Assistants List</h1>
+
+        <div class="mb-4">
+            <a asp-controller="Assistant" asp-action="Create" class="btn btn-primary">Add New Assistant</a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    int index = 1;
+                    foreach (var assistant in Model)
+                    {
+                        <tr>
+                            <th scope="row">@index++</th>
+                            <td>@assistant.FirstName</td>
+                            <td>@assistant.LastName</td>
+                            <td>@assistant.Email</td>
+                            <td>@assistant.Phone</td>
+                            <td>@assistant.Department.DepartmentName</td> <!-- Assuming you have Department navigation property -->
+                            <td>
+                                <a asp-controller="Assistant" asp-action="Edit" asp-route-id="@assistant.AssistantId" class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-controller="Assistant" asp-action="Delete" asp-route-id="@assistant.AssistantId" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No assistants found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

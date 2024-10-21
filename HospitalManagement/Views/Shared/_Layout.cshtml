@@ -23,22 +23,26 @@
                 <nav aria-label="Global" class="hidden md:block">
                     <ul class="flex items-center gap-6 text-sm">
                         <li>
-                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Home </a>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Home" asp-action="Index"> Home </a>
                         </li>
                         <li>
-                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Duty Schedule </a>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Assistants" asp-action="Index"> Assistant Schedule </a>
                         </li>
                         <li>
-                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Faculty </a>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Faculty" asp-action="Index"> Faculty </a>
                         </li>
                         <li>
-                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Appointments </a>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Department" asp-action="Index"> Department Description </a>
                         </li>
                         <li>
-                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" href="#"> Emergency Announcements </a>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Appointment" asp-action="Index"> Appointment Scheduling </a>
+                        </li>
+                        <li>
+                            <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Emergency" asp-action="Index"> Emergency Announcements </a>
                         </li>
                     </ul>
                 </nav>
+
 
                 <div class="flex items-center gap-4">
                     <div class="sm:flex sm:gap-4">
@@ -53,6 +57,14 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="size-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
+                    </button>
+                    <button type="button"
+                            class="overflow-hidden rounded-full border border-gray-300 shadow-inner">
+                        <span class="sr-only">Toggle dashboard menu</span>
+
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                             alt=""
+                             class="size-10 object-cover" />
                     </button>
                 </div>
             </div>
