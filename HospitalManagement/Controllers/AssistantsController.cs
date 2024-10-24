@@ -7,24 +7,20 @@ using System.Linq; // Add this for ToList()
 
 namespace HospitalManagement.Controllers
 {
-    public class AssistantsController : Controller
+    public class AssistantsController(ApplicationDbContext db) : Controller
     {
-        private readonly ApplicationDbContext _db;
-
-        public AssistantsController(ApplicationDbContext db)
-        {
-            _db = db;
-        }
+        private readonly ApplicationDbContext _db = db;
 
         // GET: Assistants
         public IActionResult Index()
         {
             List<Assistant> objAssistantList = _db.Assistants
-                .Include(a => a.Department) // Eagerly load the Department
+                .Include(a => a.Department) // Correctly include the single Department navigation property
                 .ToList();
 
             return View(objAssistantList);
         }
+
 
 
         // GET: Create Assistant
@@ -45,9 +41,6 @@ namespace HospitalManagement.Controllers
                 // Save the assistant data
                 _db.Assistants.Add(assistant);
                 _db.SaveChanges();
-
-                // After saving, reload the assistant with its related department
-                _db.Entry(assistant).Reference(a => a.Department).Load(); // This loads the Department navigation property
 
                 return RedirectToAction("Index");
             }

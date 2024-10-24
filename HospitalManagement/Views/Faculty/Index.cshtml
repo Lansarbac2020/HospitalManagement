@@ -1,1 +1,65 @@
-﻿<h1 class="mt-10 font-bold">All the faculty</h1>
+﻿@model List<FacultyMember>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Faculty Members - Pediatric Department</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Faculty Members List</h1>
+
+        <div class="mb-4">
+            <a asp-controller="Faculty" asp-action="CreateFacultyMember" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Add New Faculty Member
+            </a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Phone</th>
+                    <th scope="col">Department</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var faculty in Model)
+                    {
+                        <tr>
+                            <th scope="row">@faculty.FacultyId</th>
+                            <td>@faculty.FirstName</td>
+                            <td>@faculty.LastName</td>
+                            <td>@faculty.Email</td>
+                            <td>@faculty.Phone</td>
+                            <td>@faculty.Department?.DepartmentName</td> <!-- Assuming Department navigation is available -->
+                            <td>
+                                <a asp-controller="Faculty" asp-action="Edit" asp-route-id="@faculty.FacultyId" class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-controller="Faculty" asp-action="Delete" asp-route-id="@faculty.FacultyId" class="btn btn-danger btn-sm">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="text-center">No faculty members found.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

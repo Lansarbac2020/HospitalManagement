@@ -1,9 +1,9 @@
-﻿@model Assistant
+﻿@model FacultyMember
 
-<form asp-action="CreateAssistant" method="post" class="container mt-4">
+<form asp-action="CreateFacultyMember" method="post" class="container mt-4">
     <div class="border p-3">
         <div class="row pb-2">
-            <h2 class="text-primary col-12">Create Assistant</h2>
+            <h2 class="text-primary col-12">Create Faculty Member</h2>
             <hr class="col-12" />
             <div asp-validation-summary="All" class="col-12"></div>
         </div>
@@ -45,42 +45,16 @@
         </div>
 
         <!-- Address -->
-        <div class="form-group row">
-            <label asp-for="Address" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="Address" type="text" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-        </div>
+     
 
         <!-- Department -->
         <div class="form-group row">
-            <div class="form-group">
-                <label asp-for="DepartmentId"></label>
+            <label asp-for="DepartmentId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
                 <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control">
                     <option value="">Select a Department</option>
                 </select>
                 <span asp-validation-for="DepartmentId" class="text-danger"></span>
-            </div>
-
-
-
-
-        <!-- Shift Start Time -->
-        <div class="form-group row">
-            <label asp-for="ShiftStartTime" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="ShiftStartTime" type="datetime-local" class="form-control" />
-                <span asp-validation-for="ShiftStartTime" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Shift End Time -->
-        <div class="form-group row">
-            <label asp-for="ShiftEndTime" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="ShiftEndTime" type="datetime-local" class="form-control" />
-                <span asp-validation-for="ShiftEndTime" class="text-danger"></span>
             </div>
         </div>
 
@@ -89,7 +63,7 @@
                 <button type="submit" class="btn btn-primary form-control">Create</button>
             </div>
             <div class="col-6 col-md-3">
-                <a asp-controller="Assistants" asp-action="Index" class="btn btn-outline-secondary form-control border">Back to list</a>
+                <a asp-controller="Faculty" asp-action="Index" class="btn btn-outline-secondary form-control border">Back to list</a>
             </div>
         </div>
     </div>
