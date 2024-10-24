@@ -1,27 +1,30 @@
-﻿namespace HospitalManagement.Models
-{
-    public class Assistant
+﻿ using System.Collections.Generic;
+ using System.ComponentModel.DataAnnotations;
+
+
+    namespace HospitalManagement.Models
     {
-        public int AssistantId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Email { get; set; }
-        public string Phone { get; set; }
-        public string Address { get; set; }
+        public class Assistant
+        {
+            public int AssistantId { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string Email { get; set; }
+            public string Phone { get; set; }
+            public string Address { get; set; }
 
-        // Foreign Key to Department
-        public int DepartmentId { get; set; }
-        public Department Department { get; set; }
+           
+            public int DepartmentId { get; set; }
 
-        // Shift timing
-        public DateTime ShiftStartTime { get; set; }
-        public DateTime ShiftEndTime { get; set; }
+            public DateTime ShiftStartTime { get; set; }
+            public DateTime ShiftEndTime { get; set; }
 
-        // Navigation property for schedules
-        public ICollection<Schedule> Schedules { get; set; }
+            // Navigation properties
+            public virtual Department Department { get; set; }
 
-        // Navigation property for appointments
-        public ICollection<Appointment> Appointments { get; set; }
+            // Collection for related appointments
+            public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+           // Collection for related schedules
+        public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
     }
-
-}
+    }

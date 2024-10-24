@@ -16,16 +16,49 @@ namespace HospitalManagement.Controllers
             _db = db;
         }
 
+        // GET: Assistants
         public IActionResult Index()
         {
-            // Include the Department data when retrieving the list of assistants
             List<Assistant> objAssistantList = _db.Assistants
-                .Include(a => a.Department) // Include related Department data
+                .Include(a => a.Department) // Eagerly load the Department
                 .ToList();
 
             return View(objAssistantList);
         }
 
-        // Other actions (Create, Edit, Delete) can go here...
+
+        // GET: Create Assistant
+        public IActionResult CreateAssistant()
+        {
+            // Fetch departments from the database and pass them to the view
+            ViewBag.Departments = _db.Departments.ToList(); // Ensure this is populated
+            return View(new Assistant()); // Return an empty Assistant object to the view
+        }
+
+        // POST: Create Assistant
+        [HttpPost]
+        [ValidateAntiForgeryToken] // This helps prevent CSRF attacks
+        public IActionResult CreateAssistant(Assistant assistant)
+        {
+            if (ModelState.IsValid)
+            {
+                // Save the assistant data
+                _db.Assistants.Add(assistant);
+                _db.SaveChanges();
+
+                // After saving, reload the assistant with its related department
+                _db.Entry(assistant).Reference(a => a.Department).Load(); // This loads the Department navigation property
+
+                return RedirectToAction("Index");
+            }
+
+            // Repopulate departments if model state is invalid
+            ViewBag.Departments = _db.Departments.ToList();
+            return View(assistant);
+        }
+
+
+
+        // Additional actions (e.g., Edit, Delete, Details) can go here...
     }
 }

@@ -1,0 +1,105 @@
+﻿@model Assistant
+
+<form asp-action="CreateAssistant" method="post" class="container mt-4">
+    <div class="border p-3">
+        <div class="row pb-2">
+            <h2 class="text-primary col-12">Create Assistant</h2>
+            <hr class="col-12" />
+            <div asp-validation-summary="All" class="col-12"></div>
+        </div>
+
+        <!-- First Name -->
+        <div class="form-group row">
+            <label asp-for="FirstName" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="FirstName" type="text" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group row">
+            <label asp-for="LastName" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="LastName" type="text" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group row">
+            <label asp-for="Email" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="Email" type="email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group row">
+            <label asp-for="Phone" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="Phone" type="text" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Address -->
+        <div class="form-group row">
+            <label asp-for="Address" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="Address" type="text" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Department -->
+        <div class="form-group row">
+            <div class="form-group row">
+                <label asp-for="DepartmentId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <select asp-for="DepartmentId" class="form-control">
+                        <option value="">Select Department</option>
+                        @foreach (var department in ViewBag.Departments)
+                        {
+                            <option value="@department.DepartmentId">@department.DepartmentName</option>
+                        }
+                    </select>
+                    <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+
+        <!-- Shift Start Time -->
+        <div class="form-group row">
+            <label asp-for="ShiftStartTime" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="ShiftStartTime" type="datetime-local" class="form-control" />
+                <span asp-validation-for="ShiftStartTime" class="text-danger"></span>
+            </div>
+        </div>
+
+        <!-- Shift End Time -->
+        <div class="form-group row">
+            <label asp-for="ShiftEndTime" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <input asp-for="ShiftEndTime" type="datetime-local" class="form-control" />
+                <span asp-validation-for="ShiftEndTime" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Create</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Assistants" asp-action="Index" class="btn btn-outline-secondary form-control border">Back to list</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

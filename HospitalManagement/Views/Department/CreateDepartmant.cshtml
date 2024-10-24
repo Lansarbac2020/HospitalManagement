@@ -1,0 +1,42 @@
+﻿@model Department
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2 ">
+            <h2 class="text-primary">Create Department</h2>
+            <hr />
+            <div asp-validation-summary="All"></div>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="DepartmentName" class="p-0"></label>
+            <input asp-for="DepartmentName" type="text" class="form-control" />
+            <span asp-validation-for="DepartmentName" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="PatientCount" class="p-0"></label>
+            <input asp-for="PatientCount" type="number" class="form-control" />
+            <span asp-validation-for="PatientCount" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="AvailableBeds" class="p-0"></label>
+            <input asp-for="AvailableBeds" type="number" class="form-control" />
+            <span asp-validation-for="AvailableBeds" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button type="submit" class="btn btn-primary form-control">Create</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-controller="Department" asp-action="Index" class="btn btn-outline-secondary form-control border">Back to list</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
