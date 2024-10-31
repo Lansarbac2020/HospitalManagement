@@ -1,0 +1,79 @@
+﻿@model Assistant
+
+<form method="post" class="container mx-auto mt-4 max-w-lg">
+    <div class="border p-6 bg-white rounded-lg shadow-md">
+        <div class="pb-4">
+            <h2 class="text-2xl font-semibold text-blue-600">Edit Assistant</h2>
+            <hr class="mt-2 mb-4" />
+            <div asp-validation-summary="All" class="text-red-500"></div>
+        </div>
+
+        <!-- First Name -->
+        <div class="mb-4">
+            <label asp-for="FirstName" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="FirstName" type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="FirstName" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Last Name -->
+        <div class="mb-4">
+            <label asp-for="LastName" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="LastName" type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="LastName" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-4">
+            <label asp-for="Email" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="Email" type="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="Email" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Phone -->
+        <div class="mb-4">
+            <label asp-for="Phone" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="Phone" type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="Phone" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Address -->
+        <div class="mb-4">
+            <label asp-for="Address" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="Address" type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="Address" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Department -->
+        <div class="mb-4">
+            <label asp-for="DepartmentId" class="block text-sm font-medium text-gray-700"></label>
+            <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">Select a Department</option>
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Shift Start Time -->
+        <div class="mb-4">
+            <label asp-for="ShiftStartTime" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="ShiftStartTime" type="datetime-local" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="ShiftStartTime" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Shift End Time -->
+        <div class="mb-4">
+            <label asp-for="ShiftEndTime" class="block text-sm font-medium text-gray-700"></label>
+            <input asp-for="ShiftEndTime" type="datetime-local" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+            <span asp-validation-for="ShiftEndTime" class="text-sm text-red-500"></span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex space-x-4">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md shadow-sm">Edit</button>
+            <a asp-controller="Assistants" asp-action="Index" class="w-full text-center bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-md shadow-sm">Back to list</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

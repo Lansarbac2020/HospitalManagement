@@ -47,8 +47,8 @@
                                 <td class="py-3 px-4">@assistant.ShiftStartTime.ToString("hh:mm tt")</td>
                                 <td class="py-3 px-4">@assistant.ShiftEndTime.ToString("hh:mm tt")</td>
                                 <td class="py-3 px-4">
-                                    <a asp-controller="Assistant" asp-action="Edit" asp-route-id="@assistant.AssistantId" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
-                                    <a asp-controller="Assistant" asp-action="Delete" asp-route-id="@assistant.AssistantId" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</a>
+                                    <a asp-controller="Assistants" asp-action="EditAssistant" asp-route-id="@assistant.AssistantId" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
+                                    <a asp-controller="Assistants" asp-action="Delete" asp-route-id="@assistant.AssistantId" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</a>
                                 </td>
                             </tr>
                         }

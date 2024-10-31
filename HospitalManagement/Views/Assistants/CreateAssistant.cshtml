@@ -1,86 +1,91 @@
 ﻿@model Assistant
-
-<form asp-action="CreateAssistant" method="post" class="container mt-4">
-    <div class="border p-3">
-        <div class="row pb-2">
-            <h2 class="text-primary col-12">Create Assistant</h2>
+<form asp-action="CreateAssistant" method="post" class="container">
+    <div class="max-w-7xl mx-auto border p-3 mt-10">
+        <div class="row pb-2 mt-6">
+            <h2 class="text-primary font-bold text-center mb-3 text-3xl col-12">Create Assistant</h2>
             <hr class="col-12" />
             <div asp-validation-summary="All" class="col-12"></div>
         </div>
 
-        <!-- First Name -->
-        <div class="form-group row">
-            <label asp-for="FirstName" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="FirstName" type="text" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-        </div>
+        <div class="row">
+            <!-- Colonne de gauche -->
+            <div class="col-md-6">
+                <!-- First Name -->
+                <div class="form-group row">
+                    <label asp-for="FirstName" class="col-form-label font-bold">First Name</label>
+                    <div>
+                        <input asp-for="FirstName" type="text" class="form-control" required />
+                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                    </div>
+                </div>
 
-        <!-- Last Name -->
-        <div class="form-group row">
-            <label asp-for="LastName" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="LastName" type="text" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-        </div>
+                <!-- Last Name -->
+                <div class="form-group row">
+                    <label asp-for="LastName" class="col-form-label font-bold">Last Name</label>
+                    <div>
+                        <input asp-for="LastName" type="text" class="form-control" required />
+                        <span asp-validation-for="LastName" class="text-danger"></span>
+                    </div>
+                </div>
 
-        <!-- Email -->
-        <div class="form-group row">
-            <label asp-for="Email" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="Email" type="email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-        </div>
+                <!-- Email -->
+                <div class="form-group row">
+                    <label asp-for="Email" class="col-form-label font-bold">Email</label>
+                    <div>
+                        <input asp-for="Email" type="email" class="form-control" required />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
 
-        <!-- Phone -->
-        <div class="form-group row">
-            <label asp-for="Phone" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="Phone" type="text" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Address -->
-        <div class="form-group row">
-            <label asp-for="Address" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="Address" type="text" class="form-control" />
-                <span asp-validation-for="Address" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Department -->
-        <div class="form-group row">
-            <div class="form-group">
-                <label asp-for="DepartmentId"></label>
-                <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control">
-                    <option value="">Select a Department</option>
-                </select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                <!-- Phone -->
+                <div class="form-group row">
+                    <label asp-for="Phone" class="col-form-label font-bold">Phone</label>
+                    <div>
+                        <input asp-for="Phone" type="text" class="form-control" required />
+                        <span asp-validation-for="Phone" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
 
+            <!-- Colonne de droite -->
+            <div class="col-md-6">
+                <!-- Address -->
+                <div class="form-group row">
+                    <label asp-for="Address" class="col-form-label font-bold">Address</label>
+                    <div>
+                        <input asp-for="Address" type="text" class="form-control" required />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+                </div>
 
+                <!-- Department -->
+                <div class="form-group row">
+                    <label asp-for="DepartmentId" class="col-form-label font-bold">Department </label>
+                    <div>
+                        <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control" required>
+                            <option value="">Select a Department</option>
+                        </select>
+                        <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                    </div>
+                </div>
 
+                <!-- Shift Start Time -->
+                <div class="form-group row">
+                    <label asp-for="ShiftStartTime" class="col-form-label font-bold">Shift Start Time </label>
+                    <div>
+                        <input asp-for="ShiftStartTime" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="ShiftStartTime" class="text-danger"></span>
+                    </div>
+                </div>
 
-        <!-- Shift Start Time -->
-        <div class="form-group row">
-            <label asp-for="ShiftStartTime" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="ShiftStartTime" type="datetime-local" class="form-control" />
-                <span asp-validation-for="ShiftStartTime" class="text-danger"></span>
-            </div>
-        </div>
-
-        <!-- Shift End Time -->
-        <div class="form-group row">
-            <label asp-for="ShiftEndTime" class="col-sm-3 col-form-label"></label>
-            <div class="col-sm-9">
-                <input asp-for="ShiftEndTime" type="datetime-local" class="form-control" />
-                <span asp-validation-for="ShiftEndTime" class="text-danger"></span>
+                <!-- Shift End Time -->
+                <div class="form-group row">
+                    <label asp-for="ShiftEndTime" class="col-form-label font-bold">Shift End Time </label>
+                    <div>
+                        <input asp-for="ShiftEndTime" type="datetime-local" class="form-control" required />
+                        <span asp-validation-for="ShiftEndTime" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
         </div>
 
