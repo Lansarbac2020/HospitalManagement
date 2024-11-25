@@ -85,7 +85,6 @@ namespace HospitalManagement.Controllers
             return View(appointment);
         }
 
-
         // GET: Edit Appointment
         public IActionResult EditAppointment(int? id)
         {
@@ -94,44 +93,9 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            Appointment appointmentFromDb = _db.Appointments.Find(id);
-            if (appointmentFromDb == null)
-            {
-                return NotFound();
-            }
-
-            ViewBag.Assistants = _db.Assistants.ToList();
-            ViewBag.FacultyMembers = _db.FacultyMembers.ToList();
-            return View(appointmentFromDb);
-        }
-
-        // POST: Edit Appointment
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult EditAppointment(Appointment appointment)
-        {
-            if (ModelState.IsValid)
-            {
-                _db.Appointments.Update(appointment); // Correctly updating the appointment instead of adding
-                _db.SaveChanges();
-
-                return RedirectToAction("Index");
-            }
-
-            ViewBag.Assistants = _db.Assistants.ToList();
-            ViewBag.FacultyMembers = _db.FacultyMembers.ToList();
-            return View(appointment);
-        }
-
-        // GET: Delete Appointment
-        public IActionResult DeleteAppointment(int? id)
-        {
-            if (id == null || id == 0)
-            {
-                return NotFound();
-            }
-
+            // Retrieve the appointment from the database
             Appointment appointmentFromDb = _db.Appointments
+                .Include(a => a.Assistant)
                 .Include(a => a.FacultyMember)
                 .FirstOrDefault(a => a.AppointmentId == id);
 
@@ -140,7 +104,83 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            return View(appointmentFromDb);
+            // Populate the dropdown for assistants and faculty members
+            ViewBag.Assistants = new SelectList(
+                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
+                "AssistantId",
+                "FullName",
+                appointmentFromDb.AssistantId
+            );
+            ViewBag.FacultyMembers = new SelectList(
+                _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
+                "FacultyId",
+                "FullName",
+                appointmentFromDb.FacultyMemberId
+            );
+
+            return View(appointmentFromDb);  // Return the view with the current appointment data
+        }
+
+
+        // POST: Edit Appointment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditAppointment(Appointment appointment)
+        {
+            if (ModelState.IsValid)
+            {
+                // Ensure the correct AssistantId and FacultyMemberId are provided
+                if (appointment.AssistantId == 0 || appointment.FacultyMemberId == 0)
+                {
+                    ModelState.AddModelError("", "Assistant and Faculty Member must be selected.");
+                    return View(appointment);  // Return the view with error messages
+                }
+
+                // Update the existing appointment in the database
+                _db.Appointments.Update(appointment);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");  // Redirect to the list of appointments
+            }
+
+            // Re-populate ViewBag in case of validation failure
+            ViewBag.Assistants = new SelectList(
+                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
+                "AssistantId",
+                "FullName",
+                appointment.AssistantId
+            );
+            ViewBag.FacultyMembers = new SelectList(
+                _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
+                "FacultyId",
+                "FullName",
+                appointment.FacultyMemberId
+            );
+
+            return View(appointment);  // Return the view if model validation fails
+        }
+
+        //Delete
+        // GET: Delete Appointment
+        public IActionResult DeleteAppointment(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            // Retrieve the appointment from the database
+            Appointment appointmentFromDb = _db.Appointments
+                .Include(a => a.Assistant)
+                .Include(a => a.FacultyMember)
+                .FirstOrDefault(a => a.AppointmentId == id);
+
+            if (appointmentFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(appointmentFromDb);  // Return the view to confirm deletion
         }
 
         // POST: Delete Appointment
@@ -148,16 +188,21 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
+            // Retrieve the appointment from the database
             Appointment appointmentFromDb = _db.Appointments.Find(id);
+
             if (appointmentFromDb == null)
             {
                 return NotFound();
             }
 
+            // Delete the appointment
             _db.Appointments.Remove(appointmentFromDb);
             _db.SaveChanges();
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");  // Redirect to the list of appointments
         }
+
+
     }
 }

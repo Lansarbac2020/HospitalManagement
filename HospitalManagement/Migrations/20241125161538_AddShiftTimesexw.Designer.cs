@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241125121202_AddAppointmentFields")]
-    partial class AddAppointmentFields
+    [Migration("20241125161538_AddShiftTimesexw")]
+    partial class AddShiftTimesexw
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,16 +102,21 @@ namespace HospitalManagement.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("Days")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
-                    b.Property<TimeSpan>("Duration")
-                        .HasColumnType("time");
-
                     b.Property<int>("FacultyMemberId")
                         .HasColumnType("int");
+
+                    b.Property<TimeSpan?>("ShiftEndTime")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan?>("ShiftStartTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -160,12 +165,6 @@ namespace HospitalManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ShiftEndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ShiftStartTime")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("AssistantId");
 
                     b.HasIndex("DepartmentId");
@@ -181,9 +180,7 @@ namespace HospitalManagement.Migrations
                             Email = "john.doe@example.com",
                             FirstName = "John",
                             LastName = "Doe",
-                            Phone = "555-1234",
-                            ShiftEndTime = new DateTime(2023, 10, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            ShiftStartTime = new DateTime(2023, 10, 21, 8, 0, 0, 0, DateTimeKind.Unspecified)
+                            Phone = "555-1234"
                         },
                         new
                         {
@@ -193,9 +190,7 @@ namespace HospitalManagement.Migrations
                             Email = "jane.smith@example.com",
                             FirstName = "Jane",
                             LastName = "Smith",
-                            Phone = "555-5678",
-                            ShiftEndTime = new DateTime(2023, 10, 21, 17, 0, 0, 0, DateTimeKind.Unspecified),
-                            ShiftStartTime = new DateTime(2023, 10, 21, 9, 0, 0, 0, DateTimeKind.Unspecified)
+                            Phone = "555-5678"
                         },
                         new
                         {
@@ -205,9 +200,7 @@ namespace HospitalManagement.Migrations
                             Email = "emily.johnson@example.com",
                             FirstName = "Emily",
                             LastName = "Johnson",
-                            Phone = "555-8765",
-                            ShiftEndTime = new DateTime(2023, 10, 21, 18, 0, 0, 0, DateTimeKind.Unspecified),
-                            ShiftStartTime = new DateTime(2023, 10, 21, 10, 0, 0, 0, DateTimeKind.Unspecified)
+                            Phone = "555-8765"
                         });
                 });
 
@@ -324,42 +317,10 @@ namespace HospitalManagement.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Models.Schedule", b =>
-                {
-                    b.Property<int>("ScheduleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ScheduleId"));
-
-                    b.Property<int>("AssistantId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DepartmentId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ShiftEndTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ShiftStartTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ScheduleId");
-
-                    b.HasIndex("AssistantId");
-
-                    b.HasIndex("DepartmentId");
-
-                    b.ToTable("Schedules");
-                });
-
             modelBuilder.Entity("HospitalManagement.Models.Appointment", b =>
                 {
                     b.HasOne("HospitalManagement.Models.Assistant", "Assistant")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("AssistantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -367,7 +328,7 @@ namespace HospitalManagement.Migrations
                     b.HasOne("HospitalManagement.Models.FacultyMember", "FacultyMember")
                         .WithMany("Appointments")
                         .HasForeignKey("FacultyMemberId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Assistant");
@@ -378,9 +339,9 @@ namespace HospitalManagement.Migrations
             modelBuilder.Entity("HospitalManagement.Models.Assistant", b =>
                 {
                     b.HasOne("Department", "Department")
-                        .WithMany()
+                        .WithMany("Assistants")
                         .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Department");
@@ -397,35 +358,9 @@ namespace HospitalManagement.Migrations
                     b.Navigation("Department");
                 });
 
-            modelBuilder.Entity("HospitalManagement.Models.Schedule", b =>
-                {
-                    b.HasOne("HospitalManagement.Models.Assistant", "Assistant")
-                        .WithMany("Schedules")
-                        .HasForeignKey("AssistantId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Department", "Department")
-                        .WithMany("Schedules")
-                        .HasForeignKey("DepartmentId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Assistant");
-
-                    b.Navigation("Department");
-                });
-
             modelBuilder.Entity("Department", b =>
                 {
-                    b.Navigation("Schedules");
-                });
-
-            modelBuilder.Entity("HospitalManagement.Models.Assistant", b =>
-                {
-                    b.Navigation("Appointments");
-
-                    b.Navigation("Schedules");
+                    b.Navigation("Assistants");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.FacultyMember", b =>

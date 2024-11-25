@@ -15,5 +15,5 @@ public class Department
     public int AvailableBeds { get; set; } // Fixed label from "Patien Name"
 
     // Navigation property for the related Schedules
-    public ICollection<Schedule> Schedules { get; set; } = new List<Schedule>(); // Initialize to avoid null reference
+    public ICollection<Assistant> Assistants { get; set; }  // Represents many-to-one relationship with Assistants
 }

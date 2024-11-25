@@ -25,14 +25,19 @@ namespace HospitalManagement.Models
         public DateTime AppointmentDate { get; set; }
 
         [StringLength(500)]
-        public  string? Description { get; set; }
+        public string? Description { get; set; }
 
+        // Shift start and end times
+        
+        [DataType(DataType.Time)]
+        public TimeSpan? ShiftStartTime { get; set; }
+        public TimeSpan? ShiftEndTime { get; set; }
         // Appointment status
         public string Status { get; set; } = "Pending";
 
         // Optional duration
         [DataType(DataType.Time)]
-        public TimeSpan Duration { get; set; }
+        public DateTime Days { get; set; }
 
         // Audit fields
         public DateTime CreatedAt { get; set; } = DateTime.Now;

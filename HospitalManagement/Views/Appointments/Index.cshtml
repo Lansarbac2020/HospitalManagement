@@ -31,7 +31,9 @@
                         <th scope="col" class="py-3 px-4 text-left">Appointment Date</th>
                         <th scope="col" class="py-3 px-4 text-left">Description</th>
                         <th scope="col" class="py-3 px-4 text-left">Status</th>
-                        <th scope="col" class="py-3 px-4 text-left">Duration</th>
+                        <th scope="col" class="py-3 px-4 text-left">Days</th>
+                        <th scope="col" class="py-3 px-4 text-left">Shift StartTime</th>
+                        <th scope="col" class="py-3 px-4 text-left">Shift EndTime</th>
                         <th scope="col" class="py-3 px-4 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -54,8 +56,11 @@
                                 </td>
                                 <td class="py-3 px-4">@appointment.Description</td>
                                 <td class="py-3 px-4">@appointment.Status</td>
-                                <td class="py-3 px-4">@appointment.Duration.ToString(@"hh\:mm")</td>
-                                <td class="py-3 px-4">
+                                <td class="py-3 px-4">@appointment.Days.ToString(@"MM/dd/yyyy")</td>
+                                <td class="py-3 px-4">@appointment.ShiftStartTime?.ToString(@"hh\:mm")</td>
+                                <td class="py-3 px-4">@appointment.ShiftEndTime?.ToString(@"hh\:mm")</td>
+
+                                <td class="py-3 flex gap-1 px-4">
                                     <a asp-controller="Appointments" asp-action="EditAppointment" asp-route-id="@appointment.AppointmentId"
                                        class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">
                                         Edit

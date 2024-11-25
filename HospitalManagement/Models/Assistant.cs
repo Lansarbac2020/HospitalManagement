@@ -16,9 +16,6 @@ namespace HospitalManagement.Models
         [Required(ErrorMessage = "Department is required.")]
         public int DepartmentId { get; set; }
 
-        public DateTime ShiftStartTime { get; set; }
-        public DateTime ShiftEndTime { get; set; }
-
         // Navigation properties
         public virtual Department? Department { get; set; }
         
