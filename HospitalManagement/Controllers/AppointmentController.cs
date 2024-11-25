@@ -1,149 +1,163 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
-    public class AppointmentController : Controller
+    public class AppointmentsController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _db;
 
-        public AppointmentController(ApplicationDbContext context)
+        public AppointmentsController(ApplicationDbContext db)
         {
-            _context = context;
+            _db = db;
         }
 
-        // GET: Appointment/Index
-        public async Task<IActionResult> Index()
+        // GET: Appointments
+        public IActionResult Index()
         {
-            var appointments = await _context.Appointments
+            var appointments = _db.Appointments
                 .Include(a => a.Assistant)
                 .Include(a => a.FacultyMember)
-                .ToListAsync();
+                .ToList();
+
             return View(appointments);
         }
 
-        // GET: Appointment/Details/5
-        public async Task<IActionResult> Details(int? id)
+
+        // GET: Create Appointment
+        [HttpGet]
+        public IActionResult CreateAppointment()
         {
-            if (id == null)
-                return NotFound();
+            // Fetch assistants and populate the dropdown
+            ViewBag.Assistants = new SelectList(
+                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
+                "AssistantId",
+                "FullName"
+            );
 
-            var appointment = await _context.Appointments
-                .Include(a => a.Assistant)
-                .Include(a => a.FacultyMember)
-                .FirstOrDefaultAsync(m => m.AppointmentId == id);
+            // Fetch faculty members and populate the dropdown
+            ViewBag.FacultyMembers = new SelectList(
+                _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
+                "FacultyId",
+                "FullName"
+            );
 
-            if (appointment == null)
-                return NotFound();
-
-            return View(appointment);
-        }
-
-        // GET: Appointment/Create
-        public IActionResult Create()
-        {
-            ViewData["AssistantId"] = _context.Assistants.ToList();
-            ViewData["FacultyMemberId"] = _context.FacultyMembers.ToList();
             return View();
         }
 
-        // POST: Appointment/Create
+
+
+
+        // POST: Create Appointment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AssistantId,FacultyMemberId,AppointmentDate,Description,Status,Duration")] Appointment appointment)
+        public IActionResult CreateAppointment(Appointment appointment)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(appointment);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // Ensure that AssistantId and FacultyMemberId are set
+                if (appointment.AssistantId == 0 || appointment.FacultyMemberId == 0)
+                {
+                    // Handle the case where the assistant or faculty member isn't selected
+                    ModelState.AddModelError("", "Assistant and Faculty Member must be selected.");
+                    return View(appointment);
+                }
+
+                // Set CreatedAt and UpdatedAt fields
+                appointment.CreatedAt = DateTime.Now;
+                appointment.UpdatedAt = DateTime.Now;
+
+                _db.Appointments.Add(appointment);
+                _db.SaveChanges();
+
+                return RedirectToAction("Index"); // Redirect to the appointment list or any other page
             }
-            ViewData["AssistantId"] = _context.Assistants.ToList();
-            ViewData["FacultyMemberId"] = _context.FacultyMembers.ToList();
+
+            // Re-populate ViewBag in case of validation failure
+            ViewBag.Assistants = new SelectList(_db.Assistants, "AssistantId", "FirstName");
+            ViewBag.FacultyMembers = new SelectList(_db.FacultyMembers, "FacultyMemberId", "FullName");
+
             return View(appointment);
         }
 
-        // GET: Appointment/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+
+        // GET: Edit Appointment
+        public IActionResult EditAppointment(int? id)
         {
-            if (id == null)
+            if (id == null || id == 0)
+            {
                 return NotFound();
+            }
 
-            var appointment = await _context.Appointments.FindAsync(id);
-            if (appointment == null)
+            Appointment appointmentFromDb = _db.Appointments.Find(id);
+            if (appointmentFromDb == null)
+            {
                 return NotFound();
+            }
 
-            ViewData["AssistantId"] = _context.Assistants.ToList();
-            ViewData["FacultyMemberId"] = _context.FacultyMembers.ToList();
-            return View(appointment);
+            ViewBag.Assistants = _db.Assistants.ToList();
+            ViewBag.FacultyMembers = _db.FacultyMembers.ToList();
+            return View(appointmentFromDb);
         }
 
-        // POST: Appointment/Edit/5
+        // POST: Edit Appointment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AppointmentId,AssistantId,FacultyMemberId,AppointmentDate,Description,Status,Duration")] Appointment appointment)
+        public IActionResult EditAppointment(Appointment appointment)
         {
-            if (id != appointment.AppointmentId)
-                return NotFound();
-
             if (ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(appointment);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!AppointmentExists(appointment.AppointmentId))
-                        return NotFound();
-                    else
-                        throw;
-                }
-                return RedirectToAction(nameof(Index));
+                _db.Appointments.Update(appointment); // Correctly updating the appointment instead of adding
+                _db.SaveChanges();
+
+                return RedirectToAction("Index");
             }
-            ViewData["AssistantId"] = _context.Assistants.ToList();
-            ViewData["FacultyMemberId"] = _context.FacultyMembers.ToList();
+
+            ViewBag.Assistants = _db.Assistants.ToList();
+            ViewBag.FacultyMembers = _db.FacultyMembers.ToList();
             return View(appointment);
         }
 
-        // GET: Appointment/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        // GET: Delete Appointment
+        public IActionResult DeleteAppointment(int? id)
         {
-            if (id == null)
+            if (id == null || id == 0)
+            {
                 return NotFound();
+            }
 
-            var appointment = await _context.Appointments
-                .Include(a => a.Assistant)
+            Appointment appointmentFromDb = _db.Appointments
                 .Include(a => a.FacultyMember)
-                .FirstOrDefaultAsync(m => m.AppointmentId == id);
+                .FirstOrDefault(a => a.AppointmentId == id);
 
-            if (appointment == null)
+            if (appointmentFromDb == null)
+            {
                 return NotFound();
+            }
 
-            return View(appointment);
+            return View(appointmentFromDb);
         }
 
-        // POST: Appointment/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: Delete Appointment
+        [HttpPost, ActionName("DeleteAppointment")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var appointment = await _context.Appointments.FindAsync(id);
-            _context.Appointments.Remove(appointment);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            Appointment appointmentFromDb = _db.Appointments.Find(id);
+            if (appointmentFromDb == null)
+            {
+                return NotFound();
+            }
 
-        private bool AppointmentExists(int id)
-        {
-            return _context.Appointments.Any(e => e.AppointmentId == id);
+            _db.Appointments.Remove(appointmentFromDb);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index");
         }
     }
 }
-

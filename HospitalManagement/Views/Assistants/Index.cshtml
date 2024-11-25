@@ -28,8 +28,7 @@
                         <th scope="col" class="py-3 px-4 text-left">Email</th>
                         <th scope="col" class="py-3 px-4 text-left">Phone</th>
                         <th scope="col" class="py-3 px-4 text-left">Department</th>
-                        <th scope="col" class="py-3 px-4 text-left">Shift Start</th>
-                        <th scope="col" class="py-3 px-4 text-left">Shift End</th>
+                        
                         <th scope="col" class="py-3 px-4 text-left">Actions</th>
                     </tr>
                 </thead>
@@ -45,8 +44,6 @@
                                 <td class="py-3 px-4">@assistant.Email</td>
                                 <td class="py-3 px-4">@assistant.Phone</td>
                                 <td class="py-3 px-4">@assistant.Department?.DepartmentName</td>
-                                <td class="py-3 px-4">@assistant.ShiftStartTime.ToString("hh:mm tt")</td>
-                                <td class="py-3 px-4">@assistant.ShiftEndTime.ToString("hh:mm tt")</td>
                                 <td class="py-3 px-4">
                                     <a asp-controller="Assistants" asp-action="EditAssistant" asp-route-id="@assistant.AssistantId" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
                                     <a asp-controller="Assistants" asp-action="Delete" asp-route-id="@assistant.AssistantId" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</a>

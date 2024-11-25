@@ -21,7 +21,6 @@ namespace HospitalManagement.Models
 
         // Navigation properties
         public virtual Department? Department { get; set; }
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
-        public virtual ICollection<Schedule> Schedules { get; set; } = new List<Schedule>();
+        
     }
 }

@@ -17,7 +17,7 @@ namespace HospitalManagement.Models
         // Foreign key to Faculty Member
         [Required]
         public int FacultyMemberId { get; set; }
-        public virtual FacultyMember FacultyMember { get; set; }
+        public virtual FacultyMember? FacultyMember { get; set; }
 
         // Appointment details
         [Required]
@@ -25,7 +25,7 @@ namespace HospitalManagement.Models
         public DateTime AppointmentDate { get; set; }
 
         [StringLength(500)]
-        public required string Description { get; set; }
+        public  string? Description { get; set; }
 
         // Appointment status
         public string Status { get; set; } = "Pending";
