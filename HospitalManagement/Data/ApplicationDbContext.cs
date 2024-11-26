@@ -1,9 +1,11 @@
 ﻿using HospitalManagement.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+
 
 namespace HospitalManagement.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -25,7 +27,8 @@ namespace HospitalManagement.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Seed Categories, Departments, and Assistants
+            base.OnModelCreating(modelBuilder);
+            // Seed Categories, Departments, and Assistants;
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Apple", Displayorder = "1" },
                 new Category { Id = 2, Name = "TV", Displayorder = "2" },

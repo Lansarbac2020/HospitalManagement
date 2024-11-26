@@ -1,0 +1,62 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Faculty Member - Pediatric Department</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Edit Faculty Member</h1>
+
+        <form asp-action="Edit" method="post">
+            <div class="form-group">
+                <label for="FacultyId">Faculty ID</label>
+                <input type="text" class="form-control" id="FacultyId" name="FacultyId" value="@Model.FacultyId" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="FirstName">First Name</label>
+                <input type="text" class="form-control" id="FirstName" name="FirstName" value="@Model.FirstName" required />
+            </div>
+
+            <div class="form-group">
+                <label for="LastName">Last Name</label>
+                <input type="text" class="form-control" id="LastName" name="LastName" value="@Model.LastName" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Phone">Phone</label>
+                <input type="text" class="form-control" id="Phone" name="Phone" value="@Model.Phone" />
+            </div>
+
+            <div class="form-group">
+                <label for="Department">Department</label>
+                <select class="form-control" id="Department" name="DepartmentId">
+                    <option value="">-- Select Department --</option>
+                    @foreach (var department in ViewData["Departments"] as List<Department>)
+
+                    {
+                        <option value="@department.DepartmentId">
+                            @department.DepartmentName
+                        </option>
+                    }
+
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Update Faculty Member</button>
+            <a href="@Url.Action("Index", "Faculty")" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

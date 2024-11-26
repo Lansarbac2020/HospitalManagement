@@ -46,21 +46,29 @@ namespace HospitalManagement.Controllers
         }
 
         // GET: Faculty/Edit/5
-        public async Task<IActionResult> Edit(int id)
+        // FacultyController.cs
+        public IActionResult Edit(int id)
         {
-            var facultyMember = await _context.FacultyMembers.FindAsync(id);
+            var facultyMember = _context.FacultyMembers.Find(id);
             if (facultyMember == null)
             {
                 return NotFound();
             }
-            ViewBag.Departments = _context.Departments.ToList();
-            return View(facultyMember);
+
+            // Fetch the list of departments
+            var departments = _context.Departments.ToList();
+
+            // Pass the departments list to the view
+            ViewData["Departments"] = departments;
+
+            return View(facultyMember); // This will pass the facultyMember to the Edit view
         }
+
 
         // POST: Faculty/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, FacultyMember facultyMember)
+        public IActionResult Edit(int id, FacultyMember facultyMember)
         {
             if (id != facultyMember.FacultyId)
             {
@@ -72,19 +80,21 @@ namespace HospitalManagement.Controllers
                 try
                 {
                     _context.Update(facultyMember);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!FacultyMemberExists(facultyMember.FacultyId))
+                    if (!_context.FacultyMembers.Any(e => e.FacultyId == facultyMember.FacultyId))
                     {
                         return NotFound();
                     }
-                    throw;
+                    else
+                    {
+                        throw;
+                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); // Assuming you have an Index action to return the list
             }
-            ViewBag.Departments = _context.Departments.ToList();
             return View(facultyMember);
         }
 

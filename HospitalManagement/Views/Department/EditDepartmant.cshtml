@@ -1,0 +1,44 @@
+﻿@model Department
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Edit Department</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Edit Department</h1>
+
+        <form asp-action="Edit" method="post">
+            <div class="form-group">
+                <label for="DepartmentId">ID</label>
+                <input type="text" id="DepartmentId" class="form-control" name="DepartmentId" value="@Model.DepartmentId" readonly />
+            </div>
+
+            <div class="form-group">
+                <label for="DepartmentName">Department Name</label>
+                <input type="text" id="DepartmentName" class="form-control" name="DepartmentName" value="@Model.DepartmentName" />
+            </div>
+
+            <div class="form-group">
+                <label for="PatientCount">Patient Count</label>
+                <input type="number" id="PatientCount" class="form-control" name="PatientCount" value="@Model.PatientCount" />
+            </div>
+
+            <div class="form-group">
+                <label for="AvailableBeds">Available Beds</label>
+                <input type="number" id="AvailableBeds" class="form-control" name="AvailableBeds" value="@Model.AvailableBeds" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -183,25 +183,32 @@ namespace HospitalManagement.Controllers
             return View(appointmentFromDb);  // Return the view to confirm deletion
         }
 
+
         // POST: Delete Appointment
-        [HttpPost, ActionName("DeleteAppointment")]
+
+        // POST: Delete Appointment
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            // Retrieve the appointment from the database
-            Appointment appointmentFromDb = _db.Appointments.Find(id);
+            Console.WriteLine($"Received ID: {id}"); // For debugging
+            if (id == 0)
+            {
+                return BadRequest("Invalid ID");
+            }
 
-            if (appointmentFromDb == null)
+            var appointment = _db.Appointments.Find(id);
+            if (appointment == null)
             {
                 return NotFound();
             }
 
-            // Delete the appointment
-            _db.Appointments.Remove(appointmentFromDb);
+            _db.Appointments.Remove(appointment);
             _db.SaveChanges();
 
-            return RedirectToAction("Index");  // Redirect to the list of appointments
+            return RedirectToAction("Index");
         }
+
 
 
     }
