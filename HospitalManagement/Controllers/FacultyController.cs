@@ -98,7 +98,7 @@ namespace HospitalManagement.Controllers
             return View(facultyMember);
         }
         // GET: Faculty/Delete/5
-        public IActionResult Delete(int? id)
+        public IActionResult DeleteFaculty(int? id)
         {
             if (id == null || id == 0)
             {
@@ -118,20 +118,20 @@ namespace HospitalManagement.Controllers
         }
 
         // POST: Faculty/DeleteConfirmed
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var facultyMember = _context.FacultyMembers.Find(id);
-            if (facultyMember == null)
+            var facultyFromDb = _context.FacultyMembers.Find(id);
+            if (facultyFromDb == null)
             {
                 return NotFound();
             }
 
-            _context.FacultyMembers.Remove(facultyMember);
+            _context.FacultyMembers.Remove(facultyFromDb);
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
 

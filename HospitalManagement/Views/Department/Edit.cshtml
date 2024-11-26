@@ -1,17 +1,6 @@
 ﻿@model Department
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>Edit Department</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="text-center">Edit Department</h1>
-
-        <form asp-action="Edit" method="post">
+ <form asp-action="Edit" method="post">
             <div class="form-group">
                 <label for="DepartmentId">ID</label>
                 <input type="text" id="DepartmentId" class="form-control" name="DepartmentId" value="@Model.DepartmentId" readonly />
@@ -32,13 +21,11 @@
                 <input type="number" id="AvailableBeds" class="form-control" name="AvailableBeds" value="@Model.AvailableBeds" />
             </div>
 
-            <button type="submit" class="btn btn-primary">Save Changes</button>
-            <a asp-controller="Departments" asp-action="Index" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-primary">Upate Changes</button>
+            <a asp-controller="Department" asp-action="Index" class="btn btn-secondary">Cancel</a>
         </form>
-    </div>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</body>
-</html>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

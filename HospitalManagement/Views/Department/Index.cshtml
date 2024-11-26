@@ -38,8 +38,8 @@
                             <td>@department.PatientCount</td>
                             <td>@department.AvailableBeds</td>
                             <td>
-                                <a asp-controller="Departments" asp-action="Edit" asp-route-id="@department.DepartmentId" class="btn btn-warning btn-sm">Edit</a>
-                                <a asp-controller="Departments" asp-action="Delete" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-sm">Delete</a>
+                                <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.DepartmentId" class="btn btn-warning btn-sm">Edit</a>
+                                <a asp-controller="Department" asp-action="Delete" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-sm">Delete</a>
                             </td>
                         </tr>
                     }

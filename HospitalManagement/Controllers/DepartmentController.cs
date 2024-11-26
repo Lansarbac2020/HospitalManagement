@@ -32,32 +32,39 @@ namespace HospitalManagement.Controllers
             return View();
         }
         // DepartmentsController.cs
-        public IActionResult Edit(int id)
+        public IActionResult Edit(int? id)
         {
-            var department = _context.Departments.Find(id);
-            if (department == null)
+           // var department = _context.Departments.Find(id);
+            if (id == null)
             {
                 return NotFound();
             }
-
-            return View(department); // Pass the department object to the Edit view
+            Department departmentFromDb = _context.Departments.Find(id);
+            if(departmentFromDb==null)
+            {
+                return NotFound();
+            }
+            return View(departmentFromDb);
         }
+
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(Department department)
+        public IActionResult Edit([Bind("DepartmentId,DepartmentName,PatientCount,AvailableBeds")] Department department)
         {
             if (ModelState.IsValid)
             {
                 _context.Departments.Update(department);
                 _context.SaveChanges();
-
-                return RedirectToAction(nameof(Index)); // Redirect back to the list
+                return RedirectToAction("Index");
             }
 
-            return View(department); // If validation fails, return to the Edit view
+            return View(department);
         }
+
+
+
 
     }
 }
