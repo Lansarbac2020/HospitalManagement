@@ -191,7 +191,7 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Console.WriteLine($"Received ID: {id}"); // For debugging
+            Console.WriteLine($"Received ID: {id}");
             if (id == 0)
             {
                 return BadRequest("Invalid ID");
