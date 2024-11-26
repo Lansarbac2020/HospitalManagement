@@ -1,0 +1,48 @@
+﻿@model HospitalManagement.Models.Assistant
+
+@{
+    ViewData["Title"] = "Delete Assistant";
+}
+
+<h2>Delete Assistant</h2>
+
+<p>Are you sure you want to delete this assistant?</p>
+
+<div>
+    <strong>Name:</strong> @Model.FirstName<br />
+    <strong>Email:</strong> @Model.Email<br />
+    <strong>Department:</strong> @Model.Department.DepartmentName<br />
+</div>
+
+<!-- Trigger button to open the modal -->
+<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+    Yes, Delete
+</button>
+<a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+
+<!-- Modal Dialog Box -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this assistant?</p>
+                <ul>
+                    <li><strong>Name:</strong> @Model.FirstName +""+@Model.LastName</li>
+                    <li><strong>Email:</strong> @Model.Email</li>
+                    <li><strong>Department:</strong> @Model.Department.DepartmentName</li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <form asp-action="DeleteConfirmed" method="post">
+                    <input type="hidden" name="id" value="@Model.AssistantId" />
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                </form>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

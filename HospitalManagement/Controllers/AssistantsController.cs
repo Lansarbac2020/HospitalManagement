@@ -84,5 +84,42 @@ namespace HospitalManagement.Controllers
             ViewBag.Departments = _db.Departments.ToList();
             return View(assistant);
         }
+
+        // GET: Delete Assistant
+        public IActionResult DeleteAssistant(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            Assistant assistantFromDb = _db.Assistants.Include(a => a.Department).FirstOrDefault(a => a.AssistantId == id);
+            if (assistantFromDb == null)
+            {
+                return NotFound();
+            }
+
+            return View(assistantFromDb); // Return the assistant to the view to show details in modal
+        }
+
+        // POST: Delete Assistant
+        [HttpPost, ActionName("DeleteConfirmed")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var assistantFromDb = _db.Assistants.Find(id);
+            if (assistantFromDb == null)
+            {
+                return NotFound();
+            }
+
+            _db.Assistants.Remove(assistantFromDb);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index"); // Redirect back to the list of assistants after deletion
+        }
+
+
+
     }
 }

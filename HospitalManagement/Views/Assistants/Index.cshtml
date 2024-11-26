@@ -45,8 +45,8 @@
                                 <td class="py-3 px-4">@assistant.Phone</td>
                                 <td class="py-3 px-4">@assistant.Department?.DepartmentName</td>
                                 <td class="py-3 px-4">
-                                    <a asp-controller="Assistants" asp-action="EditAssistant" asp-route-id="@assistant.AssistantId" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-2 rounded">Edit</a>
-                                    <a asp-controller="Assistants" asp-action="Delete" asp-route-id="@assistant.AssistantId" class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Delete</a>
+                                    <a href="@Url.Action("EditAssistant", new { id = assistant.AssistantId })" class="btn btn-primary">Edit</a>
+                                    <a href="@Url.Action("DeleteAssistant", new { id = assistant.AssistantId })" class="btn btn-danger">Delete</a>
                                 </td>
                             </tr>
                         }

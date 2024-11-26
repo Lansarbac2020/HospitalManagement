@@ -97,32 +97,44 @@ namespace HospitalManagement.Controllers
             }
             return View(facultyMember);
         }
-
         // GET: Faculty/Delete/5
-        public async Task<IActionResult> Delete(int id)
+        public IActionResult Delete(int? id)
         {
-            var facultyMember = await _context.FacultyMembers.Include(f => f.Department).FirstOrDefaultAsync(m => m.FacultyId == id);
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var facultyMember = _context.FacultyMembers
+                .Include(f => f.Department) // Include related Department details
+                .FirstOrDefault(f => f.FacultyId == id);
+
             if (facultyMember == null)
             {
                 return NotFound();
             }
+
             return View(facultyMember);
         }
 
-        // POST: Faculty/Delete/5
+        // POST: Faculty/DeleteConfirmed
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var facultyMember = await _context.FacultyMembers.FindAsync(id);
+            var facultyMember = _context.FacultyMembers.Find(id);
+            if (facultyMember == null)
+            {
+                return NotFound();
+            }
+
             _context.FacultyMembers.Remove(facultyMember);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
 
-        private bool FacultyMemberExists(int id)
-        {
-            return _context.FacultyMembers.Any(e => e.FacultyId == id);
-        }
+
+
     }
 }
