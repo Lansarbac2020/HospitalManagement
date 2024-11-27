@@ -1,17 +1,37 @@
 ﻿@model LoginViewModel
 
-<h2>Login</h2>
-<form asp-action="Login" method="post">
-    <div class="form-group">
-        <label>Email</label>
-        <input asp-for="Email" class="form-control" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label>Password</label>
-        <input asp-for="Password" class="form-control" type="password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Login</button>
-</form>
+<!-- Login Form Container -->
+<div class="flex justify-center items-center min-h-screen bg-gray-100">
+    <div class="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
 
+        <!-- Login Form -->
+        <form asp-action="Login" method="post">
+            <!-- Email Field -->
+            <div class="mb-4">
+                <label for="Email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input asp-for="Email" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Password Field -->
+            <div class="mb-6">
+                <label for="Password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input asp-for="Password" type="password" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="flex justify-center">
+                <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    Login
+                </button>
+            </div>
+        </form>
+
+        <!-- Forgot Password Link -->
+        <div class="mt-4 text-center">
+            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</a>
+        </div>
+    </div>
+</div>

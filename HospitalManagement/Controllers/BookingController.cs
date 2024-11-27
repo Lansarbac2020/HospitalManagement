@@ -49,7 +49,10 @@ namespace HospitalManagement.Controllers
 
             var appointment = _db.Appointments
                 .Include(a => a.Assistant)
+                .ThenInclude(assistant => assistant.Department)
                 .Include(a => a.FacultyMember)
+               .Include(a => a.Department) // Ensure the Department is included
+
                 .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Pending");
 
             if (appointment == null)

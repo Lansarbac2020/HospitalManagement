@@ -26,9 +26,11 @@ namespace HospitalManagement.Models
 
         [StringLength(500)]
         public string? Description { get; set; }
+        public int? DepartmentId { get; set; } // Foreign Key
+        public Department? Department { get; set; } // Navigation Property
 
         // Shift start and end times
-        
+
         [DataType(DataType.Time)]
         public TimeSpan? ShiftStartTime { get; set; }
         public TimeSpan? ShiftEndTime { get; set; }
