@@ -1,0 +1,32 @@
+﻿@{
+    ViewData["Title"] = "Book an Appointment";
+}
+
+<h2>Book an Appointment</h2>
+
+<div id="calendar"></div>
+
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var calendarEl = document.getElementById('calendar');
+
+            // Initialisation de FullCalendar
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'timeGridWeek', // Vue hebdomadaire
+                events: '/Appointments/GetAvailableSlots', // API des créneaux
+                selectable: true, // Permet de sélectionner une plage horaire
+                eventClick: function (info) {
+                    // Redirige vers la page de réservation
+                    var appointmentId = info.event.id;
+                    window.location.href = `/Appointments/ConfirmBooking/${appointmentId}`;
+                }
+            });
+
+            calendar.render();
+        });
+    </script>
+}

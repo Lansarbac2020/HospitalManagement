@@ -1,0 +1,37 @@
+﻿@model HospitalManagement.Models.Appointment
+
+@{
+    ViewData["Title"] = "Confirm Booking";
+}
+
+@* Tailwind CSS classes are added for responsiveness and better styling *@
+<div class="max-w-4xl mt-10 mx-auto p-6 bg-white shadow-lg rounded-lg">
+    <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">@ViewData["Title"]</h2>
+
+    <div class="mb-6">
+        <h3 class="text-lg font-semibold text-gray-400 text-center">Appointment Details</h3>
+        <p class="text-gray-600">
+            <strong>Assistant:</strong> @Model.Assistant.FirstName @Model.Assistant.LastName<br />
+            <strong>Date:</strong> @Model.AppointmentDate.ToShortDateString()<br />
+            <strong>Faculty Member:</strong> @Model.FacultyMember?.FirstName @Model.FacultyMember?.LastName<br />
+            <strong>Time:</strong> @Model.ShiftStartTime?.ToString("hh\\:mm") - @Model.ShiftEndTime?.ToString("hh\\:mm")
+        </p>
+    </div>
+
+    <form asp-action="ConfirmBooking" method="post" class="space-y-6">
+        @* Hidden field to pass appointment ID *@
+        <input type="hidden" name="id" value="@Model.AppointmentId" />
+
+        <div class="form-group">
+            <label for="description" class="block text-sm font-medium text-gray-700">Description:</label>
+            <textarea name="description" id="description" required rows="4" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" placeholder="Enter a description or notes about the appointment"></textarea>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="w-full py-3 px-6 bg-indigo-600 text-white font-semibold rounded-md shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Confirm Booking</button>
+        </div>
+    </form>
+</div>
+
+@* Additional Tailwind utility classes for responsiveness *@
+

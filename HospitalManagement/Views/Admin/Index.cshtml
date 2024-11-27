@@ -1,2 +1,40 @@
-﻿<h2>Admin Dashboard</h2>
-<p>Welcome to the admin section.</p>
+﻿@model AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container mt-5">
+    <h2 class="mb-4">Admin Dashboard</h2>
+    <div class="row">
+        <!-- Departments Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-primary mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Departments</h5>
+                    <p class="card-text display-4">@Model.DepartmentCount</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Faculty Members Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-success mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Faculty Members</h5>
+                    <p class="card-text display-4">@Model.FacultyCount</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Assistants Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Assistants</h5>
+                    <p class="card-text display-4">@Model.AssistantCount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

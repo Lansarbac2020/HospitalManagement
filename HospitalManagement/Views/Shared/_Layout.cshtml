@@ -24,7 +24,7 @@
                         {
                             <!-- Admin Navigation Bar -->
                             <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Home" asp-action="Index"> Dashboard </a>
+                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Admin" asp-action="Index"> Dashboard </a>
                             </li>
                             <li>
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Assistants" asp-action="Index"> Assistant Management </a>
@@ -52,7 +52,8 @@
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Department" asp-action="Index"> Departments </a>
                             </li>
                             <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Appointments" asp-action="Index"> Book Appointment </a>
+                                <a href="/Booking/BookAppointment" class="text-blue-500 hover:text-blue-700">Book Appointment</a>
+
                             </li>
                             <li>
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Emergency" asp-action="Index"> Emergency Info </a>
@@ -100,6 +101,10 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/locales-all.min.js"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
