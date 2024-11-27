@@ -1,1 +1,31 @@
-﻿<h1>Allrdv</h1>
+﻿@model IEnumerable<HospitalManagement.Models.BookedAppointment>
+
+<h2>Booked Appointments</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Assistant</th>
+            <th>Appointment Date</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model)
+        {
+            <tr>
+                <td>@booking.Assistant.FirstName @booking.Assistant.LastName</td>
+                <td>@booking.Appointment.AppointmentDate</td>
+                <td>@booking.Description</td>
+                <td>@booking.Status</td>
+                <td>
+                    <a href="@Url.Action("Edit", "Booking", new { id = booking.BookedAppointmentId })" class="btn btn-primary">Edit</a>
+                    <a href="@Url.Action("Delete", "Booking", new { id = booking.BookedAppointmentId })" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

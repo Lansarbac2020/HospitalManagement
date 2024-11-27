@@ -1,0 +1,14 @@
+﻿@model HospitalManagement.Models.BookedAppointment
+
+<h2>Are you sure you want to delete this booking?</h2>
+
+<div>
+    <p><strong>Assistant:</strong> @Model.Assistant.FirstName @Model.Assistant.LastName</p>
+    <p><strong>Appointment Date:</strong> @Model.Appointment.AppointmentDate</p>
+    <p><strong>Description:</strong> @Model.Description</p>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a href="@Url.Action("Index")" class="btn btn-secondary">Cancel</a>
+</form>

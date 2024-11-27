@@ -18,7 +18,7 @@ namespace HospitalManagement.Controllers
         }
         public IActionResult BookAppointment()
         {
-            return View(); // Cette action retourne la vue `BookAppointment.cshtml`
+            return View();
         }
         // API : Renvoie les créneaux disponibles pour le calendrier
         [HttpGet]
@@ -38,7 +38,7 @@ namespace HospitalManagement.Controllers
             return Json(availableSlots); // Retourne les données pour le calendrier
         }
 
-        // GET: Confirmer la réservation
+       
         [HttpGet]
         public IActionResult ConfirmBooking(int? id)
         {
@@ -77,11 +77,112 @@ namespace HospitalManagement.Controllers
             appointment.Description = description;
             appointment.UpdatedAt = DateTime.Now;
 
+
+            // Create a new BookedAppointment
+            var bookedAppointment = new BookedAppointment
+            {
+                AppointmentId = appointment.AppointmentId,
+                AssistantId = appointment.AssistantId,
+                Description = description,
+                BookingDate = DateTime.Now,
+                Status = "Booked"
+            };
+            // Add BookedAppointment to the database
+            _db.BookedAppointments.Add(bookedAppointment);
             _db.SaveChanges();
 
             return RedirectToAction("Index"); // Redirige vers la liste des rendez-vous
         }
+        // GET: List all booked appointments
+        public IActionResult Index()
+        {
+            var bookedAppointments = _db.BookedAppointments
+                .Include(b => b.Appointment)
+                .Include(b => b.Assistant)
+                .ToList();
+            return View(bookedAppointments); // Display the list of booked appointments
+        }
 
+        // GET: Edit a booked appointment
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
 
+            var bookedAppointment = _db.BookedAppointments
+                .Include(b => b.Assistant)
+                .Include(b => b.Appointment)
+                .FirstOrDefault(b => b.BookedAppointmentId == id);
+
+            if (bookedAppointment == null)
+            {
+                return NotFound();
+            }
+
+            return View(bookedAppointment); // Displays the edit form for the booking
+        }
+
+        // POST: Update a booked appointment
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, string description)
+        {
+            var bookedAppointment = _db.BookedAppointments.FirstOrDefault(b => b.BookedAppointmentId == id);
+
+            if (bookedAppointment == null)
+            {
+                return NotFound();
+            }
+
+            bookedAppointment.Description = description;
+            bookedAppointment.BookingDate = DateTime.Now;
+
+            _db.SaveChanges();
+
+            return RedirectToAction("Index"); // Redirects to the list of booked appointments
+        }
+
+        // GET: Delete a booked appointment
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            var bookedAppointment = _db.BookedAppointments
+                .Include(b => b.Appointment)
+                .Include(b => b.Assistant)
+                .FirstOrDefault(b => b.BookedAppointmentId == id);
+
+            if (bookedAppointment == null)
+            {
+                return NotFound();
+            }
+
+            return View(bookedAppointment); // Displays the delete confirmation
+        }
+
+        // POST: Delete a booked appointment
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var bookedAppointment = _db.BookedAppointments.Find(id);
+
+            if (bookedAppointment == null)
+            {
+                return NotFound();
+            }
+
+            _db.BookedAppointments.Remove(bookedAppointment);
+            _db.SaveChanges();
+
+            return RedirectToAction("Index"); // Redirects to the list of booked appointments
+        }
     }
 }

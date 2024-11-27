@@ -1,0 +1,12 @@
+﻿@model HospitalManagement.Models.BookedAppointment
+
+<h2>Edit Booked Appointment</h2>
+
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label for="Description">Description</label>
+        <textarea id="Description" name="description" class="form-control">@Model.Description</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+</form>

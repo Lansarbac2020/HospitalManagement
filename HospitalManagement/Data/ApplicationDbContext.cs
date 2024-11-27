@@ -21,6 +21,7 @@ namespace HospitalManagement.Data
         public DbSet<Department> Departments { get; set; }
        
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<BookedAppointment> BookedAppointments { get; set; }
         public DbSet<Emergency> Emergencies { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Role> Roles { get; set; }
