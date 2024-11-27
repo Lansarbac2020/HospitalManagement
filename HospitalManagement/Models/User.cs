@@ -2,8 +2,10 @@
 
 namespace HospitalManagement.Models
 {
-    public class LoginViewModel
+    public class User
     {
+        public int Id { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
@@ -12,6 +14,6 @@ namespace HospitalManagement.Models
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-       
+        public string Role { get; set; } = "Public"; // Default role is "Public"
     }
 }

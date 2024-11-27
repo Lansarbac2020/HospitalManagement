@@ -1,20 +1,17 @@
-﻿@model HospitalManagement.Models.LoginViewModel
+﻿@model LoginViewModel
 
 <h2>Login</h2>
-<form asp-action="Login">
-    <div>
-        <label asp-for="Email"></label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
+<form asp-action="Login" method="post">
+    <div class="form-group">
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
-    <div>
-        <label asp-for="Password"></label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
+    <div class="form-group">
+        <label>Password</label>
+        <input asp-for="Password" class="form-control" type="password" />
+        <span asp-validation-for="Password" class="text-danger"></span>
     </div>
-    <div>
-        <input asp-for="RememberMe" type="checkbox" />
-        <label asp-for="RememberMe">Remember me?</label>
-    </div>
-    <button type="submit">Login</button>
+    <button type="submit" class="btn btn-primary">Login</button>
 </form>
+

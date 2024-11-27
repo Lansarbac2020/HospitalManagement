@@ -17,46 +17,49 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 // Add services
 builder.Services.AddControllersWithViews();
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+});
+
 
 var app = builder.Build();
 
 //// Seed roles
-//using (var scope = app.Services.CreateScope())
-//{
-//    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-//    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-//    // Ensure roles exist
-//    string[] roles = { "Admin", "User" };
-//    foreach (var role in roles)
-//    {
-//        if (!await roleManager.RoleExistsAsync(role))
-//        {
-//            await roleManager.CreateAsync(new IdentityRole(role));
-//        }
-//    }
+    // Ensure roles exist
+    string adminRole = "Admin";
+    if (!await roleManager.RoleExistsAsync(adminRole))
+    {
+        await roleManager.CreateAsync(new IdentityRole(adminRole));
+    }
 
-//    // Optionally seed an admin user
-//    var adminEmail = "admin@example.com";
-//    var adminPassword = "Admin@123"; // Ensure this is strong in production
+    // Seed admin user
+    var adminEmail = "admin@example.com";
+    var adminPassword = "Admin@123"; // Use a strong password in production
 
-//    if (await userManager.FindByEmailAsync(adminEmail) == null)
-//    {
-//        var adminUser = new IdentityUser
-//        {
-//            UserName = adminEmail,
-//            Email = adminEmail,
-//            EmailConfirmed = true
-//        };
+    if (await userManager.FindByEmailAsync(adminEmail) == null)
+    {
+        var adminUser = new IdentityUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            EmailConfirmed = true
+        };
 
-//        var createAdminResult = await userManager.CreateAsync(adminUser, adminPassword);
+        var result = await userManager.CreateAsync(adminUser, adminPassword);
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, adminRole);
+        }
+    }
+}
 
-//        if (createAdminResult.Succeeded)
-//        {
-//            await userManager.AddToRoleAsync(adminUser, "Admin");
-//        }
-//    }
-//}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

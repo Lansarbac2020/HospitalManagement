@@ -1,0 +1,29 @@
+﻿@using Microsoft.AspNetCore.Http
+@{
+    var userRole = Context.Session.GetString("UserRole");
+}
+
+<header>
+    @if (userRole == "Admin")
+    {
+        <!-- Admin Navbar -->
+        <nav>
+            <ul>
+                <li><a asp-controller="Admin" asp-action="Dashboard">Dashboard</a></li>
+                <li><a asp-controller="Admin" asp-action="ManageUsers">Manage Users</a></li>
+                <li><a asp-controller="Account" asp-action="Logout">Logout</a></li>
+            </ul>
+        </nav>
+    }
+    else
+    {
+        <!-- Public Navbar -->
+        <nav>
+            <ul>
+                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                <li><a asp-controller="Account" asp-action="Login">Login</a></li>
+                <li><a asp-controller="Account" asp-action="Register">Register</a></li>
+            </ul>
+        </nav>
+    }
+</header>
