@@ -1,11 +1,12 @@
 ﻿using HospitalManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 
 namespace HospitalManagement.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -25,6 +26,8 @@ namespace HospitalManagement.Data
         public DbSet<Emergency> Emergencies { get; set; }
         public DbSet<Admin> Admins { get; set; }
         public DbSet<Role> Roles { get; set; }
+        // DbSet pour les patients
+        public DbSet<Patient> Patients { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

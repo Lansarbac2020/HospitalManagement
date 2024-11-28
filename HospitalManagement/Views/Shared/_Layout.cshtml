@@ -65,7 +65,10 @@
                 <div class="flex items-center gap-4">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <!-- Admin or User Profile Section -->
+                        <!-- Afficher un message personnalisé après connexion -->
+                        <span class="text-white font-semibold">
+                            Hello, @User.Identity.Name
+                        </span>
                         <a href="/Account/Logout" class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block">
                             Logout
                         </a>
@@ -81,6 +84,7 @@
                         </a>
                     }
                 </div>
+
             </div>
         </div>
     </header>

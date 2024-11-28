@@ -14,13 +14,30 @@
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
-            // Initialisation de FullCalendar
+            // Fonction pour formatter les heures
+            function formatTime(time) {
+                const [hour, minute] = time.split(":");
+                return `${hour}h${minute}`; // Ajoute "h" entre l'heure et les minutes
+            }
+
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'timeGridWeek', // Vue hebdomadaire
+                initialView: 'timeGridWeek',
                 events: '/Booking/GetAvailableSlots', // API des créneaux
-                selectable: true, // Permet de sélectionner une plage horaire
+                eventContent: function (arg) {
+                   
+
+                    // Contenu personnalisé de chaque événement
+                    return {
+                        html: `
+                            <div class="custom-event">
+                                    <div class="title">${arg.event.title}</div>
+                                                <div class="time">${arg.event.start} - ${arg.event.end}</div>
+                                
+                            </div>
+                        `
+                    };
+                },
                 eventClick: function (info) {
-                    // Redirige vers la page de réservation
                     var appointmentId = info.event.id;
                     window.location.href = `/Booking/ConfirmBooking/${appointmentId}`;
                 }
@@ -28,5 +45,36 @@
 
             calendar.render();
         });
+
+
+
     </script>
+    <style>
+        .custom-event {
+            padding: 5px;
+            background-color: #007bff; /* Couleur de fond */
+            color: white; /* Couleur du texte */
+            border-radius: 5px;
+            font-size: 12px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+            .custom-event .time {
+                font-weight: bold;
+                font-size: 14px;
+                color: yellow; /* Couleur pour mettre en évidence */
+                margin-bottom: 2px;
+            }
+
+            .custom-event .title {
+                font-size: 10px;
+                color: white;
+            }
+
+    </style>
+
+
+
 }

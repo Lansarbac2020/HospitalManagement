@@ -1,25 +1,31 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
     public class BookingController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public BookingController(ApplicationDbContext db)
+        public BookingController(ApplicationDbContext db, UserManager<IdentityUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
+
         public IActionResult BookAppointment()
         {
             return View();
         }
+
         // API : Renvoie les créneaux disponibles pour le calendrier
         [HttpGet]
         public JsonResult GetAvailableSlots()
@@ -29,7 +35,8 @@ namespace HospitalManagement.Controllers
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.Assistant.FirstName} {a.Assistant.LastName}",
+                    title = $"{a.Assistant.FirstName} {a.Assistant.LastName} ({a.Assistant.Department.DepartmentName ?? "Any"})",
+                    departmentName = a.Assistant.Department.DepartmentName ?? "Not Assigned",
                     start = a.AppointmentDate.Date + a.ShiftStartTime,
                     end = a.AppointmentDate.Date + a.ShiftEndTime
                 })
@@ -38,7 +45,6 @@ namespace HospitalManagement.Controllers
             return Json(availableSlots); // Retourne les données pour le calendrier
         }
 
-       
         [HttpGet]
         public IActionResult ConfirmBooking(int? id)
         {
@@ -51,8 +57,7 @@ namespace HospitalManagement.Controllers
                 .Include(a => a.Assistant)
                 .ThenInclude(assistant => assistant.Department)
                 .Include(a => a.FacultyMember)
-               .Include(a => a.Department) // Ensure the Department is included
-
+                .Include(a => a.Department) // Ensure the Department is included
                 .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Pending");
 
             if (appointment == null)
@@ -75,11 +80,10 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            // Marque le rendez-vous comme réservé
+            // Mark the appointment as booked
             appointment.Status = "Booked";
             appointment.Description = description;
             appointment.UpdatedAt = DateTime.Now;
-
 
             // Create a new BookedAppointment
             var bookedAppointment = new BookedAppointment
@@ -88,23 +92,32 @@ namespace HospitalManagement.Controllers
                 AssistantId = appointment.AssistantId,
                 Description = description,
                 BookingDate = DateTime.Now,
-                Status = "Booked"
+                Status = "Booked",
+                UserId = User.Identity.Name // Capture the currently logged-in user’s username or UserId
             };
-            // Add BookedAppointment to the database
+
+            // Add the BookedAppointment to the database
             _db.BookedAppointments.Add(bookedAppointment);
             _db.SaveChanges();
 
-            return RedirectToAction("Index"); // Redirige vers la liste des rendez-vous
+            return RedirectToAction("Index"); // Redirects to the list of booked appointments
         }
+
+
         // GET: List all booked appointments
         public IActionResult Index()
         {
+            var userId = User.Identity.Name; // or User.FindFirst(ClaimTypes.NameIdentifier).Value
+
             var bookedAppointments = _db.BookedAppointments
+                .Where(b => b.UserId == userId) // Filter by the logged-in user’s UserId
                 .Include(b => b.Appointment)
                 .Include(b => b.Assistant)
                 .ToList();
+
             return View(bookedAppointments); // Display the list of booked appointments
         }
+
 
         // GET: Edit a booked appointment
         [HttpGet]

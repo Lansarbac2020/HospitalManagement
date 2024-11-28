@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
 builder.Services.AddDbContext<ApplicationDbContext>(options=>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -23,20 +23,30 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.SignIn.RequireConfirmedEmail = false;
+});
+
 
 var app = builder.Build();
 
-//// Seed roles
+
+//// Seed roles and users
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
 
-    // Ensure roles exist
-    string adminRole = "Admin";
-    if (!await roleManager.RoleExistsAsync(adminRole))
+    string[] roles = { "Admin", "Patient" }; // Liste des rôles à créer
+
+    foreach (var role in roles)
     {
-        await roleManager.CreateAsync(new IdentityRole(adminRole));
+        var roleExist = await roleManager.RoleExistsAsync(role);
+        if (!roleExist)
+        {
+            await roleManager.CreateAsync(new IdentityRole(role));
+        }
     }
 
     // Seed admin user
@@ -55,10 +65,31 @@ using (var scope = app.Services.CreateScope())
         var result = await userManager.CreateAsync(adminUser, adminPassword);
         if (result.Succeeded)
         {
-            await userManager.AddToRoleAsync(adminUser, adminRole);
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+
+    // (Optionnel) Seed patient user
+    var patientEmail = "patient@example.com";
+    var patientPassword = "Patient@123"; // Use a strong password in production
+
+    if (await userManager.FindByEmailAsync(patientEmail) == null)
+    {
+        var patientUser = new IdentityUser
+        {
+            UserName = patientEmail,
+            Email = patientEmail,
+           
+        };
+
+        var patientResult = await userManager.CreateAsync(patientUser, patientPassword);
+        if (patientResult.Succeeded)
+        {
+            await userManager.AddToRoleAsync(patientUser, "Patient");
         }
     }
 }
+
 
 
 // Configure the HTTP request pipeline.

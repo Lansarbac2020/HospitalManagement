@@ -23,7 +23,11 @@ namespace HospitalManagement.Models
         // Status of the appointment (e.g., confirmed, pending, canceled, etc.)
         public string Status { get; set; }
 
+        // Foreign key for the user who made the booking (this links to the logged-in user)
+        public string UserId { get; set; }  // This property links to IdentityUser
+
         // Optional: Add any additional fields you may need, such as payment status, reminder sent, etc.
     }
+
 }
 
