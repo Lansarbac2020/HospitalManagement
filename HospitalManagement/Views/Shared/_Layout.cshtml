@@ -61,16 +61,11 @@
                         }
                     </ul>
                 </nav>
-
                 <div class="flex items-center gap-4">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <!-- Fetch the logged-in user -->
-                        var user = await UserManager.GetUserAsync(User);
-
-                        <!-- Afficher un message personnalisé après connexion -->
                         <span class="text-white font-semibold">
-                            Hello, @user.FirstName
+                            Hello, @User.Identity.Name
                         </span>
                         <a href="/Account/Logout" class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block">
                             Logout
@@ -81,12 +76,12 @@
                     }
                     else
                     {
-                        <!-- Public View Login Button -->
                         <a href="/Account/Login" class="hidden rounded-md bg-gray-100 px-5 py-2.5 text-sm font-medium text-teal-600 transition hover:text-teal-600/75 sm:block">
                             Login
                         </a>
                     }
                 </div>
+
 
             </div>
         </div>

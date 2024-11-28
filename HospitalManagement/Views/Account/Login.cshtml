@@ -1,37 +1,55 @@
 ﻿@model LoginViewModel
 
-<!-- Login Form Container -->
+<!-- Main Container -->
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
+
+    <!-- Form Container -->
     <div class="w-full max-w-sm bg-white p-8 rounded-lg shadow-md">
-        <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+
+        <!-- Tab Navigation -->
+        <div class="flex justify-between gap-4  mb-6">
+            <button id="loginTab" class="text-xl font-semibold text-gray-700 bg-success p-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/2 py-2 border-b-2 border-gray-300 hover:border-blue-500">
+                Login
+            </button>
+            <a asp-controller="Account" asp-action="Register">
+                <div id="registerTab" class="text-xl font-semibold text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-1/2 py-2 border-b-2 border-gray-300 hover:border-blue-500">
+                    Register
+                </div>
+            </a>
+            
+        </div>
 
         <!-- Login Form -->
-        <form asp-action="Login" method="post">
-            <!-- Email Field -->
-            <div class="mb-4">
-                <label for="Email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input asp-for="Email" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
-            </div>
+        <div id="loginForm" class="space-y-4">
+            <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Login</h2>
+            <form asp-action="Login" method="post">
+                <div class="mb-4">
+                    <label for="Email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input asp-for="Email" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <span asp-validation-for="Email" class="text-red-500 text-sm"></span>
+                </div>
 
-            <!-- Password Field -->
-            <div class="mb-6">
-                <label for="Password" class="block text-sm font-medium text-gray-700">Password</label>
-                <input asp-for="Password" type="password" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
-                <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
-            </div>
+                <div class="mb-6">
+                    <label for="Password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input asp-for="Password" type="password" class="mt-1 p-3 w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                    <span asp-validation-for="Password" class="text-red-500 text-sm"></span>
+                </div>
 
-            <!-- Submit Button -->
-            <div class="flex justify-center">
-                <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                    Login
-                </button>
+                <div class="flex justify-center">
+                    <button type="submit" class="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        Login
+                    </button>
+                </div>
+            </form>
+            <div class="mt-4 text-center">
+                <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</a>
             </div>
-        </form>
+        </div>
 
-        <!-- Forgot Password Link -->
-        <div class="mt-4 text-center">
-            <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot Password?</a>
+        <!-- Register Form (Initially Hidden) -->
+        <div id="registerForm" class="space-y-4 hidden">
+            <h2 class="text-2xl font-semibold text-center text-gray-700 mb-6">Register</h2>
+           
         </div>
     </div>
 </div>
