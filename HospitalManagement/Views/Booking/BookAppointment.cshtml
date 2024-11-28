@@ -14,25 +14,24 @@
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
 
-            // Fonction pour formatter les heures
-            function formatTime(time) {
-                const [hour, minute] = time.split(":");
-                return `${hour}h${minute}`; // Ajoute "h" entre l'heure et les minutes
-            }
-
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'timeGridWeek',
                 events: '/Booking/GetAvailableSlots', // API des créneaux
                 eventContent: function (arg) {
-                   
+                    // Convert start and end times to the format you want (HH:mm)
+                    var startTime = new Date(arg.event.start);
+                    var endTime = new Date(arg.event.end);
+
+                    // Format to HH:mm (24-hour format)
+                    var startFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    var endFormatted = endTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
                     // Contenu personnalisé de chaque événement
                     return {
                         html: `
                             <div class="custom-event">
-                                    <div class="title">${arg.event.title}</div>
-                                                <div class="time">${arg.event.start} - ${arg.event.end}</div>
-                                
+                                <div class="time">${startFormatted} - ${endFormatted}</div>
+                                <div class="title">${arg.event.title}</div>
                             </div>
                         `
                     };
@@ -45,6 +44,7 @@
 
             calendar.render();
         });
+
 
 
 

@@ -91,7 +91,7 @@ namespace HospitalManagement.Controllers
                 AppointmentId = appointment.AppointmentId,
                 AssistantId = appointment.AssistantId,
                 Description = description,
-                BookingDate = DateTime.Now,
+                BookingDate = appointment.AppointmentDate,
                 Status = "Booked",
                 UserId = User.Identity.Name // Capture the currently logged-in user’s username or UserId
             };
