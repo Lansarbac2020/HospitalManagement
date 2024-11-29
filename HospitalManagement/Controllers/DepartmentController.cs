@@ -1,6 +1,9 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace HospitalManagement.Controllers
 {
@@ -18,20 +21,55 @@ namespace HospitalManagement.Controllers
         }
         public IActionResult CreateDepartmant()
         {
+            var facultyMembers = _context.FacultyMembers.Select(fm => new SelectListItem
+            {
+                Value = fm.FacultyId.ToString(),
+                Text = fm.FirstName + " " + fm.LastName
+            }).ToList();
+
+            ViewBag.FacultyMembers = facultyMembers;
             return View();
         }
+
         [HttpPost]
         public IActionResult CreateDepartmant(Department obj)
         {
-          
+            if (obj == null)
+            {
+                return BadRequest("Invalid department data.");
+            }
+
+            // Create the SelectList with the selected value from the model
+            ViewBag.FacultyMembers = new SelectList(
+                _context.FacultyMembers,
+                "FacultyId",
+                "FullName",
+                obj.FacultyMemberId);
+
+            // Check if the FacultyMemberId is already assigned to another department
+            var existingDepartment = _context.Departments
+                .FirstOrDefault(d => d.FacultyMemberId == obj.FacultyMemberId);
+
+            if (existingDepartment != null)
+            {
+                ModelState.AddModelError("FacultyMemberId", "This Faculty Member is already assigned to another department.");
+            }
+
+            // Only save to the database if the model is valid
             if (ModelState.IsValid)
             {
                 _context.Departments.Add(obj);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View();
+
+            // In case of validation errors, we ensure the SelectList is passed with the selected value
+            ViewBag.FacultyMembers = new SelectList(_context.FacultyMembers, "FacultyId", "FullName", obj.FacultyMemberId);
+
+            return View(obj); // Return the view with the current model (including validation errors)
         }
+
+
         // DepartmentsController.cs
         public IActionResult Edit(int? id)
         {
@@ -40,20 +78,27 @@ namespace HospitalManagement.Controllers
             {
                 return NotFound();
             }
-            Department departmentFromDb = _context.Departments.Find(id);
-            if(departmentFromDb==null)
-            {
-                return NotFound();
-            }
-            return View(departmentFromDb);
-        }
+            var department = _context.Departments.Include(d => d.FacultyMember).FirstOrDefault(d => d.DepartmentId == id);
+            if (department == null) return NotFound();
 
+            ViewBag.FacultyMembers = _context.FacultyMembers.ToList();
+            return View(department);
+        }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([Bind("DepartmentId,DepartmentName,PatientCount,AvailableBeds")] Department department)
+        public IActionResult Edit(Department department)
         {
+            // Check if the FacultyMemberId is already assigned to another department (excluding the current one)
+            var existingDepartment = _context.Departments
+                .FirstOrDefault(d => d.FacultyMemberId == department.FacultyMemberId && d.DepartmentId != department.DepartmentId);
+
+            if (existingDepartment != null)
+            {
+                ModelState.AddModelError("FacultyMemberId", "This Faculty Member is already assigned to another department.");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Departments.Update(department);
@@ -61,14 +106,10 @@ namespace HospitalManagement.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Log validation errors
-            foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-            {
-                Console.WriteLine(error.ErrorMessage); // Or log these errors appropriately
-            }
-
+            ViewBag.FacultyMembers = new SelectList(_context.FacultyMembers, "FacultyId", "FullName", department?.FacultyMemberId);
             return View(department);
         }
+
 
         // GET: Delete Department
         public IActionResult DeleteDepartment(int? id)

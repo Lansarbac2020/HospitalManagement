@@ -1,31 +1,45 @@
 ﻿@model Department
 
- <form asp-action="Edit" method="post">
-            <div class="form-group">
-                <label for="DepartmentId">ID</label>
-                <input type="text" id="DepartmentId" class="form-control" name="DepartmentId" value="@Model.DepartmentId" readonly />
-            </div>
+<form asp-action="Edit" method="post">
+    <div class="form-group">
+        <label for="DepartmentId">ID</label>
+        <input type="text" id="DepartmentId" class="form-control" name="DepartmentId" value="@Model.DepartmentId" readonly />
+    </div>
 
-            <div class="form-group">
-                <label for="DepartmentName">Department Name</label>
-                <input type="text" id="DepartmentName" class="form-control" name="DepartmentName" value="@Model.DepartmentName" />
-            </div>
+    <div class="form-group">
+        <label for="DepartmentName">Department Name</label>
+        <input type="text" id="DepartmentName" class="form-control" name="DepartmentName" value="@Model.DepartmentName" />
+    </div>
 
-            <div class="form-group">
-                <label for="PatientCount">Patient Count</label>
-                <input type="number" id="PatientCount" class="form-control" name="PatientCount" value="@Model.PatientCount" />
-            </div>
+    <div class="form-group">
+        <label for="PatientCount">Patient Count</label>
+        <input type="number" id="PatientCount" class="form-control" name="PatientCount" value="@Model.PatientCount" />
+    </div>
 
-            <div class="form-group">
-                <label for="AvailableBeds">Available Beds</label>
-                <input type="number" id="AvailableBeds" class="form-control" name="AvailableBeds" value="@Model.AvailableBeds" />
-            </div>
+    <div class="form-group">
+        <label for="AvailableBeds">Available Beds</label>
+        <input type="number" id="AvailableBeds" class="form-control" name="AvailableBeds" value="@Model.AvailableBeds" />
+    </div>
 
-            <button type="submit" class="btn btn-primary">Upate Changes</button>
-            <a asp-controller="Department" asp-action="Index" class="btn btn-secondary">Cancel</a>
-        </form>
+    <div class="form-group">
+        <label for="FacultyMemberId">Department Head</label>
+        <select id="FacultyMemberId" class="form-control" name="FacultyMemberId">
+            <option value="">Select a head</option>
+           @foreach (var facultyMember in ViewBag.FacultyMembers)
+{
+    var isSelected = Model.FacultyMemberId == facultyMember.FacultyId ? "selected" : "";
+    <option value="@facultyMember.FacultyId">
+        @facultyMember.FirstName @facultyMember.LastName
+    </option>
+}
+
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Changes</button>
+    <a asp-controller="Department" asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

@@ -94,7 +94,12 @@ namespace HospitalManagement.Data
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete for Assistant -> Department
 
             // Configure Schedule relationship with Department
-           
+            modelBuilder.Entity<Department>()
+        .HasOne(d => d.FacultyMember)
+        .WithOne(f => f.HeadOfDepartment)
+        .HasForeignKey<Department>(d => d.FacultyMemberId)
+        .OnDelete(DeleteBehavior.Restrict); // Restrict delete to avoid cascading deletions
+
 
             base.OnModelCreating(modelBuilder); // Ensure this is called at the end to apply configurations
         }

@@ -2,28 +2,54 @@
 
 <form method="post">
     <div class="border p-3 mt-4">
-        <div class="row pb-2 ">
+        <div class="row pb-2">
             <h2 class="text-primary">Create Department</h2>
             <hr />
-            <div asp-validation-summary="All"></div>
+            <div asp-validation-summary="All" class="text-danger"></div>
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="DepartmentName" class="p-0"></label>
+            <label asp-for="DepartmentName" class="form-label"></label>
             <input asp-for="DepartmentName" type="text" class="form-control" />
             <span asp-validation-for="DepartmentName" class="text-danger"></span>
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="PatientCount" class="p-0"></label>
+            <label asp-for="PatientCount" class="form-label"></label>
             <input asp-for="PatientCount" type="number" class="form-control" />
             <span asp-validation-for="PatientCount" class="text-danger"></span>
         </div>
 
         <div class="mb-3 row p-1">
-            <label asp-for="AvailableBeds" class="p-0"></label>
+            <label asp-for="AvailableBeds" class="form-label"></label>
             <input asp-for="AvailableBeds" type="number" class="form-control" />
             <span asp-validation-for="AvailableBeds" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3 row p-1">
+            <label asp-for="FacultyMemberId" class="form-label">Department Head</label>
+            <select asp-for="FacultyMemberId" class="form-control">
+                <option value="">Select a department head</option>
+                @if (ViewBag.FacultyMembers != null && ((IEnumerable<SelectListItem>)ViewBag.FacultyMembers).Any())
+                {
+                    @foreach (var facultyMember in ViewBag.FacultyMembers)
+                    {
+                        <option value="@facultyMember.Value">
+                            @if (Model != null && Model.FacultyMemberId == facultyMember.Value)
+                            {
+                                <text>selected</text>
+                            }
+                            @facultyMember.Text
+                        </option>
+                    }
+                }
+                else
+                {
+                    <option value="">No Faculty Members Available</option>
+                }
+
+            </select>
+            <span asp-validation-for="FacultyMemberId" class="text-danger"></span>
         </div>
 
         <div class="row">
@@ -36,6 +62,8 @@
         </div>
     </div>
 </form>
+
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

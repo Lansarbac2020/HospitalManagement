@@ -14,11 +14,15 @@ namespace HospitalManagement.Models
         public int PatientCount { get; set; }
 
         [DisplayName("Available Beds")]
-        public int AvailableBeds { get; set; } // Fixed label from "Patien Name"
+        public int AvailableBeds { get; set; }
 
-        // Navigation property for the related Schedules
+        // Navigation property for the department's head (one-to-one relationship)
+        public int? FacultyMemberId { get; set; } // Nullable for departments without a head initially
+        public FacultyMember? FacultyMember { get; set; }
 
-        public ICollection<Assistant> Assistants { get; set; } = new List<Assistant>();  // Represents many-to-one relationship with Assistants
+        // Navigation property for assistants
+        public ICollection<Assistant> Assistants { get; set; } = new List<Assistant>();
     }
+
 
 }
