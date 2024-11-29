@@ -14,22 +14,28 @@ namespace HospitalManagement.Controllers
         {
             _context = db;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            List<Department> objDepartmanList=_context.Departments.ToList();
-            return View(objDepartmanList);
+            var departments = await _context.Departments
+                .Include(d => d.FacultyMember)  // Include FacultyMember to access FacultyMember's data
+                .ToListAsync();
+
+            return View(departments);
         }
+
         public IActionResult CreateDepartmant()
         {
-            var facultyMembers = _context.FacultyMembers.Select(fm => new SelectListItem
-            {
-                Value = fm.FacultyId.ToString(),
-                Text = fm.FirstName + " " + fm.LastName
-            }).ToList();
+            var facultyMembers = _context.FacultyMembers
+                .Select(fm => new SelectListItem
+                {
+                    Value = fm.FacultyId.ToString(),
+                    Text = fm.FirstName + " " + fm.LastName
+                }).ToList();
 
             ViewBag.FacultyMembers = facultyMembers;
             return View();
         }
+
 
         [HttpPost]
         public IActionResult CreateDepartmant(Department obj)
@@ -39,35 +45,31 @@ namespace HospitalManagement.Controllers
                 return BadRequest("Invalid department data.");
             }
 
-            // Create the SelectList with the selected value from the model
-            ViewBag.FacultyMembers = new SelectList(
-                _context.FacultyMembers,
-                "FacultyId",
-                "FullName",
-                obj.FacultyMemberId);
-
             // Check if the FacultyMemberId is already assigned to another department
             var existingDepartment = _context.Departments
                 .FirstOrDefault(d => d.FacultyMemberId == obj.FacultyMemberId);
 
             if (existingDepartment != null)
             {
-                ModelState.AddModelError("FacultyMemberId", "This Faculty Member is already assigned to another department.");
+                ViewBag.AlertMessage = "This Faculty Member is already assigned to another department.";
             }
 
-            // Only save to the database if the model is valid
-            if (ModelState.IsValid)
+            // Always assign FacultyMembers SelectList to ViewBag
+            ViewBag.FacultyMembers = new SelectList(_context.FacultyMembers, "FacultyId", "FullName", obj.FacultyMemberId);
+
+            if (ModelState.IsValid && existingDepartment == null)
             {
+                // Save department if no errors
                 _context.Departments.Add(obj);
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            // In case of validation errors, we ensure the SelectList is passed with the selected value
-            ViewBag.FacultyMembers = new SelectList(_context.FacultyMembers, "FacultyId", "FullName", obj.FacultyMemberId);
-
-            return View(obj); // Return the view with the current model (including validation errors)
+            // Return the view with errors (if any)
+            return View(obj);
         }
+
+
 
 
         // DepartmentsController.cs

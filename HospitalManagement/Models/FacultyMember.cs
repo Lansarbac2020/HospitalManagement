@@ -22,15 +22,8 @@ namespace HospitalManagement.Models
         [Phone(ErrorMessage = "Invalid phone number format.")]
         public string Phone { get; set; }
 
-        // Foreign Key for the Department they belong to
-        public int DepartmentId { get; set; }
-        public virtual Department? Department { get; set; }
-
-        // Navigation property for the department they lead
-        public virtual Department? HeadOfDepartment { get; set; } // One-to-one relationship
-        [Key]
-
-        // Navigation property for appointments
-        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>(); // Initialize the collection
+        // Navigation property for the department they head
+        public virtual Department? DepartmentHead { get; set; }
+        public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

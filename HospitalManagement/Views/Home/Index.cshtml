@@ -2,7 +2,77 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<body class="bg-gray-50">
+ <section class="relative bg-[url(https://images.unsplash.com/photo-1604014237800-1c9102c219da?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80)] bg-cover bg-center bg-no-repeat">
+        <div class="absolute inset-0 bg-gray-900/75 sm:bg-transparent sm:from-gray-900/95 sm:to-gray-900/25 ltr:sm:bg-gradient-to-r rtl:sm:bg-gradient-to-l"></div>
+
+        <div class="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
+            <div class="max-w-xl text-center ltr:sm:text-left rtl:sm:text-right">
+                <h1 class="text-3xl font-extrabold text-white sm:text-5xl">
+                    Let us find your
+
+                    <strong class="block font-extrabold text-rose-500"> Forever Home. </strong>
+                </h1>
+
+                <p class="mt-4 max-w-lg text-white sm:text-xl/relaxed">
+                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Nesciunt illo tenetur fuga ducimus
+                    numquam ea!
+                </p>
+
+                <div class="mt-8 flex flex-wrap gap-4 text-center">
+                    <a href="#"
+                       class="block w-full rounded bg-rose-600 px-12 py-3 text-sm font-medium text-white shadow hover:bg-rose-700 focus:outline-none focus:ring active:bg-rose-500 sm:w-auto">
+                        Get Started
+                    </a>
+
+                    <a href="#"
+                       class="block w-full rounded bg-white px-12 py-3 text-sm font-medium text-rose-600 shadow hover:text-rose-700 focus:outline-none focus:ring active:text-rose-500 sm:w-auto">
+                        Learn More
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-20 bg-gray-100">
+        <div class="container mx-auto text-center">
+            <h2 class="text-4xl font-bold text-gray-800 mb-8">Our Services</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Service Card 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pediatric Emergency</h3>
+                    <p class="text-gray-600 mb-4">Providing immediate care for children in critical conditions. Our emergency department is equipped with state-of-the-art technology.</p>
+                    <a href="#" class="text-blue-600 hover:underline">Learn More</a>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Pediatric Intensive Care</h3>
+                    <p class="text-gray-600 mb-4">Our pediatric intensive care unit is designed to meet the needs of critically ill children, offering advanced treatment options.</p>
+                    <a href="#" class="text-blue-600 hover:underline">Learn More</a>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-lg">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">General Pediatric Care</h3>
+                    <p class="text-gray-600 mb-4">We provide general pediatric care, from routine check-ups to complex medical conditions, ensuring your child's well-being at every stage of life.</p>
+                    <a href="#" class="text-blue-600 hover:underline">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="py-20 bg-blue-600 text-white">
+        <div class="container mx-auto text-center">
+            <h2 class="text-3xl font-bold mb-8">Get in Touch with Us</h2>
+            <p class="text-lg mb-8">Have any questions or want to schedule an appointment? Contact us and our team will assist you!</p>
+            <a href="mailto:contact@pediatricdepartment.com" class="bg-white text-blue-600 py-3 px-8 rounded-full text-xl font-semibold hover:bg-blue-100 transition duration-300">Contact Us</a>
+        </div>
+    </section>
+
+
+</body>
+
+

@@ -1,10 +1,22 @@
 ﻿@model Department
+@{
+    var alertMessage = ViewData["AlertMessage"] as string;
+}
 
 <form method="post">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">Create Department</h2>
             <hr />
+
+            <!-- Display the alert message if available -->
+            @if (!string.IsNullOrEmpty(alertMessage))
+            {
+                <div class="alert alert-danger">
+                    @alertMessage
+                </div>
+            }
+
             <div asp-validation-summary="All" class="text-danger"></div>
         </div>
 
@@ -28,27 +40,20 @@
 
         <div class="mb-3 row p-1">
             <label asp-for="FacultyMemberId" class="form-label">Department Head</label>
-            <select asp-for="FacultyMemberId" class="form-control">
-                <option value="">Select a department head</option>
-                @if (ViewBag.FacultyMembers != null && ((IEnumerable<SelectListItem>)ViewBag.FacultyMembers).Any())
-                {
-                    @foreach (var facultyMember in ViewBag.FacultyMembers)
-                    {
-                        <option value="@facultyMember.Value">
-                            @if (Model != null && Model.FacultyMemberId == facultyMember.Value)
-                            {
-                                <text>selected</text>
-                            }
-                            @facultyMember.Text
-                        </option>
-                    }
-                }
-                else
-                {
-                    <option value="">No Faculty Members Available</option>
-                }
 
-            </select>
+            @if (ViewBag.FacultyMembers == null || !((IEnumerable<SelectListItem>)ViewBag.FacultyMembers).Any())
+            {
+                <div class="alert alert-danger">
+                    Faculty members list is not available. Please check the data source.
+                </div>
+            }
+            else
+            {
+                <select asp-for="FacultyMemberId" class="form-control" asp-items="@(new SelectList(ViewBag.FacultyMembers, "Value", "Text", Model?.FacultyMemberId))">
+                    <option value="">Select a department head</option>
+                </select>
+            }
+
             <span asp-validation-for="FacultyMemberId" class="text-danger"></span>
         </div>
 
@@ -62,8 +67,6 @@
         </div>
     </div>
 </form>
-
-<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

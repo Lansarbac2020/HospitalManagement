@@ -19,7 +19,7 @@ namespace HospitalManagement.Controllers
         // GET: Faculty
         public async Task<IActionResult> Index()
         {
-            var facultyMembers = await _context.FacultyMembers.Include(f => f.Department).ToListAsync();
+            var facultyMembers = await _context.FacultyMembers.Include(f => f.DepartmentHead).ToListAsync();
             return View(facultyMembers);
         }
 
@@ -106,7 +106,7 @@ namespace HospitalManagement.Controllers
             }
 
             var facultyMember = _context.FacultyMembers
-                .Include(f => f.Department) // Include related Department details
+                .Include(f => f.DepartmentHead) // Include related Department details
                 .FirstOrDefault(f => f.FacultyId == id);
 
             if (facultyMember == null)

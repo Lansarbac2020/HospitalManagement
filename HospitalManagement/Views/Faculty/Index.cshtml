@@ -40,7 +40,7 @@
                             <td>@faculty.LastName</td>
                             <td>@faculty.Email</td>
                             <td>@faculty.Phone</td>
-                            <td>@faculty.Department?.DepartmentName</td> <!-- Assuming Department navigation is available -->
+                            <td>@faculty.DepartmentHead?.DepartmentName</td> <!-- Assuming Department navigation is available -->
                             <td>
                                 <a asp-controller="Faculty" asp-action="Edit" asp-route-id="@faculty.FacultyId" class="btn btn-warning btn-sm">Edit</a>
                                 <a asp-controller="Faculty" asp-action="DeleteFaculty" asp-route-id="@faculty.FacultyId" class="btn btn-danger btn-sm">Delete</a>

@@ -49,12 +49,12 @@
 
         <!-- Department -->
         <div class="form-group row">
-            <label asp-for="DepartmentId" class="col-sm-3 col-form-label"></label>
+            <label asp-for="DepartmentHead" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
-                <select asp-for="DepartmentId" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control">
+                <select asp-for="DepartmentHead" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control">
                     <option value="">Select a Department</option>
                 </select>
-                <span asp-validation-for="DepartmentId" class="text-danger"></span>
+                <span asp-validation-for="DepartmentHead" class="text-danger"></span>
             </div>
         </div>
 
