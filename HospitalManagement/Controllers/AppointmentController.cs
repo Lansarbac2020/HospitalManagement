@@ -218,7 +218,7 @@ namespace HospitalManagement.Controllers
         public JsonResult GetAvailableSlots()
         {
             var availableSlots = _db.Appointments
-                .Where(a => a.Status == "Pending") // Seules les disponibilités
+                .Where(a => a.Status == "Avalaible") // Seules les disponibilités
                 .Select(a => new
                 {
                     id = a.AppointmentId,
@@ -243,7 +243,7 @@ namespace HospitalManagement.Controllers
             var appointment = _db.Appointments
                 .Include(a => a.Assistant)
                 .Include(a=>a.FacultyMember)
-                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Pending");
+                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
 
             if (appointment == null)
             {
@@ -258,7 +258,7 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ConfirmBooking(int id, string description)
         {
-            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Pending");
+            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
 
             if (appointment == null)
             {

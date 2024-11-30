@@ -35,7 +35,7 @@ namespace HospitalManagement.Models
         public TimeSpan? ShiftStartTime { get; set; }
         public TimeSpan? ShiftEndTime { get; set; }
         // Appointment status
-        public string Status { get; set; } = "Pending";
+        public string Status { get; set; } = "Avalaible";
 
         // Optional duration
         [DataType(DataType.Time)]
