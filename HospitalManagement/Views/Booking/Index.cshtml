@@ -6,6 +6,7 @@
     <thead>
         <tr>
             <th>Assistant</th>
+            <th>DepartmentHead</th>
             <th>Appointment Date</th>
             <th>Description</th>
             <th>Status</th>
@@ -17,6 +18,7 @@
         {
             <tr>
                 <td>@booking.Assistant.FirstName @booking.Assistant.LastName</td>
+                <td>@booking.Assistant.Department?.DepartmentName</td>
                 <td>@booking.Appointment.AppointmentDate</td>
                 <td>@booking.Description</td>
                 <td>@booking.Status</td>
