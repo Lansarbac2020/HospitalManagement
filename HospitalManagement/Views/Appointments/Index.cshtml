@@ -26,12 +26,12 @@
                 <thead class="sticky top-0 bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <tr>
                         <th scope="col" class="py-3 px-4 text-left">Schedule ID</th>
-                        <th scope="col" class="py-3 px-4 text-left">Assistant</th>
+                        
                         <th scope="col" class="py-3 px-4 text-left">DepartmantHead-name</th>
                         <th scope="col" class="py-3 px-4 text-left">Availability Date</th>
                         <th scope="col" class="py-3 px-4 text-left">Description</th>
                         <th scope="col" class="py-3 px-4 text-left">Status</th>
-                        <th scope="col" class="py-3 px-4 text-left">Days</th>
+                      
                         <th scope="col" class="py-3 px-4 text-left">Shift StartTime</th>
                         <th scope="col" class="py-3 px-4 text-left">Shift EndTime</th>
                         <th scope="col" class="py-3 px-4 text-left">Actions</th>
@@ -45,9 +45,7 @@
                         {
                             <tr class="border-b border-gray-200 hover:bg-gray-100">
                                 <td class="py-3 px-4">@appointment.AppointmentId</td>
-                                <td class="py-3 px-4">
-                                    @appointment.Assistant?.FirstName @appointment.Assistant?.LastName
-                                </td>
+                               
                                 <td class="py-3 px-4">
                                     @appointment.FacultyMember?.FirstName @appointment.FacultyMember?.LastName
                                 </td>
@@ -56,7 +54,7 @@
                                 </td>
                                 <td class="py-3 px-4">@appointment.Description</td>
                                 <td class="py-3 px-4">@appointment.Status</td>
-                                <td class="py-3 px-4">@appointment.Days.ToString(@"MM/dd/yyyy")</td>
+                               
                                 <td class="py-3 px-4">@appointment.ShiftStartTime?.ToString(@"hh\:mm")</td>
                                 <td class="py-3 px-4">@appointment.ShiftEndTime?.ToString(@"hh\:mm")</td>
 

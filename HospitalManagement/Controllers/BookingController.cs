@@ -35,10 +35,12 @@ namespace HospitalManagement.Controllers
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.Assistant.FirstName} {a.Assistant.LastName} ({a.Assistant.Department.DepartmentName ?? "Any"})",
-                    departmentName = a.Assistant.Department.DepartmentName ?? "Not Assigned",
+                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} " +
+                    $" ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
+                    departmentName =$"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
                     start = a.AppointmentDate.Date + a.ShiftStartTime,
-                    end = a.AppointmentDate.Date + a.ShiftEndTime
+                    end = a.AppointmentDate.Date + a.ShiftEndTime,
+                   
                 })
                 .ToList();
 

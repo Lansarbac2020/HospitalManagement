@@ -21,6 +21,7 @@
                     // Convert start and end times to the format you want (HH:mm)
                     var startTime = new Date(arg.event.start);
                     var endTime = new Date(arg.event.end);
+                    // var department = new Date(arg.event.departmentName);
 
                     // Format to HH:mm (24-hour format)
                     var startFormatted = startTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -31,7 +32,8 @@
                         html: `
                             <div class="custom-event">
                                 <div class="time">${startFormatted} - ${endFormatted}</div>
-                                <div class="title">${arg.event.title}</div>
+                                        <div class="title1">${arg.event.title}</div>
+                                        <div class="department">${arg.departmentName}</div>
                             </div>
                         `
                     };
@@ -71,6 +73,11 @@
             .custom-event .title {
                 font-size: 10px;
                 color: white;
+            }
+
+            .custom-event department{
+                font-size: 15px;
+                color: red
             }
 
     </style>

@@ -13,7 +13,7 @@
         <p class="text-gray-600">
             <strong>Assistant:</strong> @Model.Assistant.FirstName @Model.Assistant.LastName<br />
             <strong>Date:</strong> @Model.AppointmentDate.ToShortDateString()<br />
-            <strong>Faculty Member:</strong> @Model.FacultyMember?.FirstName @Model.FacultyMember?.LastName<br />
+            <strong>Faculty Member:</strong> @Model.FacultyMember.FirstName @Model.FacultyMember?.LastName<br />
             <strong>Time:</strong> @Model.ShiftStartTime?.ToString("hh\\:mm") - @Model.ShiftEndTime?.ToString("hh\\:mm")
         </p>
     </div>
