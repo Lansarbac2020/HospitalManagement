@@ -100,6 +100,8 @@ namespace HospitalManagement.Data
          .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
 
+
+
             base.OnModelCreating(modelBuilder); // Ensure this is called at the end to apply configurations
         }
 

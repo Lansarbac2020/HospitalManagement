@@ -28,24 +28,25 @@ namespace HospitalManagement.Controllers
 
         // API : Renvoie les créneaux disponibles pour le calendrier
         [HttpGet]
+
+        [HttpGet]
         public JsonResult GetAvailableSlots()
         {
             var availableSlots = _db.Appointments
-                .Where(a => a.Status == "Avalaible") // Seules les disponibilités
+                .Where(a => a.Status == "Available") // Filtrer par statut "Available"
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} " +
-                    $" ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
-                    departmentName =$"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
-                    start = a.AppointmentDate.Date + a.ShiftStartTime,
-                    end = a.AppointmentDate.Date + a.ShiftEndTime,
-                   
+                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName}",
+                    start = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftStartTime),  // Combine date + time
+                    end = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftEndTime)       // Combine date + time
                 })
                 .ToList();
 
-            return Json(availableSlots); // Retourne les données pour le calendrier
+            return Json(availableSlots); 
         }
+
+
 
         [HttpGet]
         public IActionResult ConfirmBooking(int? id)
@@ -56,18 +57,16 @@ namespace HospitalManagement.Controllers
             }
 
             var appointment = _db.Appointments
-                .Include(a => a.Assistant)
-                .ThenInclude(assistant => assistant.Department)
-                .Include(a => a.FacultyMember)
-                .Include(a => a.Department) // Ensure the Department is included
-                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
+                .Include(a => a.FacultyMember) // Only include FacultyMember
+                .Include(a => a.FacultyMember.DepartmentHead) // Ensure Department is included
+                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(appointment); // Affiche un formulaire pour confirmer la réservation
+            return View(appointment); // Show the confirmation form for booking
         }
 
         // POST: Confirmer la réservation
@@ -75,7 +74,7 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ConfirmBooking(int id, string description)
         {
-            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
+            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
@@ -87,22 +86,9 @@ namespace HospitalManagement.Controllers
             appointment.Description = description;
             appointment.UpdatedAt = DateTime.Now;
 
-            // Create a new BookedAppointment
-            var bookedAppointment = new BookedAppointment
-            {
-                AppointmentId = appointment.AppointmentId,
-                AssistantId = appointment.AssistantId,
-                Description = description,
-                BookingDate = appointment.AppointmentDate,
-                Status = "Booked",
-                UserId = User.Identity.Name // Capture the currently logged-in user’s username or UserId
-            };
-
-            // Add the BookedAppointment to the database
-            _db.BookedAppointments.Add(bookedAppointment);
             _db.SaveChanges();
 
-            return RedirectToAction("Index"); // Redirects to the list of booked appointments
+            return RedirectToAction("Index"); // Redirect to the list of appointments
         }
 
 
@@ -114,7 +100,7 @@ namespace HospitalManagement.Controllers
             var bookedAppointments = _db.BookedAppointments
                 .Where(b => b.UserId == userId) // Filter by the logged-in user’s UserId
                 .Include(b => b.Appointment)
-                .Include(b => b.Assistant)
+                
                 .ToList();
 
             return View(bookedAppointments); // Display the list of booked appointments
@@ -131,7 +117,7 @@ namespace HospitalManagement.Controllers
             }
 
             var bookedAppointment = _db.BookedAppointments
-                .Include(b => b.Assistant)
+               // .Include(b => b.Assistant)
                 .Include(b => b.Appointment)
                 .FirstOrDefault(b => b.BookedAppointmentId == id);
 
@@ -173,8 +159,8 @@ namespace HospitalManagement.Controllers
             }
 
             var bookedAppointment = _db.BookedAppointments
-                .Include(b => b.Appointment)
-                .Include(b => b.Assistant)
+             .Include(b => b.Appointment)
+             //   .Include(b => b.Assistant)
                 .FirstOrDefault(b => b.BookedAppointmentId == id);
 
             if (bookedAppointment == null)

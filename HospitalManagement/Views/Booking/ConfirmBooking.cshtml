@@ -11,17 +11,40 @@
     <div class="mb-6">
         <h3 class="text-lg font-semibold text-gray-400 text-center">Appointment Details</h3>
         <p class="text-gray-600">
-            <strong>Assistant:</strong> @Model.Assistant.FirstName @Model.Assistant.LastName<br />
             <strong>Date:</strong> @Model.AppointmentDate.ToShortDateString()<br />
-            <strong>Faculty Member:</strong> @Model.FacultyMember?.FirstName @Model.FacultyMember?.LastName<br />
-             <strong>Department:</strong> @Model.Assistant.Department.DepartmentName<br />
+            <strong>Faculty Member:</strong>
+            @if (Model.FacultyMember != null)
+            {
+                @Model.FacultyMember.FirstName @Model.FacultyMember.LastName
+            }
+            else
+            {
+                <span class="text-red-500">Not Assigned</span>
+            }<br />
+            <strong>Department:</strong>
+            @if (Model.Department != null)
+            {
+                @Model.Department.DepartmentName
+            }
+            else
+            {
+                <span class="text-red-500">No Department</span>
+            }<br />
 
-            <strong>Time:</strong> @Model.ShiftStartTime?.ToString("hh\\:mm") - @Model.ShiftEndTime?.ToString("hh\\:mm")
+            <strong>Time:</strong>
+            @if (Model.ShiftStartTime.HasValue && Model.ShiftEndTime.HasValue)
+            {
+                @Model.ShiftStartTime?.ToString("hh\\:mm")
+                @Model.ShiftStartTime?.ToString("hh\\:mm")
+            }
+            else
+            {
+                <span class="text-red-500">Time Not Set</span>
+            }
         </p>
     </div>
 
     <form asp-action="ConfirmBooking" method="post" class="space-y-6">
-        @* Hidden field to pass appointment ID *@
         <input type="hidden" name="id" value="@Model.AppointmentId" />
 
         <div class="form-group">
@@ -35,5 +58,5 @@
     </form>
 </div>
 
-@* Additional Tailwind utility classes for responsiveness *@
 
+@* Additional Tailwind utility classes for responsiveness *@

@@ -18,14 +18,14 @@
             <form asp-controller="Appointments" asp-action="EditAppointment" method="post" class="space-y-6">
                 <input type="hidden" asp-for="AppointmentId" /> <!-- Hidden field for the Appointment Id -->
 
-                <!-- Assistant Selection -->
-                <div>
-                    <label for="AssistantId" class="block text-gray-700 font-bold mb-2">Assistant</label>
-                    <select asp-for="AssistantId" asp-items="ViewBag.Assistants" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">-- Select Assistant --</option>
-                    </select>
-                    <span asp-validation-for="AssistantId" class="text-red-500 text-sm"></span>
-                </div>
+                 <!-- Assistant Selection
+                 <div>
+                     <label for="AssistantId" class="block text-gray-700 font-bold mb-2">Assistant</label>
+                     <select asp-for="AssistantId" asp-items="ViewBag.Assistants" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                         <option value="">-- Select Assistant --</option>
+                     </select>
+                     <span asp-validation-for="AssistantId" class="text-red-500 text-sm"></span>
+                </div> -->
 
                 <!-- Faculty Member Selection -->
                 <div>
@@ -54,7 +54,7 @@
             <div>
     <label for="Status" class="block text-gray-700 font-bold mb-2">Status</label>
     <select asp-for="Status" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
-        <option value="Pending">Pending</option>
+                        <option value="Available">Available</option>
         <option value="Confirmed" >Confirmed</option>
         <option value="Cancelled">Cancelled</option>
     </select>

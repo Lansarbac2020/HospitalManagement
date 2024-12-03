@@ -3,8 +3,8 @@ using HospitalManagement.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
@@ -21,25 +21,16 @@ namespace HospitalManagement.Controllers
         public IActionResult Index()
         {
             var appointments = _db.Appointments
-                .Include(a => a.Assistant)
-                .Include(a => a.FacultyMember)
+                .Include(a => a.FacultyMember) // Only include FacultyMember
                 .ToList();
 
             return View(appointments);
         }
 
-
         // GET: Create Appointment
         [HttpGet]
         public IActionResult CreateAppointment()
         {
-            // Fetch assistants and populate the dropdown
-            ViewBag.Assistants = new SelectList(
-                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
-                "AssistantId",
-                "FullName"
-            );
-
             // Fetch faculty members and populate the dropdown
             ViewBag.FacultyMembers = new SelectList(
                 _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
@@ -50,38 +41,24 @@ namespace HospitalManagement.Controllers
             return View();
         }
 
-
-
-
         // POST: Create Appointment
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateAppointment(Appointment appointment)
+        public async Task<IActionResult> CreateAppointment(Appointment appointment)
         {
             if (ModelState.IsValid)
             {
-                // Ensure that AssistantId and FacultyMemberId are set
-                if (appointment.AssistantId == 0 || appointment.FacultyMemberId == 0)
-                {
-                    // Handle the case where the assistant or faculty member isn't selected
-                    ModelState.AddModelError("", "Assistant and Faculty Member must be selected.");
-                    return View(appointment);
-                }
-
-                // Set CreatedAt and UpdatedAt fields
-                appointment.CreatedAt = DateTime.Now;
-                appointment.UpdatedAt = DateTime.Now;
-
-                _db.Appointments.Add(appointment);
-                _db.SaveChanges();
-
-                return RedirectToAction("Index"); // Redirect to the appointment list or any other page
+                _db.Add(appointment);
+                await _db.SaveChangesAsync();
+                return RedirectToAction(nameof(Index)); // Redirect to the appropriate view after saving
             }
 
-            // Re-populate ViewBag in case of validation failure
-            ViewBag.Assistants = new SelectList(_db.Assistants, "AssistantId", "FirstName");
-            ViewBag.FacultyMembers = new SelectList(_db.FacultyMembers, "FacultyMemberId", "FullName");
-
+            // If model state is invalid, reload the list of faculty members and return to view
+            ViewBag.FacultyMembers = new SelectList(
+                _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
+                "FacultyId",
+                "FullName"
+            );
             return View(appointment);
         }
 
@@ -95,8 +72,7 @@ namespace HospitalManagement.Controllers
 
             // Retrieve the appointment from the database
             Appointment appointmentFromDb = _db.Appointments
-                .Include(a => a.Assistant)
-                .Include(a => a.FacultyMember)
+                .Include(a => a.FacultyMember) // Only include FacultyMember
                 .FirstOrDefault(a => a.AppointmentId == id);
 
             if (appointmentFromDb == null)
@@ -104,23 +80,16 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            // Populate the dropdown for assistants and faculty members
-            ViewBag.Assistants = new SelectList(
-                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
-                "AssistantId",
-                "FullName",
-                appointmentFromDb.AssistantId
-            );
+            // Populate the dropdown for faculty members
             ViewBag.FacultyMembers = new SelectList(
                 _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
                 "FacultyId",
                 "FullName",
-                appointmentFromDb.FacultyMemberId
+                appointmentFromDb.FacultyMemberId // Set selected value
             );
 
             return View(appointmentFromDb);  // Return the view with the current appointment data
         }
-
 
         // POST: Edit Appointment
         [HttpPost]
@@ -129,10 +98,10 @@ namespace HospitalManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Ensure the correct AssistantId and FacultyMemberId are provided
-                if (appointment.AssistantId == 0 || appointment.FacultyMemberId == 0)
+                // Ensure the correct FacultyMemberId is provided
+                if (appointment.FacultyMemberId == 0)
                 {
-                    ModelState.AddModelError("", "Assistant and Faculty Member must be selected.");
+                    ModelState.AddModelError("", "Faculty Member must be selected.");
                     return View(appointment);  // Return the view with error messages
                 }
 
@@ -144,12 +113,6 @@ namespace HospitalManagement.Controllers
             }
 
             // Re-populate ViewBag in case of validation failure
-            ViewBag.Assistants = new SelectList(
-                _db.Assistants.Select(a => new { a.AssistantId, FullName = a.FirstName + " " + a.LastName }),
-                "AssistantId",
-                "FullName",
-                appointment.AssistantId
-            );
             ViewBag.FacultyMembers = new SelectList(
                 _db.FacultyMembers.Select(f => new { f.FacultyId, FullName = f.FirstName + " " + f.LastName }),
                 "FacultyId",
@@ -160,7 +123,6 @@ namespace HospitalManagement.Controllers
             return View(appointment);  // Return the view if model validation fails
         }
 
-        //Delete
         // GET: Delete Appointment
         public IActionResult DeleteAppointment(int? id)
         {
@@ -171,8 +133,7 @@ namespace HospitalManagement.Controllers
 
             // Retrieve the appointment from the database
             Appointment appointmentFromDb = _db.Appointments
-                .Include(a => a.Assistant)
-                .Include(a => a.FacultyMember)
+                .Include(a => a.FacultyMember) // Only include FacultyMember
                 .FirstOrDefault(a => a.AppointmentId == id);
 
             if (appointmentFromDb == null)
@@ -183,15 +144,11 @@ namespace HospitalManagement.Controllers
             return View(appointmentFromDb);  // Return the view to confirm deletion
         }
 
-
-        // POST: Delete Appointment
-
         // POST: Delete Appointment
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            Console.WriteLine($"Received ID: {id}");
             if (id == 0)
             {
                 return BadRequest("Invalid ID");
@@ -209,26 +166,22 @@ namespace HospitalManagement.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult BookAppointment()
-        {
-            return View(); // Cette action retourne la vue `BookAppointment.cshtml`
-        }
-        // API : Renvoie les créneaux disponibles pour le calendrier
+        // API: Renvoie les créneaux disponibles pour le calendrier
         [HttpGet]
         public JsonResult GetAvailableSlots()
         {
             var availableSlots = _db.Appointments
-                .Where(a => a.Status == "Avalaible") // Seules les disponibilités
+                .Where(a => a.Status == "Available") // Filter by Available status
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.Assistant.FirstName} {a.Assistant.LastName}",
+                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName}",
                     start = a.AppointmentDate.Date + a.ShiftStartTime,
                     end = a.AppointmentDate.Date + a.ShiftEndTime
                 })
                 .ToList();
 
-            return Json(availableSlots); // Retourne les données pour le calendrier
+            return Json(availableSlots); // Return data for the calendar
         }
 
         // GET: Confirmer la réservation
@@ -241,16 +194,15 @@ namespace HospitalManagement.Controllers
             }
 
             var appointment = _db.Appointments
-                .Include(a => a.Assistant)
-                .Include(a=>a.FacultyMember)
-                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
+                .Include(a => a.FacultyMember) // Only include FacultyMember
+                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
                 return NotFound();
             }
 
-            return View(appointment); // Affiche un formulaire pour confirmer la réservation
+            return View(appointment); // Show the confirmation form for booking
         }
 
         // POST: Confirmer la réservation
@@ -258,24 +210,21 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ConfirmBooking(int id, string description)
         {
-            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Avalaible");
+            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
                 return NotFound();
             }
 
-            // Marque le rendez-vous comme réservé
+            // Mark the appointment as booked
             appointment.Status = "Booked";
             appointment.Description = description;
             appointment.UpdatedAt = DateTime.Now;
 
             _db.SaveChanges();
 
-            return RedirectToAction("Index"); // Redirige vers la liste des rendez-vous
+            return RedirectToAction("Index"); // Redirect to the list of appointments
         }
-
-
-
     }
 }

@@ -9,12 +9,7 @@ namespace HospitalManagement.Models
         [Key]
         public int AppointmentId { get; set; }
 
-        // Foreign key to Assistant
-        [Required]
-        public int AssistantId { get; set; }
-        public virtual Assistant? Assistant { get; set; }
-
-        // Foreign key to Faculty Member
+        // Foreign key to Faculty Member (Department Head)
         [Required]
         public int FacultyMemberId { get; set; }
         public virtual FacultyMember? FacultyMember { get; set; }
@@ -26,16 +21,18 @@ namespace HospitalManagement.Models
 
         [StringLength(500)]
         public string? Description { get; set; }
-        public int? DepartmentId { get; set; } // Foreign Key
-        public Department? Department { get; set; } // Navigation Property
+
+        // Department the appointment belongs to
+        public int? DepartmentId { get; set; } // Foreign Key to Department
+        public Department? Department { get; set; } // Navigation Property to Department
 
         // Shift start and end times
-
         [DataType(DataType.Time)]
         public TimeSpan? ShiftStartTime { get; set; }
         public TimeSpan? ShiftEndTime { get; set; }
-        // Appointment status
-        public string Status { get; set; } = "Avalaible";
+
+        // Appointment status (e.g., Available, Completed, etc.)
+        public string Status { get; set; } = "Available";
 
         // Optional duration
         [DataType(DataType.Time)]
@@ -45,4 +42,5 @@ namespace HospitalManagement.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; }
     }
+
 }
