@@ -4,6 +4,7 @@ using HospitalManagement.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241203162845_updatBookkedape")]
+    partial class updatBookkedape
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -293,40 +296,6 @@ namespace HospitalManagement.Migrations
                             DepartmentName = "Pediatric Intensive Care",
                             PatientCount = 0
                         });
-                });
-
-            modelBuilder.Entity("HospitalManagement.Models.Doctor", b =>
-                {
-                    b.Property<int>("DoctorId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
-
-                    b.Property<int>("DepartmentHeadId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("DoctorId");
-
-                    b.HasIndex("DepartmentHeadId");
-
-                    b.ToTable("Doctors");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.Emergency", b =>
@@ -691,17 +660,6 @@ namespace HospitalManagement.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("FacultyMember");
-                });
-
-            modelBuilder.Entity("HospitalManagement.Models.Doctor", b =>
-                {
-                    b.HasOne("HospitalManagement.Models.FacultyMember", "DepartmentHead")
-                        .WithMany()
-                        .HasForeignKey("DepartmentHeadId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("DepartmentHead");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.Patient", b =>

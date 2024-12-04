@@ -28,6 +28,8 @@ namespace HospitalManagement.Data
         public DbSet<Role> Roles { get; set; }
         // DbSet pour les patients
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; } // Nouvelle table pour les docteurs
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -99,6 +101,12 @@ namespace HospitalManagement.Data
          .HasForeignKey<Department>(d => d.FacultyMemberId) // Foreign key in the Department
          .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
+
+            modelBuilder.Entity<Doctor>()
+          .HasOne(d => d.DepartmentHead)
+          .WithMany()
+          .HasForeignKey(d => d.DepartmentHeadId)
+          .OnDelete(DeleteBehavior.Restrict);
 
 
 

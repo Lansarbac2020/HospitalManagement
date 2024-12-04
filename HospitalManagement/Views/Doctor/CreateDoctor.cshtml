@@ -1,0 +1,40 @@
+﻿@model HospitalManagement.Models.Doctor
+
+<h1>Create Doctor</h1>
+
+<form asp-action="CreateDoctor" method="post">
+    <div>
+        <label>First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div>
+        <label>Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div>
+        <label>Phone</label>
+        <input asp-for="Phone" class="form-control" />
+        <span asp-validation-for="Phone" class="text-danger"></span>
+    </div>
+    <div>
+        <label>Department Head</label>
+        <select asp-for="DepartmentHeadId" class="form-control" asp-items="@(new SelectList(ViewBag.DepartmentHeads, "FacultyId", "FirstName"))">
+            <option value="">Select a Department Head</option>
+        </select>
+        <span asp-validation-for="DepartmentHeadId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

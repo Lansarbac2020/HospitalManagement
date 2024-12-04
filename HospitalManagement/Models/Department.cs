@@ -17,11 +17,12 @@ namespace HospitalManagement.Models
 
         public int PatientCount { get; set; }
 
-        // Foreign key for FacultyMember
+        // Foreign key for FacultyMember (the department head)
         public int? FacultyMemberId { get; set; }
 
         // Navigation property for FacultyMember (the department head)
         public virtual FacultyMember? FacultyMember { get; set; }
+
         // Navigation property for assistants
         public ICollection<Assistant> Assistants { get; set; } = new List<Assistant>();
     }

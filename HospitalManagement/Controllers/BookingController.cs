@@ -37,7 +37,8 @@ namespace HospitalManagement.Controllers
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName}",
+                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} " +
+                    $" ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
                     start = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftStartTime),  // Combine date + time
                     end = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftEndTime)       // Combine date + time
                 })
@@ -57,9 +58,10 @@ namespace HospitalManagement.Controllers
             }
 
             var appointment = _db.Appointments
-                .Include(a => a.FacultyMember) // Only include FacultyMember
-                .Include(a => a.FacultyMember.DepartmentHead) // Ensure Department is included
-                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
+        .Include(a => a.FacultyMember) // Include FacultyMember
+        .Include(a => a.FacultyMember.Department) // Ensure Department is included
+        .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
+
 
             if (appointment == null)
             {
