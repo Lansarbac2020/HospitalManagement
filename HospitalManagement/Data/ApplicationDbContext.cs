@@ -83,9 +83,9 @@ namespace HospitalManagement.Data
 
             // Configure Appointment relationship with FacultyMember
             modelBuilder.Entity<Appointment>()
-                .HasOne(a => a.FacultyMember)
+                .HasOne(a => a.Doctor)
                 .WithMany(faculty => faculty.Appointments)
-                .HasForeignKey(a => a.FacultyMemberId)
+                .HasForeignKey(a => a.DoctorId)
                 .OnDelete(DeleteBehavior.Restrict);  // Prevent cascading delete for Appointment -> FacultyMember
 
             // Configure Assistant relationship with Department
@@ -102,13 +102,21 @@ namespace HospitalManagement.Data
          .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
 
+            // modelBuilder.Entity<Doctor>()
+            //.HasOne(d => d.Department)
+            //.WithMany()
+            //.HasForeignKey(d => d.DepartmentId)
+            //.OnDelete(DeleteBehavior.Restrict);
+
+            // Configure Doctor relationship with Department (optional if Doctor is the head of Department)
             modelBuilder.Entity<Doctor>()
-          .HasOne(d => d.DepartmentHead)
-          .WithMany()
-          .HasForeignKey(d => d.DepartmentHeadId)
-          .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(d => d.Department) // A Doctor belongs to a Department
+                .WithMany(d => d.Doctors)
+                .HasForeignKey(d => d.DepartmentId)
+                .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
 
+            
 
             base.OnModelCreating(modelBuilder); // Ensure this is called at the end to apply configurations
         }

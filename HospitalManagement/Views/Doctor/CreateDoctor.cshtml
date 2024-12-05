@@ -23,13 +23,16 @@
         <input asp-for="Phone" class="form-control" />
         <span asp-validation-for="Phone" class="text-danger"></span>
     </div>
+
     <div>
-        <label>Department Head</label>
-        <select asp-for="DepartmentHeadId" class="form-control" asp-items="@(new SelectList(ViewBag.DepartmentHeads, "FacultyId", "FirstName"))">
-            <option value="">Select a Department Head</option>
+        <label>Department Name</label>
+        <select asp-for="DepartmentId" class="form-control" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))">
+            <option value="">Select a Department Name</option>
         </select>
-        <span asp-validation-for="DepartmentHeadId" class="text-danger"></span>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
+
+
     <button type="submit" class="btn btn-primary">Save</button>
 </form>
 

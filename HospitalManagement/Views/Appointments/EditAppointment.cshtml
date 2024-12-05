@@ -29,11 +29,11 @@
 
                 <!-- Faculty Member Selection -->
                 <div>
-                    <label for="FacultyMemberId" class="block text-gray-700 font-bold mb-2">Faculty Member</label>
-                    <select asp-for="FacultyMemberId" asp-items="ViewBag.FacultyMembers" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                    <label for="DoctorId" class="block text-gray-700 font-bold mb-2">Faculty Member</label>
+                    <select asp-for="DoctorId" asp-items="ViewBag.Doctors" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         <option value="">-- Select Faculty Member --</option>
                     </select>
-                    <span asp-validation-for="FacultyMemberId" class="text-red-500 text-sm"></span>
+                    <span asp-validation-for="DoctorId" class="text-red-500 text-sm"></span>
                 </div>
 
                 <!-- Appointment Date -->
@@ -62,12 +62,12 @@
 </div>
 
 
-                <!-- Duration -->
-                <div>
-                    <label for="Days" class="block text-gray-700 font-bold mb-2">Days</label>
-                    <input asp-for="Days" type="date" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" />
-                    <span asp-validation-for="Days" class="text-red-500 text-sm"></span>
-                </div>
+                 <!-- Duration 
+                 <div>
+                     <label for="Days" class="block text-gray-700 font-bold mb-2">Days</label>
+                     <input asp-for="Days" type="date" class="block w-full border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+                     <span asp-validation-for="Days" class="text-red-500 text-sm"></span>
+                </div>-->
 
                 <div>
                     <label for="ShiftStartTime" class="block text-gray-700 font-bold mb-2">Shift StartTime</label>

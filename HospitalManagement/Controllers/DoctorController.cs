@@ -19,33 +19,52 @@ namespace HospitalManagement.Controllers
         // GET: Doctor
         public async Task<IActionResult> Index()
         {
-            var doctors = await _context.Doctors.Include(d => d.DepartmentHead).ToListAsync();
+            var doctors = await _context.Doctors.Include(d => d.Department)
+               
+                .ToListAsync();
             return View(doctors);
         }
 
         // GET: Doctor/Create
         public IActionResult CreateDoctor()
         {
-            ViewBag.DepartmentHeads = _context.FacultyMembers.ToList(); // Liste des chefs de départements
+            ViewBag.Departments = _context.Departments.ToList();
             return View();
         }
-
-        // POST: Doctor/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateDoctor(Doctor doctor)
         {
+            if (!ModelState.IsValid)
+            {
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine(error.ErrorMessage);
+                }
+                ViewBag.Departments = _context.Departments.ToList();
+                return View(doctor);
+            }
+            // Check if ModelState is valid before proceeding
             if (ModelState.IsValid)
             {
-                _context.Add(doctor);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(doctor); // Add the doctor to the context
+                    await _context.SaveChangesAsync(); // Save the changes
+                    return RedirectToAction(nameof(Index)); // Redirect to Index or another view
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error: {ex.Message}"); // Log the error for troubleshooting
+                    ModelState.AddModelError("", "An error occurred while saving the doctor.");
+                }
             }
-            ViewBag.DepartmentHeads = _context.FacultyMembers.ToList();
+            // In case of error or invalid data, re-populate the departments and return the view
+            ViewBag.Departments = _context.Departments.ToList();
             return View(doctor);
-        }
 
-        // GET: Doctor/Edit/5
+        }
+ // GET: Doctor/Edit/5
         public IActionResult EditDoctor(int id)
         {
             var doctor = _context.Doctors.Find(id);
@@ -55,10 +74,10 @@ namespace HospitalManagement.Controllers
             }
 
             // Fetch the list of department heads
-            var departmentHeads = _context.FacultyMembers.ToList();
+            var departmentname = _context.Departments.ToList();
 
             // Pass the department heads list to the view
-            ViewData["DepartmentHeads"] = departmentHeads;
+            ViewData["DepartmentHeads"] = departmentname;
 
             return View(doctor);
         }
@@ -105,7 +124,7 @@ namespace HospitalManagement.Controllers
             }
 
             var doctor = _context.Doctors
-                .Include(d => d.DepartmentHead) // Include related DepartmentHead details
+                .Include(d => d.Department) // Include related DepartmentHead details
                 .FirstOrDefault(d => d.DoctorId == id);
 
             if (doctor == null)

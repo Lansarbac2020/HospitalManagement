@@ -10,7 +10,7 @@
 <body class="bg-gray-100">
     <div class="container mx-auto mt-10 px-4">
         <!-- Page Header -->
-        <h1 class="text-3xl font-bold text-center mb-5">DepartmentHead-Schedule List</h1>
+        <h1 class="text-3xl font-bold text-center mb-5">Doctor-Schedule List</h1>
 
         <!-- Add New Appointment Button -->
         <div class="mb-4 text-right">
@@ -25,9 +25,9 @@
             <table class="min-w-full bg-white">
                 <thead class="sticky top-0 bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <tr>
-                        <th scope="col" class="py-3 px-4 text-left">Schedule ID</th>
+                        <th scope="col" class="py-3 px-4 text-left">Nobet ID</th>
                         
-                        <th scope="col" class="py-3 px-4 text-left">DepartmantHead-name</th>
+                        <th scope="col" class="py-3 px-4 text-left">Doctor-name</th>
                         <th scope="col" class="py-3 px-4 text-left">Availability Date</th>
                         <th scope="col" class="py-3 px-4 text-left">Description</th>
                         <th scope="col" class="py-3 px-4 text-left">Status</th>
@@ -47,7 +47,7 @@
                                 <td class="py-3 px-4">@appointment.AppointmentId</td>
                                
                                 <td class="py-3 px-4">
-                                    @appointment.FacultyMember?.FirstName @appointment.FacultyMember?.LastName
+                                    @appointment.Doctor?.FirstName @appointment.Doctor?.LastName
                                 </td>
                                 <td class="py-3 px-4">
                                     @appointment.AppointmentDate.ToString("MM/dd/yyyy")

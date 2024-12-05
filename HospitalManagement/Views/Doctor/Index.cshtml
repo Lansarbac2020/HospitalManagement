@@ -24,7 +24,8 @@
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
                     <th scope="col">Phone</th>
-                    <th scope="col">Department Head</th>
+              
+                    <th scope="col">Department Name</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -37,7 +38,8 @@
                             <td>@doctor.FirstName @doctor.LastName</td>
                             <td>@doctor.Email</td>
                             <td>@doctor.Phone</td>
-                            <td>@doctor.DepartmentHead?.FirstName @doctor.DepartmentHead?.LastName</td>
+                           
+                            <td>@doctor.Department?.DepartmentName</td>
                             <td>
                                 <a asp-action="EditDoctor" asp-route-id="@doctor.DoctorId" class="btn btn-warning btn-sm">
                                     <i class="bi bi-pencil-square"></i> Edit

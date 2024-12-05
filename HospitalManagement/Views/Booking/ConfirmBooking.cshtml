@@ -11,24 +11,26 @@
     <div class="mb-6">
         <h3 class="text-lg font-semibold text-gray-400 text-center">Appointment Details</h3>
         <p class="text-gray-600">
-            <strong>Date:</strong> @Model.AppointmentDate.ToShortDateString()<br />
-            <strong>Faculty Member:</strong>
-            }
-            else
-            {
-                <span class="text-red-500">No Department</span>
-            }<br />
+            <strong class="mr-2">Appointment Date:</strong> @Model.AppointmentDate.ToShortDateString()<br />
+            <strong class="mr-2">Doctor Name:</strong>@Model.Doctor.FirstName @Model.Doctor.LastName <br/>
+
+            <strong class="mr-2">Departmant Name:</strong>@Model.Doctor.Department.DepartmentName <br />
+
 
             <strong>Time:</strong>
             @if (Model.ShiftStartTime.HasValue && Model.ShiftEndTime.HasValue)
             {
-                @Model.ShiftStartTime?.ToString("hh\\:mm")
-                @Model.ShiftStartTime?.ToString("hh\\:mm")
+                <span>@Model.ShiftStartTime?.ToString("hh\\:mm")</span>
+                <span class="mx-1">-</span>
+                <span>@Model.ShiftEndTime?.ToString("hh\\:mm")</span>
             }
             else
             {
                 <span class="text-red-500">Time Not Set</span>
             }
+
+
+
         </p>
     </div>
 

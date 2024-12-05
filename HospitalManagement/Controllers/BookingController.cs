@@ -33,18 +33,17 @@ namespace HospitalManagement.Controllers
         public JsonResult GetAvailableSlots()
         {
             var availableSlots = _db.Appointments
-                .Where(a => a.Status == "Available") // Filtrer par statut "Available"
+                .Where(a => a.Status == "Available") // Filter by Available status
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.FacultyMember.FirstName} {a.FacultyMember.LastName} " +
-                    $" ({a.FacultyMember.DepartmentHead.DepartmentName ?? "Any"})",
-                    start = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftStartTime),  // Combine date + time
-                    end = a.AppointmentDate.Date.Add((TimeSpan)a.ShiftEndTime)       // Combine date + time
+                    title = $"{a.Doctor.FirstName} {a.Doctor.LastName}", // Change to Doctor
+                    start = a.AppointmentDate.Date + a.ShiftStartTime,
+                    end = a.AppointmentDate.Date + a.ShiftEndTime
                 })
                 .ToList();
 
-            return Json(availableSlots); 
+            return Json(availableSlots); // Return data for the calendar
         }
 
 
@@ -58,10 +57,10 @@ namespace HospitalManagement.Controllers
             }
 
             var appointment = _db.Appointments
-        .Include(a => a.FacultyMember) // Include FacultyMember
-        .Include(a => a.FacultyMember.Department) // Ensure Department is included
-        .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
+                .Include(a => a.Doctor) // Include Doctor instead of FacultyMember
+                 .Include(a => a.Doctor.Department)  // Include Department data
 
+                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
