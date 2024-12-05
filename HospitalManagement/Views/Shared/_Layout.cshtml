@@ -26,16 +26,41 @@
                             <li>
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Admin" asp-action="Index"> Dashboard </a>
                             </li>
-                            <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Assistants" asp-action="Index"> Assistant Management </a>
+                            <li class="relative">
+                                <!-- Bouton Management -->
+                                <button id="management-button"
+                                        class="text-white flex items-center transition hover:border-b-4 hover:border-[#EB8317] focus:outline-none"
+                                        aria-expanded="false"
+                                        onclick="toggleMenu()">
+                                    Management
+                                    <svg class="inline w-4 h-4 ml-1 transform transition-transform"
+                                         xmlns="http://www.w3.org/2000/svg"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </button>
+
+                                <!-- Menu déroulant -->
+                                <ul id="management-menu"
+                                    class="absolute left-0 hidden mt-2 w-56 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
+                                    
+                                    <li>
+                                        <a class="block px-4 py-2 text-gray-700  hover:border-[#EB8317]" asp-controller="Assistants" asp-action="Index"> Assistant Management </a>
+                                    </li>
+                                    <li>
+                                        <a class="block px-4 py-2 text-gray-700 hover:border-[#EB8317]" asp-controller="Faculty" asp-action="Index"> Departmant Scheduling </a>
+                                    </li>
+                                    <li>
+                                        <a class="block px-4 py-2 text-gray-700 hover:border-[#EB8317]" asp-controller="Department" asp-action="Index"> Department Name </a>
+                                    </li>
+                                    <li>
+                                        <a class="block px-4 py-2 text-gray-700  hover:border-[#EB8317]" asp-controller="Doctor" asp-action="Index"> Doctors </a>
+                                    </li>
+                                </ul>
                             </li>
-                            <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Faculty" asp-action="Index"> DepartmantHead Management </a>
-                            </li>
-                            <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Department" asp-action="Index"> Department Management </a>
-                            </li>
-                            <li>
+ <li>
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Appointments" asp-action="Index"> Appointment Scheduling </a>
                             </li>
                             <li>
@@ -98,8 +123,20 @@
     <footer class="bg-gray-800 text-white text-center py-4">
         <p>&copy; 2024 Pediatric Department. All rights reserved.</p>
     </footer>
-   
 
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('management-menu');
+            const button = document.getElementById('management-button');
+
+            // Toggle the visibility of the menu
+            menu.classList.toggle('hidden');
+
+            // Optionally toggle the expanded state on the button
+            const isExpanded = menu.classList.contains('hidden') ? 'false' : 'true';
+            button.setAttribute('aria-expanded', isExpanded);
+        }
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
