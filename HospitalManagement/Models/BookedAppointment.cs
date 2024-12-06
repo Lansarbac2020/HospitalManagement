@@ -1,33 +1,22 @@
-﻿using System;
-
-namespace HospitalManagement.Models
+﻿namespace HospitalManagement.Models
 {
     public class BookedAppointment
     {
-        public int BookedAppointmentId { get; set; }  // Unique identifier for the booking
+        public int BookedAppointmentId { get; set; }  // Identifiant unique pour la réservation
 
-        // Foreign key for the associated appointment
+        // Propriétés liées à l'Appointment
         public int AppointmentId { get; set; }
-        public Appointment Appointment { get; set; }  // Navigation property to Appointment
+        public string UserId { get; set; }  // Lié à IdentityUser
 
-        // Foreign key for the assistant who the appointment is booked with
-        public int AssistantId { get; set; }
-        public Assistant Assistant { get; set; }  // Navigation property to Assistant (if applicable)
+        public Appointment Appointment { get; set; }  // Navigation vers le modèle Appointment
 
-        // Description or any other notes entered by the patient for the appointment
-        public string Description { get; set; }
-
-        // Date and time when the appointment was booked
-        public DateTime BookingDate { get; set; }
-
-        // Status of the appointment (e.g., confirmed, pending, canceled, etc.)
+        // Statut de la réservation
         public string Status { get; set; }
 
-        // Foreign key for the user who made the booking (this links to the logged-in user)
-        public string UserId { get; set; }  // This property links to IdentityUser
+        // Date et heure de la réservation
+        public DateTime BookingDate { get; set; }  // Date et heure quand la réservation a été faite
 
-        // Optional: Add any additional fields you may need, such as payment status, reminder sent, etc.
+        // Description ou notes supplémentaires pour la réservation
+        public string Description { get; set; }  // Description de la réservation, peut-être des détails spécifiques
     }
-
 }
-

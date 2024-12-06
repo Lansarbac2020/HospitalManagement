@@ -1,5 +1,6 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class DoctorController : Controller
     {
         private readonly ApplicationDbContext _context;

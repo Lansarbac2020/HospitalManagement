@@ -1,33 +1,39 @@
 ﻿@model IEnumerable<HospitalManagement.Models.BookedAppointment>
 
-<h2 class="mt-10 text-center font-bold">Booked Appointments</h2>
+@{
+    ViewData["Title"] = "Booked Appointments";
+}
 
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+
+    <h2 class="text-3xl mt-10 font-semibold text-center text-gray-800 mb-6">Booked Appointments</h2>
 <table class="table">
     <thead>
         <tr>
-            <th>Assistant</th>
-            <th>DepartmentHead</th>
+            <th>Doctor Name</th>
+            <th>Department Name</th>
             <th>Appointment Date</th>
+            <th>Shift Start Time</th>
+            <th>Shift End Time</th>
             <th>Description</th>
-            <th>Status</th>
-            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var booking in Model)
+        @foreach (var item in Model)
         {
             <tr>
-                <td>@booking.Assistant.FirstName @booking.Assistant.LastName</td>
-                <td>@booking.Assistant.Department?.DepartmentName</td>
-                <td>@booking.Appointment.AppointmentDate</td>
-                <td>@booking.Description</td>
-                <td>@booking.Status</td>
-                <td>
-                    <a href="@Url.Action("Edit", "Booking", new { id = booking.BookedAppointmentId })" class="btn btn-primary">Edit</a>
-                    <a href="@Url.Action("Delete", "Booking", new { id = booking.BookedAppointmentId })" class="btn btn-danger">Delete</a>
-                </td>
+                <td>@item.Appointment?.Doctor?.FirstName @item.Appointment?.Doctor?.LastName </td>
+                <td>@item.Appointment?.Doctor.Department.DepartmentName </td>
+                <td>@item.Appointment?.AppointmentDate.ToString("yyyy-MM-dd") </td>
+                <td>@item.Appointment?.ShiftStartTime?.ToString("hh\\:mm") </td>
+                <td>@item.Appointment?.ShiftEndTime?.ToString("hh\\:mm")</td>
+                <td>@item.Description</td>
+                    <td>
+                        <a asp-controller="Booking" asp-action="Edit" asp-route-id="@item.BookedAppointmentId" class="btn btn-warning btn-sm">Edit</a>
+                        <a asp-controller="Booking" asp-action="Delete" asp-route-id="@item.BookedAppointmentId" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
             </tr>
         }
     </tbody>
 </table>
-
+</div>

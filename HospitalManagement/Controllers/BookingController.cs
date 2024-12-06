@@ -75,40 +75,68 @@ namespace HospitalManagement.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult ConfirmBooking(int id, string description)
         {
-            var appointment = _db.Appointments.FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
+            // Récupérer l'appointment disponible
+            var appointment = _db.Appointments
+                .Include(a => a.Doctor)
+                .FirstOrDefault(a => a.AppointmentId == id && a.Status == "Available");
 
             if (appointment == null)
             {
                 return NotFound();
             }
 
-            // Mark the appointment as booked
+            // Mettre à jour l'état de l'appointment
             appointment.Status = "Booked";
-            appointment.Description = description;
             appointment.UpdatedAt = DateTime.Now;
 
+            // Créer une nouvelle entrée dans BookedAppointments
+            var bookedAppointment = new BookedAppointment
+            {
+                AppointmentId = appointment.AppointmentId,
+                UserId = _userManager.GetUserId(User), // Récupérer l'ID de l'utilisateur connecté
+                BookingDate = DateTime.Now,
+                Description = description,
+                Status = "Confirmed" // Statut de la réservation
+            };
+
+            // Ajouter dans la table BookedAppointments
+            _db.BookedAppointments.Add(bookedAppointment);
+
+            // Sauvegarder les changements
             _db.SaveChanges();
 
-            return RedirectToAction("Index"); // Redirect to the list of appointments
+            return RedirectToAction("Index"); // Rediriger vers la liste des rendez-vous réservés
         }
+
 
 
         // GET: List all booked appointments
         public IActionResult Index()
         {
-            var userId = User.Identity.Name; // or User.FindFirst(ClaimTypes.NameIdentifier).Value
+            var userId = _userManager.GetUserId(User); // Utilisez _userManager pour obtenir l'ID de l'utilisateur
+                                                       // Récupérer l'ID de l'utilisateur connecté
 
             var bookedAppointments = _db.BookedAppointments
-                .Where(b => b.UserId == userId) // Filter by the logged-in user’s UserId
-                .Include(b => b.Appointment)
-                
-                .ToList();
+     .Where(b => b.UserId == userId)
+     .Include(b => b.Appointment)
+         .ThenInclude(a => a.Doctor) // Inclure Doctor
+         .ThenInclude(d => d.Department) // Inclure Department via Doctor
+     .ToList();
 
-            return View(bookedAppointments); // Display the list of booked appointments
+            if (bookedAppointments == null || !bookedAppointments.Any())
+            {
+                Console.WriteLine("No appointments found for user: " + userId);
+            }
+
+            return View(bookedAppointments);
+            // Passer les rendez-vous réservés à la vue
         }
 
 
-        // GET: Edit a booked appointment
+
+
+
+        // GET: Edit a booked appointment (for description only)
         [HttpGet]
         public IActionResult Edit(int? id)
         {
@@ -118,8 +146,6 @@ namespace HospitalManagement.Controllers
             }
 
             var bookedAppointment = _db.BookedAppointments
-               // .Include(b => b.Assistant)
-                .Include(b => b.Appointment)
                 .FirstOrDefault(b => b.BookedAppointmentId == id);
 
             if (bookedAppointment == null)
@@ -127,28 +153,39 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            return View(bookedAppointment); // Displays the edit form for the booking
+            return View(bookedAppointment); // Affiche le formulaire d'édition
         }
 
-        // POST: Update a booked appointment
+        // POST: Edit a booked appointment (update description only)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, string description)
+        public IActionResult Edit(BookedAppointment bookedAppointment)
         {
-            var bookedAppointment = _db.BookedAppointments.FirstOrDefault(b => b.BookedAppointmentId == id);
-
-            if (bookedAppointment == null)
+            if (ModelState.IsValid)
             {
-                return NotFound();
+                try
+                {
+                    _db.Update(bookedAppointment);
+                    _db.SaveChanges();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_db.BookedAppointments.Any(e => e.BookedAppointmentId == bookedAppointment.BookedAppointmentId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index)); // Assuming you have an Index action to return the list
             }
 
-            bookedAppointment.Description = description;
-            bookedAppointment.BookingDate = DateTime.Now;
-
-            _db.SaveChanges();
-
-            return RedirectToAction("Index"); // Redirects to the list of booked appointments
+            return View(bookedAppointment); // Retourne à la vue d'édition si le modèle est invalide
         }
+
+
 
         // GET: Delete a booked appointment
         [HttpGet]
@@ -173,7 +210,7 @@ namespace HospitalManagement.Controllers
         }
 
         // POST: Delete a booked appointment
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
@@ -189,5 +226,7 @@ namespace HospitalManagement.Controllers
 
             return RedirectToAction("Index"); // Redirects to the list of booked appointments
         }
+
+       
     }
 }

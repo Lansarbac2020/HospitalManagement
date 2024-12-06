@@ -73,11 +73,13 @@
                             <li>
                                 <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Home" asp-action="Index"> Home </a>
                             </li>
+                           
                             <li>
-                                <a class="text-white transition hover:border-b-4 hover:border-[#EB8317]" asp-controller="Department" asp-action="Index"> Departments </a>
+                                <a href="/Booking/BookAppointment" class="text-white transition hover:border-b-4 hover:border-[#EB8317]">Make an Appointment</a>
+
                             </li>
                             <li>
-                                <a href="/Booking/BookAppointment" class="text-white transition hover:border-b-4 hover:border-[#EB8317]">Book Appointment</a>
+                                <a href="/Booking" class="text-white transition hover:border-b-4 hover:border-[#EB8317]">Past Appointment</a>
 
                             </li>
                             <li>
@@ -113,14 +115,14 @@
     </header>
 
 
-    <div class="container">
+    <div class="container flex-1">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
        
     </div>
 
-    <footer class="bg-gray-800 text-white text-center py-4">
+    <footer class="bg-gray-800 text-white  bottom-0 left-0 right-0 text-center py-4">
         <p>&copy; 2024 Pediatric Department. All rights reserved.</p>
     </footer>
 

@@ -1,12 +1,17 @@
 ﻿@model HospitalManagement.Models.BookedAppointment
 
-<h2>Edit Booked Appointment</h2>
+@{
+    ViewData["Title"] = "Edit Booked Appointment";
+}
 
-<form asp-action="Edit" method="post">
-    <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea id="Description" name="description" class="form-control">@Model.Description</textarea>
-    </div>
+<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-semibold text-center text-gray-800 mb-6">Edit Booked Appointment</h2>
 
-    <button type="submit" class="btn btn-success">Update</button>
-</form>
+    <form asp-action="Edit" method="post">
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea id="Description" name="Description" class="form-control">@Model.Description</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
