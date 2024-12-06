@@ -1,6 +1,7 @@
 ﻿using HospitalManagement.Data;
 using HospitalManagement.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace HospitalManagement.Controllers
             return View(doctor);
 
         }
- // GET: Doctor/Edit/5
+        // GET: Doctor/Edit/5
         public IActionResult EditDoctor(int id)
         {
             var doctor = _context.Doctors.Find(id);
@@ -73,14 +74,20 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            // Fetch the list of department heads
-            var departmentname = _context.Departments.ToList();
+            // Fetch departments and populate SelectList
+            var departments = _context.Departments.ToList();
+            if (!departments.Any())
+            {
+                throw new InvalidOperationException("No departments found in the database.");
+            }
 
-            // Pass the department heads list to the view
-            ViewData["DepartmentHeads"] = departmentname;
+            ViewBag.Departments = new SelectList(departments, "DepartmentId", "DepartmentName", doctor.DepartmentId);
 
             return View(doctor);
         }
+
+
+
 
         // POST: Doctor/Edit/5
         [HttpPost]
@@ -98,10 +105,11 @@ namespace HospitalManagement.Controllers
                 {
                     _context.Update(doctor);
                     _context.SaveChanges();
+                    return RedirectToAction(nameof(Index));
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Doctors.Any(e => e.DoctorId == doctor.DoctorId))
+                    if (!_context.Doctors.Any(d => d.DoctorId == id))
                     {
                         return NotFound();
                     }
@@ -110,10 +118,17 @@ namespace HospitalManagement.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
+
+            // Re-populate the ViewBag.Departments for the dropdown
+            var departments = _context.Departments.ToList();
+            ViewBag.Departments = new SelectList(departments, "DepartmentId", "DepartmentName", doctor.DepartmentId);
+
             return View(doctor);
         }
+
+
+
 
         // GET: Doctor/Delete/5
         public IActionResult DeleteDoctor(int? id)

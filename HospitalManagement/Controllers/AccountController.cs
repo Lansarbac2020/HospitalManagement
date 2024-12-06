@@ -2,6 +2,8 @@
 using HospitalManagement.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
@@ -29,59 +31,63 @@ namespace HospitalManagement.Controllers
             return View();
         }
 
-        // Méthode pour l'enregistrement d'un utilisateur
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Vérifiez si le rôle "Patient" existe, sinon le créer
+                // Vérifiez si l'email appartient à un assistant
+                var isAssistantEmail = _context.Assistants.Any(a => a.Email == model.Email);
+                if (!isAssistantEmail)
+                {
+                    ModelState.AddModelError("Email", "Kaydolmak için bir Assistant e-postası kullanmalısınız.");
+                    return View(model);
+                }
+
+                // Vérifiez si le rôle "Patient" existe, sinon créez-le
                 if (!await _roleManager.RoleExistsAsync("Patient"))
                 {
                     var role = new IdentityRole("Patient");
                     await _roleManager.CreateAsync(role);
                 }
 
-                // Création de l'utilisateur via Identity
+                // Créez l'utilisateur avec l'email et le mot de passe
                 var user = new IdentityUser { UserName = model.Email, Email = model.Email };
                 var result = await _userManager.CreateAsync(user, model.Password);
 
                 if (result.Succeeded)
                 {
-                    // Assigner un rôle "Patient"
+                    // Assignez le rôle "Patient" à l'utilisateur
                     await _userManager.AddToRoleAsync(user, "Patient");
 
-                    // Création du patient et liaison avec l'utilisateur
+                    // Liez le compte utilisateur à un patient existant ou créez-en un
                     var patient = new Patient
                     {
                         FirstName = model.FirstName,
                         LastName = model.LastName,
                         Email = model.Email,
-                        UserId = user.Id // Lier l'utilisateur avec le patient
+                        UserId = user.Id // Lier le UserId à l'utilisateur
                     };
 
                     _context.Patients.Add(patient);
                     await _context.SaveChangesAsync();
 
-                    // Connexion de l'utilisateur après inscription
+                    // Connectez l'utilisateur après l'inscription
                     await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    return RedirectToAction("Index", "Home"); // Page d'accueil après enregistrement
+                    return RedirectToAction("Index", "Home");
                 }
 
-                // Ajouter les erreurs à ModelState si l'inscription échoue
+                // Ajouter les erreurs à ModelState si la création échoue
                 foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
 
-            // Si l'état du modèle n'est pas valide, retourner à la vue d'enregistrement
             return View(model);
         }
-
-
 
         [HttpGet]
         public IActionResult Login()
@@ -90,6 +96,7 @@ namespace HospitalManagement.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
@@ -102,28 +109,31 @@ namespace HospitalManagement.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                // Messages pour les différents cas d'échec
+                // Messages d'échec spécifiques
                 if (result.IsNotAllowed)
                 {
-                    ModelState.AddModelError("", "Votre email n'est pas confirmé.");
+                    ModelState.AddModelError("", "E-postanız onaylanmadı.");
                 }
                 else if (result.IsLockedOut)
                 {
-                    ModelState.AddModelError("", "Votre compte est verrouillé.");
+                    ModelState.AddModelError("", "Hesabınız kilitlendi.");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Tentative de connexion invalide.");
+                    ModelState.AddModelError("", "Geçersiz bağlantı denemesi.");
                 }
             }
 
             return View(model);
         }
 
+        
+        [HttpGet]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login");
         }
+
     }
 }

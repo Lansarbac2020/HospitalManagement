@@ -115,8 +115,13 @@ namespace HospitalManagement.Data
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
+             modelBuilder.Entity<Appointment>()
+                  .HasOne(a => a.Doctor)
+                  .WithMany(d => d.Appointments)
+                  .HasForeignKey(a => a.DoctorId)
+                 .OnDelete(DeleteBehavior.Cascade);
 
-            
+
 
             base.OnModelCreating(modelBuilder); // Ensure this is called at the end to apply configurations
         }
