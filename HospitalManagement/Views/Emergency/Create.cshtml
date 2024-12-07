@@ -1,0 +1,30 @@
+﻿@model Emergency
+
+@{
+    ViewData["Title"] = "Create Emergency";
+}
+
+<div class="container mt-5">
+    <h2 class="text-center">Create Emergency</h2>
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input asp-for="Title" class="form-control" id="Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control" id="Description"></textarea>
+            <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+}

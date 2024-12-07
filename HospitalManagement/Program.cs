@@ -1,4 +1,5 @@
 using HospitalManagement.Data;
+using HospitalManagement.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,8 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
 });
 
+// Register MailjetService
+builder.Services.AddScoped<MailjetService>();
 var app = builder.Build();
 
 // Seed roles and users (do not run this in production unless necessary)

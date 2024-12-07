@@ -126,6 +126,7 @@ namespace HospitalManagement.Controllers
             if (bookedAppointments == null || !bookedAppointments.Any())
             {
                 Console.WriteLine("No appointments found for user: " + userId);
+                return RedirectToAction("Login", "Account");
             }
 
             return View(bookedAppointments);

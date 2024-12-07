@@ -1,1 +1,41 @@
-﻿<h1 class="mt-10 font-bold">Emergency</h1>
+﻿@model IEnumerable<Emergency>
+
+@{
+    ViewData["Title"] = "Emergencies";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="text-center text-2xl font-bold text-gray-800">Emergencies</h2>
+
+        @* Vérifier si l'utilisateur est un administrateur et afficher le bouton "Create Emergency" *@
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary btn-sm">Create Emergency</a>
+        }
+    </div>
+
+    <!-- Container for flex display -->
+    <div class="d-flex flex-wrap gap-4">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var emergency in Model)
+            {
+                <div class="emergency-card bg-white shadow-sm rounded p-4" style="flex-basis: 24%; min-width: 250px;">
+                    <h5 class="text-xl font-semibold text-gray-800">@emergency.Title</h5>
+                    <p class="text-gray-600">@emergency.Description</p>
+                    <small class="text-gray-500">@emergency.DateCreated.ToString("f")</small>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="emergency-card bg-white shadow-sm rounded p-4 w-100">
+                <p class="text-center text-gray-600">
+                    No emergencies recorded.
+                    <a asp-action="CreateEmergency" class="btn btn-primary btn-sm ml-2">Create One</a>
+                </p>
+            </div>
+        }
+    </div>
+</div>
