@@ -29,6 +29,8 @@ namespace HospitalManagement.Data
         // DbSet pour les patients
         public DbSet<Patient> Patients { get; set; }
         public DbSet<Doctor> Doctors { get; set; } // Nouvelle table pour les docteurs
+        public DbSet<Shift> Shifts { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

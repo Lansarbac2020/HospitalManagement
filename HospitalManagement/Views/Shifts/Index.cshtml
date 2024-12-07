@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Calendrier des Shifts";
+}
+
+<h2>Calendrier des Shifts</h2>
+@section Scripts {
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+
+<div id="calendar"></div> <!-- Conteneur pour le calendrier -->
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth', // Affichage par défaut : mois
+            locale: 'en', // Localisation française
+            headerToolbar: { // En-tête du calendrier
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+                events: '/Shifts/getShifts', // Appel à la méthode GetShifts pour récupérer les données
+            eventColor: '#3788d8', // Couleur des événements par défaut
+            editable: false, 
+            eventClick: function (info) { 
+                alert('Details of the Shift : \n' +
+                      'Title : ' + info.event.title + '\n' +
+                      'Start : ' + info.event.start.toLocaleString() + '\n' +
+                      'End : ' + info.event.end.toLocaleString());
+            }
+        });
+
+        calendar.render(); // Affiche le calendrier
+    });
+</script>
+}

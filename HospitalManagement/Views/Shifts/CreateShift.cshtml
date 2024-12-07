@@ -1,0 +1,55 @@
+﻿@model HospitalManagement.Models.Shift
+
+<div asp-validation-summary="All" class="text-danger"></div>
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+
+<form asp-action="CreateShift" method="post">
+    <div class="form-group row">
+        <label asp-for="AssistantId" class="col-sm-3 col-form-label">Assistant</label>
+        <div class="col-sm-9">
+            <select asp-for="AssistantId" asp-items="@(ViewBag.Assistants)" class="form-control">
+                <option value="">Select an Assistant</option>
+            </select>
+            <span asp-validation-for="AssistantId" class="text-danger"></span>
+        </div>
+    </div>
+
+   
+
+    <div class="form-group">
+        <label asp-for="ShiftDate">Date</label>
+        <input asp-for="ShiftDate" class="form-control" type="date" />
+        <span asp-validation-for="ShiftDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartTime">Heure de début</label>
+        <input asp-for="StartTime" class="form-control" type="time" />
+        <span asp-validation-for="StartTime" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EndTime">Heure de fin</label>
+        <input asp-for="EndTime" class="form-control" type="time" />
+        <span asp-validation-for="EndTime" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Créer un shift</button>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
