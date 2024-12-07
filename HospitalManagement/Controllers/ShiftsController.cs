@@ -117,10 +117,11 @@ namespace HospitalManagement.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<JsonResult> GetShifts()
         {
+            var currentDate = DateTime.Now;
+
             var shifts = await _db.Shifts
                 .Include(s => s.Assistant)
                 .Select(s => new
@@ -129,12 +130,13 @@ namespace HospitalManagement.Controllers
                     title = $"{s.Assistant.FirstName} {s.Assistant.LastName}",
                     start = s.ShiftDate.Add(s.StartTime),
                     end = s.ShiftDate.Add(s.EndTime),
-                    color = "#3788d8"
+                    color = s.ShiftDate.Add(s.StartTime) < currentDate ? "red" : "#3788d8" // Change color to red if the shift is in the past
                 })
                 .ToListAsync();
 
             return Json(shifts);
         }
+
 
     }
 }

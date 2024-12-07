@@ -14,9 +14,7 @@
     </div>
 
     <!-- Calendar Section -->
-  
-        <div id="calendar"></div>
-    
+    <div id="calendar"></div>
 </div>
 
 @section Scripts {
@@ -38,6 +36,19 @@
                 events: '/Shifts/getShifts',
                 eventColor: '#3788d8',
                 editable: false,
+
+                // This is where we check the date for past events
+                eventRender: function (info) {
+                    var currentDate = new Date();
+                    var eventStartDate = info.event.start;
+
+                    // If the event date is in the past, change the background color to red
+                    if (eventStartDate < currentDate) {
+                        info.el.style.backgroundColor = 'red';  // Change background color to red
+                        info.el.style.color = 'white';           // Optional: Change text color for better visibility
+                    }
+                },
+
                 eventClick: function (info) {
                     alert('Details of the Shift : \n' +
                         'Title : ' + info.event.title + '\n' +
