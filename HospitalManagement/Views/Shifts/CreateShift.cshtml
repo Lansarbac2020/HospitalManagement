@@ -14,10 +14,10 @@
 }
 
 
-<form asp-action="CreateShift" method="post">
-    <div class="form-group row">
+<form asp-action="CreateShift" method="post" class="mt-5">
+    <div class="form-group">
         <label asp-for="AssistantId" class="col-sm-3 col-form-label">Assistant</label>
-        <div class="col-sm-9">
+        <div class="">
             <select asp-for="AssistantId" asp-items="@(ViewBag.Assistants)" class="form-control">
                 <option value="">Select an Assistant</option>
             </select>
@@ -28,24 +28,24 @@
    
 
     <div class="form-group">
-        <label asp-for="ShiftDate">Date</label>
+        <label asp-for="ShiftDate">Shift Date</label>
         <input asp-for="ShiftDate" class="form-control" type="date" />
         <span asp-validation-for="ShiftDate" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="StartTime">Heure de début</label>
+        <label asp-for="StartTime">Start Time</label>
         <input asp-for="StartTime" class="form-control" type="time" />
         <span asp-validation-for="StartTime" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="EndTime">Heure de fin</label>
+        <label asp-for="EndTime">End Time</label>
         <input asp-for="EndTime" class="form-control" type="time" />
         <span asp-validation-for="EndTime" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-primary">Créer un shift</button>
+    <button type="submit" class="btn btn-primary mt-3">Create Shift</button>
 </form>
 
 

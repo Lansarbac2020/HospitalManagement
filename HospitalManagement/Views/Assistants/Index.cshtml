@@ -18,8 +18,8 @@
         </div>
 
         <!-- Table wrapper with scrollable feature -->
-        <div class="overflow-auto border border-gray-300 rounded-lg bg-red-500 shadow-lg" style="max-height: 500px;">
-            <table class="min-w-full bg-white">
+        <div class="overflow-auto" style="max-height: 500px;">
+            <table class="table table-striped">
                 <thead class="sticky top-0 bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
                     <tr>
                         <th scope="col" class="py-3 px-4 text-left">ID</th>
@@ -45,8 +45,8 @@
                                 <td class="py-3 px-4">@assistant.Phone</td>
                                 <td class="py-3 px-4">@assistant.Department?.DepartmentName</td>
                                 <td class="py-3 px-4">
-                                    <a href="@Url.Action("EditAssistant", new { id = assistant.AssistantId })" class="btn btn-primary">Edit</a>
-                                    <a href="@Url.Action("DeleteAssistant", new { id = assistant.AssistantId })" class="btn btn-danger">Delete</a>
+                                    <a href="@Url.Action("EditAssistant", new { id = assistant.AssistantId })" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="@Url.Action("DeleteAssistant", new { id = assistant.AssistantId })" class="btn btn-danger btn-sm">Delete</a>
                                 </td>
                             </tr>
                         }
