@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace HospitalManagement.Controllers
 {
-    [Authorize(Roles = "Admin")]
+
     public class ShiftsController : Controller
     {
         private readonly ApplicationDbContext _db;
@@ -33,6 +33,7 @@ namespace HospitalManagement.Controllers
 
 
         // GET: CreateShift
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateShift()
         {
             ViewBag.Assistants = new SelectList(
@@ -52,6 +53,7 @@ namespace HospitalManagement.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateShift(Shift shift)
         {
             if (ModelState.IsValid)
@@ -124,13 +126,15 @@ namespace HospitalManagement.Controllers
 
             var shifts = await _db.Shifts
                 .Include(s => s.Assistant)
+              
                 .Select(s => new
                 {
                     id = s.ShiftId,
                     title = $"{s.Assistant.FirstName} {s.Assistant.LastName}",
                     start = s.ShiftDate.Add(s.StartTime),
                     end = s.ShiftDate.Add(s.EndTime),
-                    color = s.ShiftDate.Add(s.StartTime) < currentDate ? "red" : "#3788d8" // Change color to red if the shift is in the past
+                    color = s.ShiftDate.Add(s.StartTime) < currentDate ? "red" : "#3788d8", // Change color to red if the shift is in the past
+                    departmentName = s.Assistant.Department.DepartmentName
                 })
                 .ToListAsync();
 
