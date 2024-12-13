@@ -85,6 +85,14 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
+            // Check if the user is authenticated (UserId is null means not logged in)
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                // Redirect to login page if the user is not authenticated
+                return RedirectToAction("Login", "Account");
+            }
+
             // Mettre à jour l'état de l'appointment
             appointment.Status = "Booked";
             appointment.UpdatedAt = DateTime.Now;
@@ -93,10 +101,10 @@ namespace HospitalManagement.Controllers
             var bookedAppointment = new BookedAppointment
             {
                 AppointmentId = appointment.AppointmentId,
-                UserId = _userManager.GetUserId(User), // Récupérer l'ID de l'utilisateur connecté
+                UserId = userId, // Use the authenticated user ID
                 BookingDate = DateTime.Now,
                 Description = description,
-                Status = "Confirmed" // Statut de la réservation
+                Status = "Confirmed"
             };
 
             // Ajouter dans la table BookedAppointments
@@ -110,11 +118,12 @@ namespace HospitalManagement.Controllers
 
 
 
+
         // GET: List all booked appointments
         public IActionResult Index()
         {
-            var userId = _userManager.GetUserId(User); // Utilisez _userManager pour obtenir l'ID de l'utilisateur
-                                                       // Récupérer l'ID de l'utilisateur connecté
+            var userId = _userManager.GetUserId(User); 
+                                                      
 
             var bookedAppointments = _db.BookedAppointments
      .Where(b => b.UserId == userId)
@@ -125,7 +134,7 @@ namespace HospitalManagement.Controllers
 
             if (bookedAppointments == null || !bookedAppointments.Any())
             {
-                Console.WriteLine("No appointments found for user: " + userId);
+                //Console.WriteLine("No appointments found for user: " + userId);
                 return RedirectToAction("Login", "Account");
             }
 
@@ -137,6 +146,8 @@ namespace HospitalManagement.Controllers
 
 
 
+        // GET: Edit a booked appointment (for description only)
+        [HttpGet]
         // GET: Edit a booked appointment (for description only)
         [HttpGet]
         public IActionResult Edit(int? id)
@@ -154,16 +165,36 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            return View(bookedAppointment); // Affiche le formulaire d'édition
+            return View(bookedAppointment); // Passes the booked appointment to the view
         }
 
+
+        // POST: Edit a booked appointment (update description only)
         // POST: Edit a booked appointment (update description only)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(BookedAppointment bookedAppointment)
+        public IActionResult Edit(int id, string description)
         {
+            if (string.IsNullOrEmpty(description))
+            {
+                ModelState.AddModelError("description", "Description cannot be empty.");
+            }
+
             if (ModelState.IsValid)
             {
+                var bookedAppointment = _db.BookedAppointments
+                    .FirstOrDefault(b => b.BookedAppointmentId == id);
+
+                if (bookedAppointment == null)
+                {
+                    return NotFound();
+                }
+
+                // Update the description only
+                bookedAppointment.Description = description;
+              //  bookedAppointment. = DateTime.Now;
+
+                // Save the changes
                 try
                 {
                     _db.Update(bookedAppointment);
@@ -180,11 +211,13 @@ namespace HospitalManagement.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index)); // Assuming you have an Index action to return the list
+
+                return RedirectToAction(nameof(Index)); // Redirects to the list of booked appointments
             }
 
-            return View(bookedAppointment); // Retourne à la vue d'édition si le modèle est invalide
+            return View(); // Return to the edit view if the model is invalid
         }
+
 
 
 

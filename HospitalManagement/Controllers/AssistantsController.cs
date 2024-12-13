@@ -107,6 +107,7 @@ namespace HospitalManagement.Controllers
         // POST: Delete Assistant
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
+        // POST: Delete Assistant
         public IActionResult DeleteConfirmed(int id)
         {
             var assistantFromDb = _db.Assistants.Find(id);
@@ -115,11 +116,28 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
+            // Check if there are any related Shifts
+            var relatedShifts = _db.Shifts.Where(s => s.AssistantId == id).ToList();
+
+            if (relatedShifts.Any())
+            {
+                // Handle the related shifts - for example, you can delete them or set the AssistantId to null.
+                _db.Shifts.RemoveRange(relatedShifts); 
+                                       
+                                                       // foreach (var shift in relatedShifts)
+                                                       // {
+                                                       //     shift.AssistantId = null;
+                                                       // }
+                                                       // _db.SaveChanges();
+            }
+
+            
             _db.Assistants.Remove(assistantFromDb);
             _db.SaveChanges();
 
             return RedirectToAction("Index"); // Redirect back to the list of assistants after deletion
         }
+
 
 
 

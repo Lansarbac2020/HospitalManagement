@@ -125,6 +125,7 @@ namespace HospitalManagement.Data
 
 
 
+
             base.OnModelCreating(modelBuilder); // Ensure this is called at the end to apply configurations
         }
 
