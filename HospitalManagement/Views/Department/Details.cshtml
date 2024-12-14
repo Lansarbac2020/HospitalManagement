@@ -1,0 +1,97 @@
+﻿@model HospitalManagement.Models.Department
+
+@{
+    ViewData["Title"] = "Department Details";
+}
+
+<div class="container  px-6 py-12">
+    <!-- Heading Section -->
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-[#001F3F]">@Model.DepartmentName</h1>
+        <p class="mt-2 text-lg text-gray-600">welcome</p>
+    </div>
+
+    <!-- Department Details -->
+    <div class="flex justify-center gap-8">
+        <!-- Left Section: Department Image & Faculty Member Info -->
+        <div class="w-full md:w-1/2 bg-white shadow-lg rounded-lg overflow-hidden">
+            <!-- Department Image -->
+            <img src="https://via.placeholder.com/600x400?text=Department+Image" alt="Department Image" class="w-full h-64 object-cover">
+
+            <div class="p-6">
+                <h3 class="text-xl font-semibold text-[#001F3F]">Faculty Member</h3>
+                <div class="flex items-center mt-4">
+                    <img src="https://via.placeholder.com/50" alt="Faculty Image" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <p class="text-lg font-semibold text-gray-800">@Model.FacultyMember.FirstName @Model.FacultyMember.LastName</p>
+                        <p class="text-sm text-gray-500">Lead Faculty</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Section: Department Info, Services, and Ratings -->
+        <div class="w-full md:w-1/2 bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="p-6">
+                <!-- Services Section -->
+                <h3 class="text-xl font-semibold text-[#001F3F]">Services Offered</h3>
+                <p class="text-gray-600 mt-4">
+                Model.Services
+                </p>
+
+                <!-- Contact Information Section -->
+                <h3 class="text-xl font-semibold text-[#001F3F] mt-6">Contact Information</h3>
+                <p class="text-gray-600 mt-2">@Model.FacultyMember.Email</p>
+
+                <!-- Ratings Section -->
+                <div class="flex items-center mt-6">
+                    <h3 class="text-xl font-semibold text-[#001F3F]">Rating</h3>
+                    <div class="ml-4 flex items-center">
+                        <span class="text-yellow-500 flex gap-1">
+                            <!-- Star Icons for Rating -->
+                            @for (int i = 0; i < 4; i++)
+                            {
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-6 h-6 text-yellow-500" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
+                            }
+                        </span>
+                        <span class="ml-2 text-gray-500">(500 reviews)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Department Features Section -->
+    <div class="mt-12 text-center">
+        <h2 class="text-2xl font-bold text-[#001F3F]">Why Choose Us</h2>
+        <p class="mt-4 text-lg text-gray-600">We provide high-quality services with dedicated care and attention to every patient.</p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+            <!-- Icon Feature 1 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-12 h-12 text-[#001F3F]" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 3m0 0l3 3m-3-3h12M3 18l3-3m0 0l3-3m-3 3h12"></path></svg>
+                <h4 class="text-lg font-semibold text-[#001F3F] mt-4">Expert Pediatric Care</h4>
+                <p class="text-gray-600 mt-2">Our pediatric specialists provide expert care in critical conditions.</p>
+            </div>
+
+            <!-- Icon Feature 2 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-12 h-12 text-[#001F3F]" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <h4 class="text-lg font-semibold text-[#001F3F] mt-4">State-of-the-art Facilities</h4>
+                <p class="text-gray-600 mt-2">Our departments are equipped with the latest medical technologies.</p>
+            </div>
+
+            <!-- Icon Feature 3 -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="w-12 h-12 text-[#001F3F]" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c3.866 0 7 3.134 7 7s-3.134 7-7 7-7-3.134-7-7 3.134-7 7-7zM12 3v1m0 16v1m9-9h1m-16 0H3m14.142-6.857l-.707.707M9.707 17.857l-.707.707M4.222 4.222l.707.707M16.243 16.243l.707.707"></path></svg>
+                <h4 class="text-lg font-semibold text-[#001F3F] mt-4">Emergency Services</h4>
+                <p class="text-gray-600 mt-2">We provide round-the-clock emergency services for immediate care.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to List Button -->
+    <div class="mt-12 text-center">
+        <a href="@Url.Action("Index", "Department")" class="bg-[#001F3F] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-blue-700 transition duration-300">Back to Department List</a>
+    </div>
+</div>

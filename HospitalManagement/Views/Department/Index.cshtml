@@ -25,6 +25,8 @@
                     <th scope="col">Patient Count</th>
                     <th scope="col">Available Beds</th>
                     <th scope="col">Department Head</th>
+                    <th scope="col">Services</th>
+                    
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -39,7 +41,7 @@
                             <td>@department.PatientCount</td>
                             <td>@department.AvailableBeds</td>
                             <td>@department.FacultyMember?.FirstName @department.FacultyMember?.LastName</td>
-
+                          
                             <td>
                                 <a asp-controller="Department" asp-action="Edit" asp-route-id="@department.DepartmentId" class="btn btn-warning btn-sm">Edit</a>
                                 <a asp-controller="Department" asp-action="DeleteDepartment" asp-route-id="@department.DepartmentId" class="btn btn-danger btn-sm">Delete</a>

@@ -13,14 +13,14 @@ namespace HospitalManagement.Data
 
         }
 
-        
+
         public DbSet<Category> Categories { get; set; }
 
         //  DbSets for the models
         public DbSet<Assistant> Assistants { get; set; }
         public DbSet<FacultyMember> FacultyMembers { get; set; }
         public DbSet<Department> Departments { get; set; }
-       
+
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<BookedAppointment> BookedAppointments { get; set; }
         public DbSet<Emergency> Emergencies { get; set; }
@@ -117,11 +117,11 @@ namespace HospitalManagement.Data
                 .HasForeignKey(d => d.DepartmentId)
                 .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
 
-             modelBuilder.Entity<Appointment>()
-                  .HasOne(a => a.Doctor)
-                  .WithMany(d => d.Appointments)
-                  .HasForeignKey(a => a.DoctorId)
-                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Appointment>()
+                 .HasOne(a => a.Doctor)
+                 .WithMany(d => d.Appointments)
+                 .HasForeignKey(a => a.DoctorId)
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 

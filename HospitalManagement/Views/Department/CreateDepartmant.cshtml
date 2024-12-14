@@ -38,24 +38,14 @@
             <span asp-validation-for="AvailableBeds" class="text-danger"></span>
         </div>
 
-        <div class="mb-3 row p-1">
-            <label asp-for="FacultyMemberId" class="form-label">Department Head</label>
-
-            @if (ViewBag.FacultyMembers == null || !((IEnumerable<SelectListItem>)ViewBag.FacultyMembers).Any())
-            {
-                <div class="alert alert-danger">
-                    Faculty members list is not available. Please check the data source.
-                </div>
-            }
-            else
-            {
-                <select asp-for="FacultyMemberId" class="form-control" asp-items="@(new SelectList(ViewBag.FacultyMembers, "Value", "Text", Model?.FacultyMemberId))">
-                    <option value="">Select a department head</option>
-                </select>
-            }
-
+        <div class="form-group">
+            <label asp-for="FacultyMemberId">Chef de département</label>
+            <select asp-for="FacultyMemberId" class="form-control" asp-items="ViewBag.FacultyMembers">
+                <option value="">-- Sélectionnez un membre --</option>
+            </select>
             <span asp-validation-for="FacultyMemberId" class="text-danger"></span>
         </div>
+
 
         <div class="row">
             <div class="col-6 col-md-3">

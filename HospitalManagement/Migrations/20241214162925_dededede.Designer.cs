@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241206093420_bookedAppointmentk")]
-    partial class bookedAppointmentk
+    [Migration("20241214162925_dededede")]
+    partial class dededede
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -257,6 +257,10 @@ namespace HospitalManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int?>("FacultyMemberFacultyId")
                         .HasColumnType("int");
 
@@ -266,15 +270,16 @@ namespace HospitalManagement.Migrations
                     b.Property<int>("PatientCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Services")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("DepartmentId");
 
                     b.HasIndex("FacultyMemberFacultyId")
                         .IsUnique()
                         .HasFilter("[FacultyMemberFacultyId] IS NOT NULL");
 
-                    b.HasIndex("FacultyMemberId")
-                        .IsUnique()
-                        .HasFilter("[FacultyMemberId] IS NOT NULL");
+                    b.HasIndex("FacultyMemberId");
 
                     b.ToTable("Departments");
 
@@ -337,12 +342,18 @@ namespace HospitalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmergencyId"));
 
-                    b.Property<DateTime>("DatePosted")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("EmergencyId");
 
@@ -432,6 +443,33 @@ namespace HospitalManagement.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.Shift", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftId"));
+
+                    b.Property<int>("AssistantId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("ShiftDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ShiftId");
+
+                    b.HasIndex("AssistantId");
+
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -678,12 +716,12 @@ namespace HospitalManagement.Migrations
             modelBuilder.Entity("HospitalManagement.Models.Department", b =>
                 {
                     b.HasOne("HospitalManagement.Models.FacultyMember", null)
-                        .WithOne("Department")
+                        .WithOne("DepartmentHead")
                         .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberFacultyId");
 
                     b.HasOne("HospitalManagement.Models.FacultyMember", "FacultyMember")
-                        .WithOne("DepartmentHead")
-                        .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberId")
+                        .WithMany("Departments")
+                        .HasForeignKey("FacultyMemberId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("FacultyMember");
@@ -707,6 +745,17 @@ namespace HospitalManagement.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.Shift", b =>
+                {
+                    b.HasOne("HospitalManagement.Models.Assistant", "Assistant")
+                        .WithMany()
+                        .HasForeignKey("AssistantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assistant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -776,9 +825,9 @@ namespace HospitalManagement.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("Department");
-
                     b.Navigation("DepartmentHead");
+
+                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }

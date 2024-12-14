@@ -3,13 +3,13 @@
 <form asp-action="CreateFacultyMember" method="post" class="container mt-4">
     <div class="border p-3">
         <div class="row pb-2">
-            <h2 class="text-primary col-12">Create Faculty Member</h2>
+            <h2 class="text-primary col-12 text-3xl mb-3">Create Faculty Member</h2>
             <hr class="col-12" />
             <div asp-validation-summary="All" class="col-12"></div>
         </div>
 
         <!-- First Name -->
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label asp-for="FirstName" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
                 <input asp-for="FirstName" type="text" class="form-control" />
@@ -18,7 +18,7 @@
         </div>
 
         <!-- Last Name -->
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label asp-for="LastName" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
                 <input asp-for="LastName" type="text" class="form-control" />
@@ -27,7 +27,7 @@
         </div>
 
         <!-- Email -->
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label asp-for="Email" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
                 <input asp-for="Email" type="email" class="form-control" />
@@ -36,7 +36,7 @@
         </div>
 
         <!-- Phone -->
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label asp-for="Phone" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
                 <input asp-for="Phone" type="text" class="form-control" />
@@ -48,7 +48,7 @@
      
 
         <!-- Department -->
-        <div class="form-group row">
+        <div class="form-group row mb-3">
             <label asp-for="DepartmentHead" class="col-sm-3 col-form-label"></label>
             <div class="col-sm-9">
                 <select asp-for="DepartmentHead" asp-items="@(new SelectList(ViewBag.Departments, "DepartmentId", "DepartmentName"))" class="form-control">

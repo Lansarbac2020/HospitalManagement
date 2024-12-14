@@ -24,7 +24,8 @@ namespace HospitalManagement.Controllers
         {
             var appointments = _db.Appointments
                 .Include(a => a.Doctor)
-               . Include(a => a.Doctor.Department)  // Include Department data
+               . Include(a => a.Doctor.Department) 
+               .AsNoTracking()// Include Department data
                 .ToList();
 
             return View(appointments);

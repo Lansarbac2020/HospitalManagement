@@ -5,7 +5,7 @@
 namespace HospitalManagement.Migrations
 {
     /// <inheritdoc />
-    public partial class AddShiftTimesdex : Migration
+    public partial class dedededee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

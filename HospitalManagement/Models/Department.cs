@@ -25,7 +25,7 @@ namespace HospitalManagement.Models
 
         // Navigation property for assistants
         public ICollection<Assistant> Assistants { get; set; } = new List<Assistant>();
-        public ICollection<Doctor> Doctors { get; set; }
+        public ICollection<Doctor>? Doctors { get; set; }
 
     }
 

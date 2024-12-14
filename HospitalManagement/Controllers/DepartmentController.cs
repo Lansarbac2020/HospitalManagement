@@ -27,48 +27,42 @@ namespace HospitalManagement.Controllers
 
         public IActionResult CreateDepartmant()
         {
-            var facultyMembers = _context.FacultyMembers
+            // Charger les données des FacultyMembers pour le ViewBag
+            ViewBag.FacultyMembers = _context.FacultyMembers
                 .Select(fm => new SelectListItem
                 {
                     Value = fm.FacultyId.ToString(),
                     Text = fm.FirstName + " " + fm.LastName
-                }).ToList();
+                })
+                .ToList();
 
-            ViewBag.FacultyMembers = facultyMembers;
             return View();
         }
 
 
+
         [HttpPost]
-        public IActionResult CreateDepartmant(Department obj)
+        public IActionResult CreateDepartmant(Department department)
         {
-            if (obj == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("Invalid department data.");
+                // Réinitialiser les FacultyMembers pour la vue après un échec de validation
+                ViewBag.FacultyMembers = _context.FacultyMembers
+                    .Select(fm => new SelectListItem
+                    {
+                        Value = fm.FacultyId.ToString(),
+                        Text = fm.FirstName + " " + fm.LastName
+                    })
+                    .ToList();
+
+                return View(department);
             }
 
-            // Check if the FacultyMemberId is already assigned to another department
-            var existingDepartment = _context.Departments
-                .FirstOrDefault(d => d.FacultyMemberId == obj.FacultyMemberId);
+            // Ajouter le département et sauvegarder dans la base
+            _context.Departments.Add(department);
+            _context.SaveChanges();
 
-            if (existingDepartment != null)
-            {
-                ViewBag.AlertMessage = "This Faculty Member is already assigned to another department.";
-            }
-
-            // Always assign FacultyMembers SelectList to ViewBag
-            ViewBag.FacultyMembers = new SelectList(_context.FacultyMembers, "FacultyId", "FullName", obj.FacultyMemberId);
-
-            if (ModelState.IsValid && existingDepartment == null)
-            {
-                // Save department if no errors
-                _context.Departments.Add(obj);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            // Return the view with errors (if any)
-            return View(obj);
+            return RedirectToAction("Index");
         }
 
 
@@ -77,7 +71,7 @@ namespace HospitalManagement.Controllers
         // DepartmentsController.cs
         public IActionResult Edit(int? id)
         {
-           // var department = _context.Departments.Find(id);
+            // var department = _context.Departments.Find(id);
             if (id == null)
             {
                 return NotFound();

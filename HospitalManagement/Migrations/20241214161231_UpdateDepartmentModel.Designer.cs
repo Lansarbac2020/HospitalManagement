@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241204162725_UpdateDoctorDepartmentRelationship")]
-    partial class UpdateDoctorDepartmentRelationship
+    [Migration("20241214161231_UpdateDepartmentModel")]
+    partial class UpdateDepartmentModel
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -178,9 +178,6 @@ namespace HospitalManagement.Migrations
                     b.Property<int>("AppointmentId")
                         .HasColumnType("int");
 
-                    b.Property<int>("AssistantId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("BookingDate")
                         .HasColumnType("datetime2");
 
@@ -199,8 +196,6 @@ namespace HospitalManagement.Migrations
                     b.HasKey("BookedAppointmentId");
 
                     b.HasIndex("AppointmentId");
-
-                    b.HasIndex("AssistantId");
 
                     b.ToTable("BookedAppointments");
                 });
@@ -262,6 +257,10 @@ namespace HospitalManagement.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<int?>("FacultyMemberFacultyId")
                         .HasColumnType("int");
 
@@ -271,15 +270,16 @@ namespace HospitalManagement.Migrations
                     b.Property<int>("PatientCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Services")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("DepartmentId");
 
                     b.HasIndex("FacultyMemberFacultyId")
                         .IsUnique()
                         .HasFilter("[FacultyMemberFacultyId] IS NOT NULL");
 
-                    b.HasIndex("FacultyMemberId")
-                        .IsUnique()
-                        .HasFilter("[FacultyMemberId] IS NOT NULL");
+                    b.HasIndex("FacultyMemberId");
 
                     b.ToTable("Departments");
 
@@ -308,9 +308,6 @@ namespace HospitalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DoctorId"));
 
-                    b.Property<int>("DepartmentHeadId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DepartmentId")
                         .HasColumnType("int");
 
@@ -332,8 +329,6 @@ namespace HospitalManagement.Migrations
 
                     b.HasKey("DoctorId");
 
-                    b.HasIndex("DepartmentHeadId");
-
                     b.HasIndex("DepartmentId");
 
                     b.ToTable("Doctors");
@@ -347,12 +342,18 @@ namespace HospitalManagement.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EmergencyId"));
 
-                    b.Property<DateTime>("DatePosted")
+                    b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Message")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("EmergencyId");
 
@@ -442,6 +443,33 @@ namespace HospitalManagement.Migrations
                     b.HasKey("RoleId");
 
                     b.ToTable("Roles");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.Shift", b =>
+                {
+                    b.Property<int>("ShiftId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ShiftId"));
+
+                    b.Property<int>("AssistantId")
+                        .HasColumnType("int");
+
+                    b.Property<TimeSpan>("EndTime")
+                        .HasColumnType("time");
+
+                    b.Property<DateTime>("ShiftDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<TimeSpan>("StartTime")
+                        .HasColumnType("time");
+
+                    b.HasKey("ShiftId");
+
+                    b.HasIndex("AssistantId");
+
+                    b.ToTable("Shifts");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -651,7 +679,7 @@ namespace HospitalManagement.Migrations
                     b.HasOne("HospitalManagement.Models.Doctor", "Doctor")
                         .WithMany("Appointments")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("HospitalManagement.Models.FacultyMember", null)
@@ -682,26 +710,18 @@ namespace HospitalManagement.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HospitalManagement.Models.Assistant", "Assistant")
-                        .WithMany()
-                        .HasForeignKey("AssistantId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Appointment");
-
-                    b.Navigation("Assistant");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.Department", b =>
                 {
                     b.HasOne("HospitalManagement.Models.FacultyMember", null)
-                        .WithOne("Department")
+                        .WithOne("DepartmentHead")
                         .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberFacultyId");
 
                     b.HasOne("HospitalManagement.Models.FacultyMember", "FacultyMember")
-                        .WithOne("DepartmentHead")
-                        .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberId")
+                        .WithMany("Departments")
+                        .HasForeignKey("FacultyMemberId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("FacultyMember");
@@ -709,12 +729,6 @@ namespace HospitalManagement.Migrations
 
             modelBuilder.Entity("HospitalManagement.Models.Doctor", b =>
                 {
-                    b.HasOne("HospitalManagement.Models.FacultyMember", "DepartmentHead")
-                        .WithMany()
-                        .HasForeignKey("DepartmentHeadId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("HospitalManagement.Models.Department", "Department")
                         .WithMany("Doctors")
                         .HasForeignKey("DepartmentId")
@@ -722,8 +736,6 @@ namespace HospitalManagement.Migrations
                         .IsRequired();
 
                     b.Navigation("Department");
-
-                    b.Navigation("DepartmentHead");
                 });
 
             modelBuilder.Entity("HospitalManagement.Models.Patient", b =>
@@ -733,6 +745,17 @@ namespace HospitalManagement.Migrations
                         .HasForeignKey("UserId");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HospitalManagement.Models.Shift", b =>
+                {
+                    b.HasOne("HospitalManagement.Models.Assistant", "Assistant")
+                        .WithMany()
+                        .HasForeignKey("AssistantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Assistant");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -802,9 +825,9 @@ namespace HospitalManagement.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("Department");
-
                     b.Navigation("DepartmentHead");
+
+                    b.Navigation("Departments");
                 });
 #pragma warning restore 612, 618
         }
