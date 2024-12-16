@@ -1,0 +1,22 @@
+﻿@model Emergency
+
+@{
+    ViewData["Title"] = "Edit Emergency";
+}
+
+<h2 class="text-center text-2xl font-bold text-gray-800">Edit Emergency</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label for="Title" class="form-label">Title</label>
+        <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        <textarea class="form-control" id="Description" name="Description" required>@Model.Description</textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>
+

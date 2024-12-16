@@ -122,13 +122,9 @@ namespace HospitalManagement.Controllers
             if (relatedShifts.Any())
             {
                 // Handle the related shifts - for example, you can delete them or set the AssistantId to null.
-                _db.Shifts.RemoveRange(relatedShifts); 
-                                       
-                                                       // foreach (var shift in relatedShifts)
-                                                       // {
-                                                       //     shift.AssistantId = null;
-                                                       // }
-                                                       // _db.SaveChanges();
+                _db.Shifts.RemoveRange(relatedShifts);
+
+               
             }
 
             
@@ -137,9 +133,6 @@ namespace HospitalManagement.Controllers
 
             return RedirectToAction("Index"); // Redirect back to the list of assistants after deletion
         }
-
-
-
 
     }
 }

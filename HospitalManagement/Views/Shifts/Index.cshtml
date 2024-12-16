@@ -4,9 +4,30 @@
 
 <div class="container mt-10">
     <h2 class="text-center text-3xl font-semibold text-gray-800 mb-6">Assistants Shifts Calendar</h2>
-
+    <div class="mt-6">
+        <h4 class="text-lg font-semibold mb-2">Legend</h4>
+        <div class="flex space-x-4">
+            <div class="flex items-center space-x-2">
+                <span class="w-4 h-4 block rounded-full" style="background-color: #213555;"></span>
+                <span>Pediatric Emergency</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="w-4 h-4 block rounded-full" style="background-color: #99ccff;"></span>
+                <span>Pediatric Intensive Care</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <span class="w-4 h-4 block rounded-full" style="background-color: #99ff99;"></span>
+                <span>Pediatric Hematology and Oncology</span>
+            </div>
+            <div class="flex items-center space-x-2">
+                <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                <span class="text-sm text-gray-700">Past Shifts</span>
+            </div>
+        </div>
+    </div>
 
     @if (User.IsInRole("Admin"))
+
     {
         <div class="flex justify-end mb-4">
             <a asp-controller="Shifts" asp-action="CreateShift" class="btn btn-primary flex items-center space-x-2 px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition duration-300">
@@ -15,41 +36,45 @@
             </a>
         </div>
     }
-
-    <!-- Calendar Section -->
+       <!-- Calendar Section -->
     <div id="calendar"></div>
 </div>
+<!-- This section will always render the modal and close button for any user -->
 <div id="shiftModal" class="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white p-6 rounded-lg shadow-lg max-w-lg w-full space-y-4">
         <h3 class="text-2xl font-semibold text-gray-800 mb-4">Shift Details</h3>
-        
-        <!-- Shift Title -->
+
+        <!-- Shift Details -->
         <div>
             <h4 class="text-xl font-medium text-gray-700 mb-1">Title</h4>
             <p id="shiftTitle" class="text-lg text-gray-900 bg-gray-100 p-2 rounded-md shadow-sm"></p>
         </div>
-        
-        <!-- Shift Start -->
         <div>
             <h4 class="text-xl font-medium text-gray-700 mb-1">Start</h4>
             <p id="shiftStart" class="text-lg text-gray-900 bg-gray-100 p-2 rounded-md shadow-sm"></p>
         </div>
-        
-        <!-- Shift End -->
         <div>
             <h4 class="text-xl font-medium text-gray-700 mb-1">End</h4>
             <p id="shiftEnd" class="text-lg text-gray-900 bg-gray-100 p-2 rounded-md shadow-sm"></p>
         </div>
-
-        <!-- Department Name -->
         <div>
             <h4 class="text-xl font-medium text-gray-700 mb-1">Department</h4>
             <p id="shiftDepartment" class="text-lg text-gray-900 bg-gray-100 p-2 rounded-md shadow-sm"></p>
         </div>
 
-        <!-- Close Button -->
+        <!-- Admin Actions (Only for Admin) -->
+        @if (User.IsInRole("Admin"))
+
+        {
+            <div class="flex space-x-4 mt-4">
+                <button id="editShift" asp-controller="Shifts" asp-action="EditShift" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300">Edit</button>
+                <button id="deleteShift" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">Delete</button>
+            </div>
+        }
+
+        <!-- Close Button (Visible to all users) -->
         <div class="flex justify-end mt-4">
-            <button id="closeModal" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-300">Close</button>
+            <button id="closeModal" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition duration-300">Close</button>
         </div>
     </div>
 </div>
@@ -60,11 +85,15 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
 
     <script>
+        // Variable pour stocker l'événement sélectionné
+
         document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var shiftModal = document.getElementById('shiftModal');
             var closeModalButton = document.getElementById('closeModal');
+            var selectedShift = null;
 
+            // Initialize the calendar
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 locale: 'en',
@@ -73,44 +102,74 @@
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                events: '/Shifts/getShifts',
-                eventColor: '#3788d8',
+                events: '/Shifts/GetShifts', // Fetch events from your backend
                 editable: false,
 
-                // This is where we check the date for past events
-                eventRender: function (info) {
-                    var currentDate = new Date();
-                    var eventStartDate = info.event.start;
-
-        
-                    if (eventStartDate < currentDate) {
-                        info.el.style.backgroundColor = 'red';  // Change background color to red
-                        info.el.style.color = 'white';           // Optional: Change text color for better visibility
-                    }
-                },
-
+                // Event click handler
                 eventClick: function (info) {
-                
+                    selectedShift = info.event; // Store the current event
                     var shiftStartTime = info.event.start.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                     var shiftEndTime = info.event.end.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-                    document.getElementById('shiftTitle').innerText =info.event.title;
+                    document.getElementById('shiftTitle').innerText = info.event.title;
                     document.getElementById('shiftStart').innerText = shiftStartTime;
                     document.getElementById('shiftEnd').innerText = shiftEndTime;
                     document.getElementById('shiftDepartment').innerText = info.event.extendedProps.departmentName;
 
-                    // Show the modal
-                    shiftModal.classList.remove('hidden');
+                    shiftModal.classList.remove('hidden'); // Show modal
                 }
             });
 
-            // Close modal functionality
-            closeModalButton.addEventListener('click', function () {
-                shiftModal.classList.add('hidden');
-            });
-
+            // Render the calendar
             calendar.render();
+
+            // Edit shift functionality (only for Admin)
+            if (document.getElementById('editShift')) {
+                document.getElementById('editShift').addEventListener('click', function () {
+                    if (selectedShift && selectedShift.id) {
+                        window.location.href = `/Shifts/EditShift/${selectedShift.id}`;
+                    } else {
+                        alert('Shift ID not found.');
+                    }
+                });
+            }
+
+            // Delete shift functionality (only for Admin)
+            if (document.getElementById('deleteShift')) {
+                document.getElementById('deleteShift').addEventListener('click', function () {
+                    if (selectedShift && selectedShift.id && confirm("Are you sure you want to delete this shift?")) {
+                        fetch(`/Shifts/DeleteShift/${selectedShift.id}`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    alert("Shift deleted successfully.");
+                                    shiftModal.classList.add('hidden'); // Hide modal
+                                    calendar.refetchEvents(); // Reload calendar events
+                                } else {
+                                    alert("Error deleting shift.");
+                                }
+                            })
+                            .catch(error => {
+                                console.error("Delete error:", error);
+                                alert("Error deleting shift.");
+                            });
+                    }
+                });
+            }
+
+            // Close modal functionality (always available to all users)
+            closeModalButton.addEventListener('click', function () {
+                shiftModal.classList.add('hidden'); // Hide modal
+            });
         });
 
+
+
+     
+
     </script>
-}
+}  

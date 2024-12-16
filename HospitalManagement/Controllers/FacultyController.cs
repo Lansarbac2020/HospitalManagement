@@ -120,21 +120,37 @@ namespace HospitalManagement.Controllers
         }
 
         // POST: Faculty/DeleteConfirmed
+        // POST: Faculty/DeleteConfirmed
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var facultyFromDb = _context.FacultyMembers.Find(id);
-            if (facultyFromDb == null)
+            var facultyMember = await _context.FacultyMembers
+                                               .Include(f => f.Department)
+                                               .FirstOrDefaultAsync(f => f.FacultyId == id);
+
+            if (facultyMember == null)
             {
                 return NotFound();
             }
 
-            _context.FacultyMembers.Remove(facultyFromDb);
-            _context.SaveChanges();
+            // Find and update any departments referencing this faculty member
+            var relatedDepartments = await _context.Departments
+                .Where(d => d.FacultyMemberId == facultyMember.FacultyId)
+                .ToListAsync();
 
-            return RedirectToAction("Index");
+            foreach (var department in relatedDepartments)
+            {
+                department.FacultyMemberId = null; // Remove the reference
+                _context.Update(department);
+            }
+
+            _context.FacultyMembers.Remove(facultyMember);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+
 
 
 

@@ -101,7 +101,7 @@ namespace HospitalManagement.Data
          .HasOne(d => d.FacultyMember) // A department has one head
          .WithOne(fm => fm.DepartmentHead) // A faculty member has one department head
          .HasForeignKey<Department>(d => d.FacultyMemberId) // Foreign key in the Department
-         .OnDelete(DeleteBehavior.Restrict); // Prevent cascading delete
+         .OnDelete(DeleteBehavior.SetNull); // Prevent cascading delete
 
 
             // modelBuilder.Entity<Doctor>()

@@ -1,48 +1,63 @@
 ﻿@model HospitalManagement.Models.FacultyMember
 
-@{
-    ViewData["Title"] = "Delete Faculty Member";
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Delete Faculty Member - Pediatric Department</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Delete Faculty Member</h1>
 
-<h2>Delete Faculty Member</h2>
+        <div class="mb-4">
+            <h3>Are you sure you want to delete the following Faculty Member?</h3>
+            <p><strong>First Name:</strong> @Model.FirstName</p>
+            <p><strong>Last Name:</strong> @Model.LastName</p>
+            <p><strong>Email:</strong> @Model.Email</p>
+            <p><strong>Phone:</strong> @Model.Phone</p>
+            <p><strong>Department:</strong> @Model.DepartmentHead?.DepartmentName</p>
+        </div>
 
-<p>Are you sure you want to delete this faculty member?</p>
+        <!-- Trigger button to open the modal  -->
+        <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Yes, Delete
+        </button>
+        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 
-<div>
-    <strong>Name:</strong> @Model.FirstName @Model.LastName<br />
-    <strong>Email:</strong> @Model.Email<br />
-    <strong>Department:</strong> @Model.DepartmentHead.DepartmentName<br />
-</div>
-
-<!-- Trigger button to open the modal -->
-<button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-    Yes, Delete
-</button>
-<a asp-action="Index" class="btn btn-secondary">Cancel</a>
-
-<!-- Modal Dialog Box -->
-<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to delete this faculty member?</p>
-                <ul>
-                    <li><strong>Name:</strong> @Model.FirstName @Model.LastName</li>
-                    <li><strong>Email:</strong> @Model.Email</li>
-                    <li><strong>Department:</strong> @Model.DepartmentHead.DepartmentName</li>
-                </ul>
-            </div>
-            <div class="modal-footer">
-                <form asp-action="DeleteConfirmed" method="post">
-                    <input type="hidden" name="id" value="@Model.FacultyId" />
-                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-                </form>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Modal Dialog Box -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete this faculty member?</p>
+                        <ul>
+                            <li><strong>First Name:</strong> @Model.FirstName</li>
+                            <li><strong>Last Name:</strong> @Model.LastName</li>
+                            <li><strong>Email:</strong> @Model.Email</li>
+                            <li><strong>Phone:</strong> @Model.Phone</li>
+                            <li><strong>Department:</strong> @Model.DepartmentHead?.DepartmentName</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <form asp-action="DeleteConfirmed" method="post">
+                            <input type="hidden" name="id" value="@Model.FacultyId" />
+                            <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -104,7 +104,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts(); // Use HTTPS Strict Transport Security (HSTS) in production
 }
-
+ 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

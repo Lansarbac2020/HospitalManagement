@@ -8,7 +8,7 @@
     <!-- Heading Section -->
     <div class="text-center mb-12">
         <h1 class="text-4xl font-bold text-[#001F3F]">@Model.DepartmentName</h1>
-        <p class="mt-2 text-lg text-gray-600">welcome</p>
+        <p class="mt-2 text-lg text-gray-600">@Model.Description</p>
     </div>
 
     <!-- Department Details -->
@@ -34,10 +34,12 @@
         <div class="w-full md:w-1/2 bg-white shadow-lg rounded-lg overflow-hidden">
             <div class="p-6">
                 <!-- Services Section -->
-                <h3 class="text-xl font-semibold text-[#001F3F]">Services Offered</h3>
-                <p class="text-gray-600 mt-4">
-                Model.Services
-                </p>
+                <h3 class="text-xl font-semibold text-[#001F3F]">Information</h3>
+                <div class="grid">
+                    <strong>Available Beds </strong> <span>@Model.AvailableBeds</span>
+                    <strong>Patient Counts </strong> <span>@Model.PatientCount</span>
+                </div>
+                
 
                 <!-- Contact Information Section -->
                 <h3 class="text-xl font-semibold text-[#001F3F] mt-6">Contact Information</h3>
@@ -91,7 +93,17 @@
     </div>
 
     <!-- Back to List Button -->
-    <div class="mt-12 text-center">
-        <a href="@Url.Action("Index", "Department")" class="bg-[#001F3F] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-blue-700 transition duration-300">Back to Department List</a>
-    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="mt-12 text-center">
+            <a href="@Url.Action("Index", "Department")" class="bg-[#001F3F] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-blue-700 transition duration-300">Back to Department List</a>
+        </div>
+    }
+    else
+    {
+        <div class="mt-12 text-center">
+            <a href="@Url.Action("Index", "Home")" class="bg-[#001F3F] text-white py-3 px-8 rounded-full text-xl font-semibold hover:bg-blue-700 transition duration-300">Back to Home</a>
+        </div>
+    }
+
 </div>

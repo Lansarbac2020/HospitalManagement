@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagement.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    
     public class DepartmentController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -16,6 +16,7 @@ namespace HospitalManagement.Controllers
         {
             _context = db;
         }
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var departments = await _context.Departments
@@ -24,7 +25,7 @@ namespace HospitalManagement.Controllers
 
             return View(departments);
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult CreateDepartmant()
         {
             // Charger les données des FacultyMembers pour le ViewBag
@@ -40,13 +41,13 @@ namespace HospitalManagement.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CreateDepartmant(Department department)
         {
             if (!ModelState.IsValid)
             {
-                // Réinitialiser les FacultyMembers pour la vue après un échec de validation
+                
                 ViewBag.FacultyMembers = _context.FacultyMembers
                     .Select(fm => new SelectListItem
                     {
@@ -58,7 +59,7 @@ namespace HospitalManagement.Controllers
                 return View(department);
             }
 
-            // Ajouter le département et sauvegarder dans la base
+
             _context.Departments.Add(department);
             _context.SaveChanges();
 
@@ -69,6 +70,7 @@ namespace HospitalManagement.Controllers
 
 
         // DepartmentsController.cs
+        [Authorize(Roles = "Admin")]
         public IActionResult Edit(int? id)
         {
             // var department = _context.Departments.Find(id);
@@ -83,7 +85,7 @@ namespace HospitalManagement.Controllers
             return View(department);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(Department department)
@@ -95,6 +97,7 @@ namespace HospitalManagement.Controllers
             if (existingDepartment != null)
             {
                 ModelState.AddModelError("FacultyMemberId", "This Faculty Member is already assigned to another department.");
+                RedirectToAction("Index");
             }
 
             if (ModelState.IsValid)
@@ -108,7 +111,7 @@ namespace HospitalManagement.Controllers
             return View(department);
         }
 
-
+        [Authorize(Roles = "Admin")]
         // GET: Delete Department
         public IActionResult DeleteDepartment(int? id)
         {
@@ -128,7 +131,7 @@ namespace HospitalManagement.Controllers
             return View(departmentFromDb); // Pass the department to the view for confirmation
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
@@ -146,6 +149,25 @@ namespace HospitalManagement.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index"); // Redirect to the list after deletion
+        }
+        [AllowAnonymous]
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var department = _context.Departments
+                                     .Include(d => d.FacultyMember)
+                                     .FirstOrDefault(d => d.DepartmentId == id);
+
+            if (department == null)
+            {
+                return NotFound();
+            }
+
+            return View(department);
         }
 
 

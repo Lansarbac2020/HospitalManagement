@@ -68,28 +68,38 @@ namespace HospitalManagement.Controllers
                     return View(shift);
                 }
 
-                // Check for overlapping shifts
                 bool isDuplicate = _db.Shifts.Any(s =>
-                    s.AssistantId == shift.AssistantId &&
-                    s.ShiftDate == shift.ShiftDate &&
-                    (
-                        (s.StartTime <= shift.StartTime && s.EndTime > shift.StartTime) ||
-                        (s.StartTime < shift.EndTime && s.EndTime >= shift.EndTime)
-                    ));
-
+      s.ShiftId != shift.ShiftId && // Exclude the current shift
+      s.AssistantId == shift.AssistantId &&
+      s.ShiftDate == shift.ShiftDate &&
+      (
+          (s.StartTime <= shift.StartTime && s.EndTime > shift.StartTime) ||
+          (s.StartTime < shift.EndTime && s.EndTime >= shift.EndTime)
+      ));
                 if (isDuplicate)
                 {
                     ModelState.AddModelError("", "An overlap with another shift was detected.");
-                    PopulateAssistantsDropdown(shift);
+                    ViewBag.Assistants = new SelectList(
+                        _db.Assistants.Select(a => new { a.AssistantId, FullName = $"{a.FirstName} {a.LastName}" }),
+                        "AssistantId",
+                        "FullName",
+                        shift.AssistantId
+                    );
                     return View(shift);
                 }
-
                 if (shift.StartTime >= shift.EndTime)
                 {
                     ModelState.AddModelError("", "Start time must be before end time.");
-                    PopulateAssistantsDropdown(shift);
+                    ViewBag.Assistants = new SelectList(
+                        _db.Assistants.Select(a => new { a.AssistantId, FullName = $"{a.FirstName} {a.LastName}" }),
+                        "AssistantId",
+                        "FullName",
+                        shift.AssistantId
+                    );
                     return View(shift);
                 }
+
+
 
                 // Add the shift to the database
                 _db.Shifts.Add(shift);
@@ -126,19 +136,109 @@ namespace HospitalManagement.Controllers
 
             var shifts = await _db.Shifts
                 .Include(s => s.Assistant)
-              
+                .ThenInclude(a => a.Department) // Inclure le département
                 .Select(s => new
                 {
                     id = s.ShiftId,
                     title = $"{s.Assistant.FirstName} {s.Assistant.LastName}",
                     start = s.ShiftDate.Add(s.StartTime),
                     end = s.ShiftDate.Add(s.EndTime),
-                    color = s.ShiftDate.Add(s.StartTime) < currentDate ? "red" : "#3788d8", // Change color to red if the shift is in the past
+                    color = s.ShiftDate.Add(s.StartTime) < currentDate
+                        ? "red" // Rouge pour les shifts passés
+                        : (s.Assistant.Department.DepartmentName == "Pediatric Emergency" ? "#1E90FF" // Bleu
+                        : s.Assistant.Department.DepartmentName == "Pediatric Intensive Care" ? "#32CD32" // Vert
+                        : s.Assistant.Department.DepartmentName == "Pediatric Hematology and Oncology" ? "#FFD700" // Jaune
+                        : "#3788d8"), // Couleur par défaut
                     departmentName = s.Assistant.Department.DepartmentName
                 })
                 .ToListAsync();
 
             return Json(shifts);
+        }
+
+
+        // GET: EditShift
+       
+        public IActionResult EditShift(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+
+            // Fetch the Shift from the database
+            Shift shiftFromDb = _db.Shifts
+                .Include(s => s.Assistant)  // Include Assistant details if needed
+                .FirstOrDefault(s => s.ShiftId == id);
+
+            if (shiftFromDb == null)
+            {
+                return NotFound();
+            }
+
+            // Populate ViewBag with list of Assistants for dropdown
+            ViewBag.Assistants = new SelectList(
+                _db.Assistants.Select(a => new { a.AssistantId, FullName = $"{a.FirstName} {a.LastName}" }),
+                "AssistantId",
+                "FullName",
+                shiftFromDb.AssistantId // Pre-select the current assistant
+            );
+
+            // Return the Shift model to the view
+            return View(shiftFromDb);
+        }
+
+
+
+        // POST: EditShift
+        // POST: EditShift
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditShift(Shift shift)
+        {
+            if (ModelState.IsValid)
+            {
+                // Fetch the Shift from the database using ShiftId
+                var shiftFromDb = _db.Shifts.FirstOrDefault(s => s.ShiftId == shift.ShiftId);
+
+                if (shiftFromDb == null)
+                {
+                    return NotFound();
+                }
+
+                // Update properties of shiftFromDb with the new data from shift
+                shiftFromDb.AssistantId = shift.AssistantId;
+                shiftFromDb.ShiftDate = shift.ShiftDate;
+                shiftFromDb.StartTime = shift.StartTime;
+                shiftFromDb.EndTime = shift.EndTime;
+              
+
+                // Save the changes in the database
+                _db.Shifts.Update(shiftFromDb);
+                _db.SaveChanges();
+                return RedirectToAction("Index"); // Or wherever you want to redirect
+            }
+
+            // Populate dropdown for assistant selection again if validation fails
+            PopulateAssistantsDropdown(shift);
+            return View(shift); // If validation fails, return the view with the model
+        }
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteShift(int id)
+        {
+            var shift = await _db.Shifts.FindAsync(id);
+            if (shift == null)
+            {
+                return NotFound();
+            }
+
+            _db.Shifts.Remove(shift);
+            await _db.SaveChangesAsync();
+
+            return Ok();
         }
 
 

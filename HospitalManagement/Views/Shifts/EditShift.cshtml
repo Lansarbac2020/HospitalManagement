@@ -1,0 +1,31 @@
+﻿@model HospitalManagement.Models.Shift
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="AssistantId" class="col-sm-3 col-form-label">Assistant</label>
+        <div class="">
+            <select asp-for="AssistantId" asp-items="@(ViewBag.Assistants)" class="form-control">
+                <option value="">Select an Assistant</option>
+            </select>
+            <span asp-validation-for="AssistantId" class="text-danger"></span>
+        </div>
+    </div>
+
+    <input type="hidden" asp-for="ShiftId" />
+    <div class="form-group">
+        <label for="ShiftDate">Shift Date</label>
+        <input type="date" name="ShiftDate" id="ShiftDate" value="@Model.ShiftDate.ToString("yyyy-MM-dd")" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="StartTime">Start Time</label>
+        <input type="time" name="StartTime" id="StartTime" value="@Model.StartTime.ToString(@"hh\:mm")" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="EndTime">End Time</label>
+        <input type="time" name="EndTime" id="EndTime" value="@Model.EndTime.ToString(@"hh\:mm")" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+</form>

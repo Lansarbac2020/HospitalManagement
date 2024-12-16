@@ -2,6 +2,7 @@
 using HospitalManagement.Models;
 using HospitalManagement.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HospitalManagement.Controllers
 {
@@ -84,6 +85,80 @@ namespace HospitalManagement.Controllers
 
             // Si la validation du modèle échoue, retourner le même formulaire avec les erreurs
             return View(emergency);
+        }
+        // Edit GET method
+        public async Task<IActionResult> EditEmergency(int id)
+        {
+            var emergency = await _db.Emergencies.FindAsync(id);
+
+            if (emergency == null)
+            {
+                return NotFound();
+            }
+
+            return View(emergency);
+        }
+
+        // Edit POST method
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditEmergency(int id, Emergency emergency)
+        {
+            if (id != emergency.EmergencyId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _db.Update(emergency);
+                    await _db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_db.Emergencies.Any(e => e.EmergencyId == emergency.EmergencyId))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(emergency);
+        }
+
+        // Delete GET method
+        public async Task<IActionResult> Delete(int id)
+        {
+            var emergency = await _db.Emergencies.FindAsync(id);
+
+            if (emergency == null)
+            {
+                return NotFound();
+            }
+
+            return View(emergency);
+        }
+
+        // Delete POST method
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var emergency = await _db.Emergencies.FindAsync(id);
+
+            if (emergency != null)
+            {
+                _db.Emergencies.Remove(emergency);
+                await _db.SaveChangesAsync();
+            }
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -24,6 +24,8 @@ namespace HospitalManagement.Models
         public virtual FacultyMember? FacultyMember { get; set; }
 
         // Navigation property for assistants
+        [MaxLength(500)]
+        public string ? Description { get; set; }
         public ICollection<Assistant> Assistants { get; set; } = new List<Assistant>();
         public ICollection<Doctor>? Doctors { get; set; }
 
