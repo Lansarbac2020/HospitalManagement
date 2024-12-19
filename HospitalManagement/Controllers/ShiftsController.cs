@@ -145,9 +145,9 @@ namespace HospitalManagement.Controllers
                     end = s.ShiftDate.Add(s.EndTime),
                     color = s.ShiftDate.Add(s.StartTime) < currentDate
                         ? "red" // Rouge pour les shifts passés
-                        : (s.Assistant.Department.DepartmentName == "Pediatric Emergency" ? "#1E90FF" // Bleu
-                        : s.Assistant.Department.DepartmentName == "Pediatric Intensive Care" ? "#32CD32" // Vert
-                        : s.Assistant.Department.DepartmentName == "Pediatric Hematology and Oncology" ? "#FFD700" // Jaune
+                        : (s.Assistant.Department.DepartmentName == "Pediatric Emergency" ? "#213555" // Bleu
+                        : s.Assistant.Department.DepartmentName == "Pediatric Intensive Care" ? "#99ccff" // Vert
+                        : s.Assistant.Department.DepartmentName == "Pediatric Hematology and Oncology" ? "#99ff99" // Jaune
                         : "#3788d8"), // Couleur par défaut
                     departmentName = s.Assistant.Department.DepartmentName
                 })

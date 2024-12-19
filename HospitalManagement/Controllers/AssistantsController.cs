@@ -77,7 +77,7 @@ namespace HospitalManagement.Controllers
         {
             if (ModelState.IsValid)
             {
-                _db.Assistants.Update(assistant); // Correctly updating the assistant instead of adding
+                _db.Assistants.Update(assistant); //  update the assistant 
                 _db.SaveChanges();
 
                 return RedirectToAction("Index");
@@ -121,7 +121,6 @@ namespace HospitalManagement.Controllers
 
             if (relatedShifts.Any())
             {
-                // Handle the related shifts - for example, you can delete them or set the AssistantId to null.
                 _db.Shifts.RemoveRange(relatedShifts);
 
                

@@ -33,11 +33,11 @@ namespace HospitalManagement.Controllers
         public JsonResult GetAvailableSlots()
         {
             var availableSlots = _db.Appointments
-                .Where(a => a.Status == "Available") // Filter by Available status
+                .Where(a => a.Status == "Available")
                 .Select(a => new
                 {
                     id = a.AppointmentId,
-                    title = $"{a.Doctor.FirstName} {a.Doctor.LastName}", // Change to Doctor
+                    title = $"{a.Doctor.FirstName} {a.Doctor.LastName}",
                     start = a.AppointmentDate.Date + a.ShiftStartTime,
                     end = a.AppointmentDate.Date + a.ShiftEndTime
                 })
@@ -85,7 +85,7 @@ namespace HospitalManagement.Controllers
                 return NotFound();
             }
 
-            // Check if the user is authenticated (UserId is null means not logged in)
+            // Check if the user is authenticated
             var userId = _userManager.GetUserId(User);
             if (userId == null)
             {
@@ -107,13 +107,12 @@ namespace HospitalManagement.Controllers
                 Status = "Confirmed"
             };
 
-            // Ajouter dans la table BookedAppointments
+          
             _db.BookedAppointments.Add(bookedAppointment);
 
-            // Sauvegarder les changements
             _db.SaveChanges();
 
-            return RedirectToAction("Index"); // Rediriger vers la liste des rendez-vous réservés
+            return RedirectToAction("Index"); 
         }
 
 
@@ -139,7 +138,7 @@ namespace HospitalManagement.Controllers
             }
 
             return View(bookedAppointments);
-            // Passer les rendez-vous réservés à la vue
+           
         }
 
 

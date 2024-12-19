@@ -4,7 +4,7 @@
     ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container mt-5">
+<div class="container grid grid-cols-2 gap-2 mt-5">
     <h2 class="mb-4">Admin Dashboard</h2>
     <div class="row">
         <!-- Departments Card -->
@@ -33,6 +33,15 @@
                 <div class="card-body">
                     <h5 class="card-title">Assistants</h5>
                     <p class="card-text display-4">@Model.AssistantCount</p>
+                </div>
+            </div>
+        </div>
+         <!-- Doctors Card -->
+        <div class="col-md-4">
+            <div class="card text-white bg-info mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Doctors</h5>
+                    <p class="card-text display-4">@Model.DoctorCount</p>
                 </div>
             </div>
         </div>

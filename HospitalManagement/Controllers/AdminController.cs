@@ -22,7 +22,8 @@ namespace HospitalManagement.Controllers
             {
                 DepartmentCount = _context.Departments.Count(),
                 FacultyCount = _context.FacultyMembers.Count(),
-                AssistantCount = _context.Assistants.Count()
+                AssistantCount = _context.Assistants.Count(),
+                DoctorCount=_context.Doctors.Count(),
             };
 
             return View(dashboardData);
