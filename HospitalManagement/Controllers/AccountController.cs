@@ -111,6 +111,10 @@ namespace HospitalManagement.Controllers
 
                 // Messages d'échec spécifiques
                 if (result.IsNotAllowed)
+
+
+
+
                 {
                     ModelState.AddModelError("", "E-postanız onaylanmadı.");
                 }

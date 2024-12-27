@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HospitalManagement.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241214162925_dededede")]
-    partial class dededede
+    [Migration("20241227084013_dbupdatedg")]
+    partial class dbupdatedg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -270,16 +270,15 @@ namespace HospitalManagement.Migrations
                     b.Property<int>("PatientCount")
                         .HasColumnType("int");
 
-                    b.Property<string>("Services")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("DepartmentId");
 
                     b.HasIndex("FacultyMemberFacultyId")
                         .IsUnique()
                         .HasFilter("[FacultyMemberFacultyId] IS NOT NULL");
 
-                    b.HasIndex("FacultyMemberId");
+                    b.HasIndex("FacultyMemberId")
+                        .IsUnique()
+                        .HasFilter("[FacultyMemberId] IS NOT NULL");
 
                     b.ToTable("Departments");
 
@@ -716,13 +715,13 @@ namespace HospitalManagement.Migrations
             modelBuilder.Entity("HospitalManagement.Models.Department", b =>
                 {
                     b.HasOne("HospitalManagement.Models.FacultyMember", null)
-                        .WithOne("DepartmentHead")
+                        .WithOne("Department")
                         .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberFacultyId");
 
                     b.HasOne("HospitalManagement.Models.FacultyMember", "FacultyMember")
-                        .WithMany("Departments")
-                        .HasForeignKey("FacultyMemberId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .WithOne("DepartmentHead")
+                        .HasForeignKey("HospitalManagement.Models.Department", "FacultyMemberId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("FacultyMember");
                 });
@@ -825,9 +824,9 @@ namespace HospitalManagement.Migrations
                 {
                     b.Navigation("Appointments");
 
-                    b.Navigation("DepartmentHead");
+                    b.Navigation("Department");
 
-                    b.Navigation("Departments");
+                    b.Navigation("DepartmentHead");
                 });
 #pragma warning restore 612, 618
         }
